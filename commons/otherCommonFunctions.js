@@ -1,6 +1,6 @@
 'use strict';
 
-import {rupiah} from '../customer/components/Formatter';
+import {rupiah} from '../components/Formatter';
 
 
 //// display how many pax (e.g. 2 Adults, 3 Children)

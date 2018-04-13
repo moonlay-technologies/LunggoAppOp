@@ -18,8 +18,7 @@ import registerForPushNotificationsAsync
 import { fetchWishlist, backToMain } from '../../../api/Common';
 import { LinearGradient } from 'expo';
 import { fetchProfile } from '../../ProfileController';
-import { APP_TYPE } from '../../../constants/env';
-import { phoneWithoutCountryCode_Indonesia } from '../../../customer/components/Formatter';
+import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from './../../components/LoadingModal';
 const { setItemAsync } = Expo.SecureStore;
 
@@ -63,24 +62,12 @@ export default class LoginScreen extends React.Component {
 
     this.setState({ isLoading: true });
 
-    fetchTravoramaLoginApi(email, countryCallCd, phoneNumber, this.state.password, APP_TYPE == 'OPERATOR')
+    fetchTravoramaLoginApi(email, countryCallCd, phoneNumber, this.state.password)
       .then(response => {
         this.setState({ isLoading: false });
         if (response.status == 200) {
           setItemAsync('isLoggedIn', 'true');
-          if (APP_TYPE == 'OPERATOR') {
             backToMain(navigation);
-          } else {
-            registerForPushNotificationsAsync();
-            fetchWishlist();
-            let { resetAfter, thruBeforeLogin } = params;
-            if (resetAfter)
-              backToMain(navigation);
-            else if (thruBeforeLogin)
-              pop(2);
-            else
-              pop();
-          }
         } else {
           console.log(response);
           let error;

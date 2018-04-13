@@ -7,7 +7,7 @@ import {
   TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView
 } from 'react-native';
 import { LinearGradient } from 'expo';
-import { dateFullShort } from '../../customer/components/Formatter';
+import { dateFullShort } from '../../components/Formatter';
 import { getPaxCountText } from '../../commons/otherCommonFunctions';
 import { fetchVerifyTicket } from './Appointments/AppointmentController';
 

@@ -9,7 +9,7 @@ import {
 import globalStyles from '../../commons/globalStyles';
 import Modal from './Modal';
 import { NavigationActions } from 'react-navigation';
-import LoadingAnimation from './../../customer/components/LoadingAnimation';
+import LoadingAnimation from './../../components/LoadingAnimation';
 
 export default class LoadingModal extends React.Component {
 

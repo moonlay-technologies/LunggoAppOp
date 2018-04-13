@@ -7,7 +7,7 @@ import {
   TextInput, ScrollView, TouchableHighlight, RefreshControl,
 } from 'react-native';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../../api/Common';
-import { dateFullShort, timeFromNow } from '../../customer/components/Formatter';
+import { dateFullShort, timeFromNow } from '../../components/Formatter';
 import { fetchAppointmentRequests } from './Appointments/AppointmentController';
 import { shouldRefreshAppointmentRequest } from './AppointmentList';
 import LoadingModal from './../../commons/components/LoadingModal';

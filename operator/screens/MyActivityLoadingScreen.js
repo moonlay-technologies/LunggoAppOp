@@ -4,7 +4,7 @@ import React from 'react';
 import { ActivityIndicator, Text, RefreshControl } from 'react-native';
 import {fetchTravoramaApi,AUTH_LEVEL} from '../../api/Common';
 import ListScreen from './ActivityList';
-import LoadingAnimation from '../../customer/components/LoadingAnimation';
+import LoadingAnimation from '../../components/LoadingAnimation';
 import { getActivityList } from './ActivityController';
 
 

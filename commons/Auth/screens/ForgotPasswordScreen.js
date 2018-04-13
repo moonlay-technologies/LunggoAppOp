@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { validatePhone } from '../../../commons/FormValidation';
 import { sendOtp } from '../ResetPasswordController';
-import LoadingAnimation from '../../../customer/components/LoadingAnimation';
-import { phoneWithoutCountryCode_Indonesia } from '../../../customer/components/Formatter';
+import LoadingAnimation from '../../../components/LoadingAnimation';
+import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from './../../components/LoadingModal';
 
 export default class ForgotPasswordScreen extends React.Component {

@@ -7,7 +7,7 @@ import {
   ScrollView, FlatList,
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
-import { dateFullShort, rupiah } from '../../customer/components/Formatter';
+import { dateFullShort, rupiah } from '../../components/Formatter';
 import {
   getPaxCountText, getPaymentSumInSteps as getPaymentInfo,
   getPaymentSumInReservations as getPaymentSum,

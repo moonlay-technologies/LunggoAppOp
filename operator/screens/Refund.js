@@ -6,8 +6,8 @@ import { Platform, StyleSheet, Text, View, Image, ScrollView,
 } from 'react-native';
 import OfflineNotificationBar from '../../commons/components/OfflineNotificationBar';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../../api/Common';
-import LoadingAnimation from '../../customer/components/LoadingAnimation';
-import { timeFromNow, date, rupiah } from '../../customer/components/Formatter';
+import LoadingAnimation from '../../components/LoadingAnimation';
+import { timeFromNow, date, rupiah } from '../../components/Formatter';
 import { getPaxCountText } from '../../commons/otherCommonFunctions';
 import Moment from 'moment';
 

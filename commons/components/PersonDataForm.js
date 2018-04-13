@@ -10,7 +10,7 @@ import {
 import { validateEmail, validatePassword, validateRequiredField, validatePhone }
   from '../FormValidation';
 import globalStyles from '../globalStyles';
-import { reversePhoneWithoutCountryCode_Indonesia, phoneWithoutCountryCode_Indonesia } from '../../customer/components/Formatter';
+import { reversePhoneWithoutCountryCode_Indonesia, phoneWithoutCountryCode_Indonesia } from '../../components/Formatter';
 import { WideCTAButton } from './Buttons';
 
 

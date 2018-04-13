@@ -10,28 +10,15 @@ import globalStyles from '../../commons/globalStyles';
 import Modal from './Modal';
 import { logout } from '../../commons/Auth/AuthController';
 import { backToMain } from '../../api/Common';
-import { APP_TYPE } from '../../constants/env';
 import { NavigationActions } from 'react-navigation';
-import { purgeMyBookingList } from '../../customer/screens/MyBooking/MyBookingController';
 import { purgeProfile } from '../ProfileController';
 
 export default class LogoutConfirmationModal extends React.Component {
 
   _logout = () => {
     logout().then(() => {
-      purgeMyBookingList();
       purgeProfile();
-      if (APP_TYPE != 'OPERATOR') {
-        backToMain(this.props.navigation);
-      }
-      else {
-        let { reset, navigate } = NavigationActions;
-        const action = reset({
-          index: 0,
-          actions: [navigate({ routeName: 'LoginScreen', params: { appType: 'OPERATOR' } })],
-        });
-        this.props.navigation.dispatch(action);
-      }
+      backToMain(this.props.navigation);
     });
   }
 

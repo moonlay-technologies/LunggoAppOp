@@ -11,12 +11,12 @@ import {
   ScrollView,
 } from 'react-native';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../../api/Common'
-import * as Formatter from '../../customer/components/Formatter'
+import * as Formatter from '../../components/Formatter'
 import DatePicker from 'react-native-datepicker'
 import globalStyles from '../../commons/globalStyles';
 import Moment from 'moment';
 // import 'moment/locale/id';
-import LoadingAnimation from '../../customer/components/LoadingAnimation';
+import LoadingAnimation from '../../components/LoadingAnimation';
 
 export default class Mutasi extends React.Component {
   constructor(props) {

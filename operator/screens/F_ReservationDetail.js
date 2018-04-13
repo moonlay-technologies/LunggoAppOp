@@ -5,7 +5,7 @@ import { Platform, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Timeline from 'react-native-timeline-listview';
 import { getPaxCountText, getPaymentSumInSteps } from '../../commons/otherCommonFunctions';
-import { date as formatDate, rupiah } from '../../customer/components/Formatter';
+import { date as formatDate, rupiah } from '../../components/Formatter';
 import Moment from 'moment';
 
 export default class F_ReservationDetail extends React.Component {

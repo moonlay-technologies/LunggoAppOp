@@ -17,7 +17,7 @@ import {
   KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback,
 } from 'react-native';
 import { sendOtp, verifyOtp } from '../ResetPasswordController';
-import LoadingAnimation from '../../../customer/components/LoadingAnimation';
+import LoadingAnimation from '../../../components/LoadingAnimation';
 import Moment from 'moment';
 import LoadingModal from './../../components/LoadingModal';
 

@@ -7,9 +7,9 @@ import {
 } from 'react-native';
 import OfflineNotificationBar from '../../commons/components/OfflineNotificationBar';
 import ReactNativeDatepicker from 'react-native-datepicker';
-import { dateFullShort } from '../../customer/components/Formatter';
+import { dateFullShort } from '../../components/Formatter';
 import { fetchAppointmentList } from './Appointments/AppointmentController';
-import LoadingAnimation from '../../customer/components/LoadingAnimation';
+import LoadingAnimation from '../../components/LoadingAnimation';
 import {
   getTotalPaxCountsText,
   getPaymentSumInReservations as getPaymentInfo,

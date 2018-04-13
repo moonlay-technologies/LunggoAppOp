@@ -4,5 +4,3 @@ export const deviceId = Expo.Constants.deviceId;
 export const AUTH_LEVEL = { Guest: '1', User: '2' }
 export const DOMAIN = 'http://travorama-local-cw.azurewebsites.net';
 export const API_DOMAIN = 'http://travorama-local-api.azurewebsites.net';
-// export const APP_TYPE = 'OPERATOR';
-export const APP_TYPE = 'CUSTOMER';

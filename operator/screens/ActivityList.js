@@ -3,7 +3,7 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, View, Image, TextInput,
   ScrollView, FlatList, TouchableHighlight } from 'react-native';
-import * as Formatter from '../../customer/components/Formatter';
+import * as Formatter from '../../components/Formatter';
 
 class ListItem extends React.PureComponent {
 

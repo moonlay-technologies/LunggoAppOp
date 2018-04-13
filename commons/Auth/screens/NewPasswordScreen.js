@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { validatePassword } from '../../../commons/FormValidation';
 import { resetPassword } from '../ResetPasswordController';
-import LoadingAnimation from '../../../customer/components/LoadingAnimation'
+import LoadingAnimation from '../../../components/LoadingAnimation'
 import { fetchWishlist, backToMain } from '../../../api/Common';
 import { fetchTravoramaLoginApi } from '../AuthController';
 import registerForPushNotificationsAsync from '../../../api/NotificationController';

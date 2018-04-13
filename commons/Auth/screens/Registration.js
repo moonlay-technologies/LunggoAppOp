@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
-import { phoneWithoutCountryCode_Indonesia } from '../../../customer/components/Formatter';
+import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import { fetchTravoramaApi, fetchWishlist, AUTH_LEVEL, backToMain } from '../../../api/Common';
 import registerForPushNotificationsAsync from '../../../api/NotificationController';
 import { fetchTravoramaLoginApi } from '../AuthController';

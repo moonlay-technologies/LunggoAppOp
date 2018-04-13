@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "LunggoAppOpp",
+    "name": "LunggoAppOp",
     "description": "This project is really great.",
-    "slug": "LunggoAppOpp",
+    "slug": "LunggoAppOp",
     "privacy": "public",
-    "sdkVersion": "26.0.0",
-    "platforms": ["ios", "android"],
+    "sdkVersion": "21.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,12 +13,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": true
     }
