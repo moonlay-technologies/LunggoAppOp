@@ -68,10 +68,8 @@ export default class AppointmentRequests extends React.Component {
     this.setState({ isLoading: false });
   }
 
-  _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm')
-  _declineRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'decline')
-  _refreshCtrl = () =>
-    <RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />
+  _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm');
+  _declineRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'decline');    
 
   render() {
     let { isLoading, list } = this.state;
@@ -85,13 +83,13 @@ export default class AppointmentRequests extends React.Component {
             data={this.state.list}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
-            refreshControl={<this._refreshCtrl/>}
+            refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
           />
         </View>
       :
         <ScrollView
           style={{ backgroundColor: '#fff' }}
-          refreshControl={<this._refreshCtrl/>}
+          refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
           contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
         >
           <Text>Belum ada pesanan baru yang masuk</Text>

@@ -122,10 +122,7 @@ export default class AppointmentList extends React.Component {
     this.props.navigation.navigate(
       'AppointmentDetail',{details: item}
     );
-  }
-
-  _refreshCtrl = () =>
-    <RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />
+  }    
 
   render() {
     let {list} = this.state;
@@ -137,13 +134,13 @@ export default class AppointmentList extends React.Component {
             data={list}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
-            refreshControl={<this._refreshCtrl />}
+            refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
           />
         </View>
       :
         <ScrollView
           style={{ backgroundColor: '#fff' }}
-          refreshControl={<this._refreshCtrl/>}
+          refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
         >
           <Text>Anda belum memiliki pesanan terjadwal</Text>
         </ScrollView>
