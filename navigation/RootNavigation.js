@@ -24,6 +24,8 @@ import F_AppointmentDetail from '../operator/screens/F_AppointmentDetail';
 import F_AppointmentList from '../operator/screens/F_AppointmentList';
 import F_ReservationDetail from '../operator/screens/F_ReservationDetail';
 import Refund from '../operator/screens/Refund';
+import HelpScreen from '../operator/screens/HelpScreen';
+import AddActivityScreen from '../operator/screens/AddActivityScreen';
 
 import NotFound from '../commons/NotFoundScreen';
 
@@ -58,6 +60,8 @@ export default class RootNavigator extends React.Component {
       F_AppointmentDetail: { screen: F_AppointmentDetail },
       F_ReservationDetail: { screen: F_ReservationDetail },
       Refund: { screen: Refund },
+      HelpScreen: { screen: HelpScreen },
+      AddActivityScreen: { screen: AddActivityScreen },
     },
     {
       initialRouteName: (this.props.isLoggedIn) ? 'Main' : 'LoginScreen',
