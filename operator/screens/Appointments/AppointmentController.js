@@ -6,7 +6,7 @@ const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 export async function fetchAppointmentRequests() {
   const version = 'v1';
   let request = {
-    path: `/${version}/operator/appointments/request`,
+    path: `/${version}/operator/appointments/request?perpage=1000`,
     requiredAuthLevel: AUTH_LEVEL.User,
   }
   try {
@@ -32,7 +32,8 @@ export const getAppointmentList = async () => {
 
 export const fetchAppointmentList = async (params = '') => {
   const version = 'v1';
-  const path = `/${version}/operator/appointments?${params}`;
+  const path = `/${version}/operator/appointments?perpage=1000
+  `;
   let request = { path, requiredAuthLevel: AUTH_LEVEL.User }
   try {
     let list = await fetchTravoramaApi(request);

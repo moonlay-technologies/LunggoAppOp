@@ -5,7 +5,7 @@ const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 
 export async function fetchActivityList() {
   const version = 'v1';
-  const path = `/${version}/operator/myactivity`;
+  const path = `/${version}/operator/myactivity?perPage=1000`;
   let request = { path, requiredAuthLevel: AUTH_LEVEL.User }
   let list = await fetchTravoramaApi(request);
   await setItemAsync('activityList', JSON.stringify(list));

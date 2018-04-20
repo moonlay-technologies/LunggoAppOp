@@ -391,11 +391,11 @@ export default class Dashboard extends React.Component {
           </TouchableOpacity>
         </View>
 
-        <View>
+        <View style={styles.boxDetail}>
           <TouchableOpacity style={styles.row} onPress={this._goToAddActivityScreen}>
             <View style={{ marginRight: 15 }}>
               <Icon
-                name='ios-plus-outline'
+                name='md-add-circle'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
@@ -415,7 +415,7 @@ export default class Dashboard extends React.Component {
           <TouchableOpacity style={styles.row} onPress={this._goToHelpScreen}>
             <View style={{ marginRight: 15 }}>
               <Icon
-                name='ios-help-outline'
+                name='md-help-circle'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
@@ -433,7 +433,7 @@ export default class Dashboard extends React.Component {
           </TouchableOpacity>
           <View style={styles.separatorListDashbord}></View>
           <TouchableOpacity
-            style={[styles.boxDetail, styles.row]}
+            style={styles.row}
             onPress={this._askLogout}
           >
             <Icon

@@ -8,8 +8,7 @@ import {
 } from 'react-native';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../../api/Common';
 import { dateFullShort, timeFromNow } from '../../components/Formatter';
-import { fetchAppointmentRequests } from './Appointments/AppointmentController';
-import { shouldRefreshAppointmentRequest } from './AppointmentList';
+import { fetchAppointmentRequests, shouldRefreshAppointmentList } from './Appointments/AppointmentController';
 import LoadingModal from './../../commons/components/LoadingModal';
 import { getPaxCountText } from '../../commons/otherCommonFunctions';
 
@@ -32,7 +31,7 @@ export default class AppointmentRequests extends React.Component {
     this._refreshList();
   }
 
-  _refreshList = () => fetchAppointmentRequests().then( res =>
+  _refreshList = () => fetchAppointmentRequests().then(res =>
     this.setState({ list: res.appointmentRequests })
   )
 
@@ -62,38 +61,39 @@ export default class AppointmentRequests extends React.Component {
       requiredAuthLevel: AUTH_LEVEL.User,
     }
     fetchTravoramaApi(request).then(response => {
-      shouldRefreshAppointmentRequest();
+      shouldRefreshAppointmentList();
+      this._refreshList();
       this.setState({ list: list.filter(e => e.rsvNo != rsvNo) });
-    }).catch(error => console.log(error));
-    this.setState({ isLoading: false });
+    }).catch(error => console.log(error)
+    ).finally(() => this.setState({ isLoading: false }));
   }
 
   _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm');
-  _declineRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'decline');    
+  _declineRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'decline');
 
   render() {
     let { isLoading, list } = this.state;
     return (
       isLoading ? <LoadingModal isVisible={isLoading} />
-      :
-      ( list && list.length > 0 ) ?
-        <View style={{ marginBottom: 10,backgroundColor: '#fff', }}>
-          <FlatList
-            style={{ paddingTop: 15 }}
-            data={this.state.list}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}
+        :
+        (list && list.length > 0) ?
+          <View style={{ marginBottom: 10, backgroundColor: '#fff', }}>
+            <FlatList
+              style={{ paddingTop: 15 }}
+              data={this.state.list}
+              keyExtractor={this._keyExtractor}
+              renderItem={this._renderItem}
+              refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
+            />
+          </View>
+          :
+          <ScrollView
+            style={{ backgroundColor: '#fff' }}
             refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-          />
-        </View>
-      :
-        <ScrollView
-          style={{ backgroundColor: '#fff' }}
-          refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-          contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
-        >
-          <Text>Belum ada pesanan baru yang masuk</Text>
-        </ScrollView>
+            contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
+          >
+            <Text>Belum ada pesanan baru yang masuk</Text>
+          </ScrollView>
     );
   }
 }

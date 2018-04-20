@@ -8,7 +8,7 @@ import {
 import Moment from 'moment';
 import 'moment/locale/id';
 import { Icon } from 'react-native-elements';
-import { getAppointmentList } from './Appointments/AppointmentController';
+import { getAppointmentList, shouldRefreshAppointmentList } from './Appointments/AppointmentController';
 
 class ListItem extends React.PureComponent {
 
@@ -101,8 +101,9 @@ export default class AppointmentList extends React.Component {
     title: 'Pesanan Terjadwal',
   }
 
-  _refreshList = () => {
+  _refreshList = (force = false) => {
     this.setState({isLoading:true})
+    if (force) shouldRefreshAppointmentList();
     getAppointmentList().then( r =>
       this.setState({ list: r.appointments })
     ).catch(e  => console.warn(e))

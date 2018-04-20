@@ -5,16 +5,20 @@
     "slug": "LunggoAppOp",
     "privacy": "public",
     "sdkVersion": "21.0.0",
-    "version": "1.0.0",
+    "version": "0.1.2",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/icon-android.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/icons/splash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./assets/icons/icon-ios.png"
+    },
+    "android": {
+      "icon": "./assets/icons/icon-android.png"
     }
   }
 }
