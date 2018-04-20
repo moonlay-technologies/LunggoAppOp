@@ -114,20 +114,6 @@ export default class LoginScreen extends React.Component {
         <Text style={{ color: '#fc2b4e' }}>{error}</Text>
       </View> : null;
 
-    let registerHereButton =
-      (params && params.appType == 'OPERATOR') ? null :
-        <TouchableOpacity
-          style={{
-            position: 'absolute', bottom: 20,
-            alignItems: 'center', width: '111%'
-          }}
-          onPress={() => this.props.navigation.replace('Registration', params)}
-        >
-          <Text style={{ fontSize: 14, color: '#000', fontFamily: 'Hind' }}>
-            Belum punya akun? Daftar di sini
-        </Text>
-        </TouchableOpacity>
-
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
@@ -220,7 +206,6 @@ export default class LoginScreen extends React.Component {
               Lupa Password?
               </Text>
           </TouchableOpacity>
-          {registerHereButton}
         </View>
       </TouchableWithoutFeedback>
     );
