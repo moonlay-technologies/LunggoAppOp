@@ -55,8 +55,8 @@ export default class F_ReservationDetail extends React.Component {
             <Text style={styles.labelHeader}>Detail Aktivitas</Text>
             <View style={{ marginTop: 3 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={[styles.labelDesc, { flex: 1 }]}>Nama Aktivitas</Text>
-                <Text style={styles.activityDesc} numberOfLines={1}>{name}</Text>
+                <Text style={[styles.labelDesc]}>Nama Aktivitas</Text>
+                <Text style={[styles.activityDesc, {flex : 1}, {marginLeft: 40}]} numberOfLines={1}>{name}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={styles.labelDesc}>Waktu</Text>

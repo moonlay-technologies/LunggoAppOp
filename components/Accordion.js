@@ -7,8 +7,8 @@ export default class Accordion extends React.Component {
   constructor(props) {
     super(props);
     this.icons = {   
-      'up'   : require('../../assets/icons/up-arrow.png'),
-      'down' : require('../../assets/icons/down-arrow.png')
+      'up'   : require('../assets/icons/up-arrow.png'),
+      'down' : require('../assets/icons/down-arrow.png')
     };
   }
 

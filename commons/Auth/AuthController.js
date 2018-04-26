@@ -5,7 +5,7 @@ import {
 import { fetchProfile } from '../ProfileController';
 
 async function fetchAuth(data, isOperator) {
-  let url = API_DOMAIN + `/v1${isOperator ? '/operator' : ''}/login`;
+  let url = API_DOMAIN + `/v1/operator/login`;
   console.log(url);
   console.log(data);
   let response = await fetch(url, {

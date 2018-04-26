@@ -15,6 +15,7 @@ import { fetchWishlist, backToMain } from '../../../api/Common';
 import { fetchTravoramaLoginApi } from '../AuthController';
 import registerForPushNotificationsAsync from '../../../api/NotificationController';
 import LoadingModal from './../../components/LoadingModal';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 
@@ -33,6 +34,7 @@ export default class NewPasswordScreen extends React.Component {
   }
 
   _submit = () => {
+    Keyboard.dismiss();
     let { password } = this.state;
     let { countryCallCd, phone, email, otp } = this.props.navigation.state.params;
     let errorPassword = validatePassword(password);
@@ -74,7 +76,7 @@ export default class NewPasswordScreen extends React.Component {
     let { password, showPassword, isLoading, errorMessage } = this.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <KeyboardAvoidingView behavior="position" style={styles.container}>
+        <KeyboardAwareScrollView enableOnAndroid={true} keyboardShouldPersistTaps="handled" enableAutomaticScroll = {true}>
           <LoadingModal isVisible={isLoading} />
           <View style={{ marginBottom: 15 }}>
             <Text style={styles.categoryTitle}>Masukkan Password Baru</Text>
@@ -132,7 +134,7 @@ export default class NewPasswordScreen extends React.Component {
             Ubah Password
           </Button>
           {isLoading && <LoadingAnimation />}
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </TouchableWithoutFeedback>
     );
   }

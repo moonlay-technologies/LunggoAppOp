@@ -18,7 +18,7 @@ import LogoutConfirmationModal from '../../commons/components/LogoutConfirmation
 import { checkUserLoggedIn } from '../../api/Common';
 import { NavigationActions } from 'react-navigation';
 import {
-  fetchAppointmentRequests, getAppointmentList, getReservationList,
+  fetchAppointmentRequests, getAppointmentList, getReservationList, fetchAppointmentList
 } from './Appointments/AppointmentController';
 import { getActivityList } from './ActivityController';
 import Avatar from './../../commons/components/Avatar';
@@ -101,8 +101,8 @@ export default class Dashboard extends React.Component {
 
   _refreshData = () => {
     Promise.all([
-      this._getAppointmentRequests(),
       this._getAppointmentList(),
+      this._getAppointmentRequests(),
       this._getActivityList(),
       // this._getReservationList()
     ]);
@@ -116,7 +116,7 @@ export default class Dashboard extends React.Component {
   }
 
   _getAppointmentList = () => {
-    getAppointmentList().then(({ appointments }) =>
+    fetchAppointmentList().then(({ appointments }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ appointments })
     ).catch(e => console.warn(e));
@@ -329,8 +329,8 @@ export default class Dashboard extends React.Component {
               />
             </View>
           </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row}>
+          <View style={styles.separatorListDashbord} ></View>
+          <TouchableOpacity style={styles.row} >
             <View style={{ marginRight: 15 }}>
               <Icon
                 name='md-clock'

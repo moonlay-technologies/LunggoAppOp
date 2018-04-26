@@ -28,6 +28,8 @@ import HelpScreen from '../operator/screens/HelpScreen';
 import AddActivityScreen from '../operator/screens/AddActivityScreen';
 
 import NotFound from '../commons/NotFoundScreen';
+import DetailScreen from './../operator/screens/DetailScreen';
+import MapScreen from './../operator/screens/MapScreen';
 
 export default class RootNavigator extends React.Component {
 
@@ -62,6 +64,8 @@ export default class RootNavigator extends React.Component {
       Refund: { screen: Refund },
       HelpScreen: { screen: HelpScreen },
       AddActivityScreen: { screen: AddActivityScreen },
+      DetailScreen: {screen: DetailScreen},
+      MapScreen: {screen: MapScreen},
     },
     {
       initialRouteName: (this.props.isLoggedIn) ? 'Main' : 'LoginScreen',

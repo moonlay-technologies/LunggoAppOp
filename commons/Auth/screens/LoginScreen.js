@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo';
 import { fetchProfile } from '../../ProfileController';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from './../../components/LoadingModal';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const { setItemAsync } = Expo.SecureStore;
 
 export default class LoginScreen extends React.Component {
@@ -116,6 +117,7 @@ export default class LoginScreen extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+       <KeyboardAwareScrollView enableOnAndroid = {true} enableAutomaticScroll = {true} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
           <LoadingModal isVisible={isLoading} />
           <View style={{ marginBottom: 30 }}>
@@ -207,6 +209,7 @@ export default class LoginScreen extends React.Component {
               </Text>
           </TouchableOpacity>
         </View>
+        </KeyboardAwareScrollView>
       </TouchableWithoutFeedback>
     );
   }

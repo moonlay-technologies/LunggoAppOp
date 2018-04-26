@@ -23,7 +23,7 @@ export const getAppointmentList = async () => {
     return fetchAppointmentList();
   } else {
     let listJson = await getItemAsync('appointmentList');
-    if (!listJson) return fetchAppointmentList();
+    if (!listJson || !listJson.includes("\"status\":200")) return fetchAppointmentList();
 
     let list = JSON.parse(listJson);
     return list;
@@ -32,8 +32,8 @@ export const getAppointmentList = async () => {
 
 export const fetchAppointmentList = async (params = '') => {
   const version = 'v1';
-  const path = `/${version}/operator/appointments?perpage=1000
-  `;
+  const appointmentListPath = `/${version}/operator/appointments?perpage=1000`
+  const path = params ? appointmentListPath + "&" + params : appointmentListPath;
   let request = { path, requiredAuthLevel: AUTH_LEVEL.User }
   try {
     let list = await fetchTravoramaApi(request);

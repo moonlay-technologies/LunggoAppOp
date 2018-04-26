@@ -12,6 +12,7 @@ import { sendOtp } from '../ResetPasswordController';
 import LoadingAnimation from '../../../components/LoadingAnimation';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from './../../components/LoadingModal';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default class ForgotPasswordScreen extends React.Component {
   constructor(props, context) {
@@ -33,6 +34,7 @@ export default class ForgotPasswordScreen extends React.Component {
   }
 
   _submit = () => {
+    Keyboard.dismiss();
     let { countryCallCd } = this.state;
     let phone = phoneWithoutCountryCode_Indonesia(this.state.phone);
     let errorMessage = validatePhone(phone);
@@ -56,7 +58,7 @@ export default class ForgotPasswordScreen extends React.Component {
     let { phone, isLoading, errorMessage } = this.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <KeyboardAwareScrollView enableOnAndroid={true} keyboardShouldPersistTaps="handled" enableAutomaticScroll = {true}>
           <LoadingModal isVisible={isLoading} />
           <View style={{ marginBottom: 15 }}>
             <Text style={styles.categoryTitle}>Lupa Password?</Text>
@@ -104,7 +106,7 @@ export default class ForgotPasswordScreen extends React.Component {
           >
             Kirim
           </Button>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </TouchableWithoutFeedback>
     );
   }

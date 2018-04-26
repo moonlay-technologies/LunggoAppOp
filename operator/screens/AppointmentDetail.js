@@ -4,12 +4,13 @@ import React from 'react';
 import { Icon } from 'react-native-elements'
 import {
   Platform, StyleSheet, Text, View, Image, TouchableOpacity, NetInfo,
-  TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView
+  TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView, Keyboard
 } from 'react-native';
 import { LinearGradient } from 'expo';
 import { dateFullShort } from '../../components/Formatter';
 import { getPaxCountText } from '../../commons/otherCommonFunctions';
 import { fetchVerifyTicket } from './Appointments/AppointmentController';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default class AppointmentDetail extends React.Component {
 
@@ -20,6 +21,7 @@ export default class AppointmentDetail extends React.Component {
       reservations,
       verificationCode: '',
       showInputWarning: false,
+      keyboard: 150
     };
   }
 
@@ -28,6 +30,10 @@ export default class AppointmentDetail extends React.Component {
   }
 
   _verify = () => {
+    Keyboard.dismiss();
+    this.setState({
+      keyboard: 0
+    });
     let {verificationCode:code, reservations} = this.state;
     this.setState({verificationCode: ''});
     let {verifiedRsv,markedRsvs} = this._verifyOffline(code);
@@ -62,16 +68,17 @@ export default class AppointmentDetail extends React.Component {
   _onVerificationCodeChanged = verificationCode => {
     this.setState({verificationCode, showInputWarning:false});
   }
-
+  
   render() {
     let { details } = this.props.navigation.state.params;
     let {showInputWarning, verificationCode} = this.state;
     // let {paxGroups} = details;
     return (
-      <ScrollView style={{flex:1,backgroundColor: '#f1f0f0' }}>
-        <KeyboardAvoidingView behavior="padding">
+      <KeyboardAwareScrollView keyboardShouldPersistTaps="handled" enableOnAndroid = {true} accessible={true} extraScrollHeight={Platform.OS == 'android' ? this.state.keyboard : 0}>
+      <ScrollView keyboardShouldPersistTaps="handled" style={{flex:1,backgroundColor: '#f1f0f0' }}>
+        
         <View style={{flex:1,backgroundColor: '#f1f0f0',}}>
-
+          
           <View style={styles.containerListAppointmentHeader}>
             <Text style={styles.activityTitle2}>
               {details.name}
@@ -220,7 +227,17 @@ export default class AppointmentDetail extends React.Component {
                 onChangeText={this._onVerificationCodeChanged}
                 value={verificationCode}
                 placeholder="Kode verifikasi"
+                onFocus={() => this.setState({
+                  keyboard: 150
+                })}
+                onEndEditing = {() => this.setState({
+                  keyboard: 0
+                })}
               />
+              {showInputWarning && (
+                <Text style={{color:'red'}}> Kode verifikasi salah </Text>
+              )
+              }
             </View>
 
             <TouchableOpacity
@@ -263,10 +280,11 @@ export default class AppointmentDetail extends React.Component {
               </View>*/}
 
           
-          
+         
         </View>
-        </KeyboardAvoidingView>
+       
       </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }

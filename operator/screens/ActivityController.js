@@ -14,13 +14,15 @@ export async function fetchActivityList() {
 
 export const getActivityList = async () => {
   let shouldRefresh = await getItemAsync('shouldRefresh.activityList');
+  console.log("should refresh activityList: " + shouldRefresh);
   if (shouldRefresh) {
     deleteItemAsync('shouldRefresh.activityList');
     return fetchActivityList();
   }
 
   let listJson = await getItemAsync('activityList');
-  if (!listJson) return fetchActivityList();
+  console.log("activity list: " + listJson);
+  if (!listJson || !listJson.includes("\"status\":200")) return fetchActivityList();
 
   let list = JSON.parse(listJson);
   return list;

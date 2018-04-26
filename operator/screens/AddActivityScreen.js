@@ -16,7 +16,7 @@ export default class EditDetailActivity extends Component {
   render() {
     let text = 'Ingin menambahkan aktivitas baru';
     return (
-      <WebView
+      <WebView style={{marginTop:-30}}
         startInLoadingState={true}
         source={{
           uri: DOMAIN + '/id/webview/redirectcontact?text=' + text,
