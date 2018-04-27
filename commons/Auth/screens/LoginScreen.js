@@ -30,6 +30,7 @@ export default class LoginScreen extends React.Component {
   }
 
   _onLoginPressed = () => {
+    Keyboard.dismiss();
     let { userName, password } = this.state;
     let errorUserName = validateUserName(userName);
     let errorPassword = validatePassword(password);

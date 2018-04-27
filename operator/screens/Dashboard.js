@@ -20,7 +20,7 @@ import { NavigationActions } from 'react-navigation';
 import {
   fetchAppointmentRequests, getAppointmentList, getReservationList, fetchAppointmentList
 } from './Appointments/AppointmentController';
-import { getActivityList } from './ActivityController';
+import { getActivityList, fetchActivityList } from './ActivityController';
 import Avatar from './../../commons/components/Avatar';
 
 export default class Dashboard extends React.Component {
@@ -123,7 +123,7 @@ export default class Dashboard extends React.Component {
   }
 
   _getActivityList = () => {
-    getActivityList().then(({ activityList }) =>
+    fetchActivityList().then(({ activityList }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ activities: activityList })
     ).catch(e => console.warn(e));;
