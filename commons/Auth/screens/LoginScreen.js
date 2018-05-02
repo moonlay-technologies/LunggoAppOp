@@ -69,6 +69,7 @@ export default class LoginScreen extends React.Component {
         this.setState({ isLoading: false });
         if (response.status == 200) {
           setItemAsync('isLoggedIn', 'true');
+          registerForPushNotificationsAsync();
             backToMain(navigation);
         } else {
           console.log(response);

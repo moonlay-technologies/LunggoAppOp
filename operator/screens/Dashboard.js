@@ -329,26 +329,6 @@ export default class Dashboard extends React.Component {
               />
             </View>
           </TouchableOpacity>
-          <View style={styles.separatorListDashbord} ></View>
-          <TouchableOpacity style={styles.row} >
-            <View style={{ marginRight: 15 }}>
-              <Icon
-                name='md-clock'
-                type='ionicon'
-                size={26}
-                color='#00d3c5'
-              />
-            </View>
-            <Text style={styles.labelHeader}>Riwayat Pesanan</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
           <View style={styles.separatorListDashbord}></View>
           <TouchableOpacity style={styles.row} onPress={this._goToRefund}>
             <View style={{ marginRight: 15 }}>

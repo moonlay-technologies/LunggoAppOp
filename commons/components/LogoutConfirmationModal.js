@@ -12,12 +12,14 @@ import { logout } from '../../commons/Auth/AuthController';
 import { backToMain } from '../../api/Common';
 import { NavigationActions } from 'react-navigation';
 import { purgeProfile } from '../ProfileController';
+import { deletePushNotificationAsync } from '../../api/NotificationController';
 
 export default class LogoutConfirmationModal extends React.Component {
 
   _logout = () => {
     logout().then(() => {
       purgeProfile();
+      deletePushNotificationAsync();
       backToMain(this.props.navigation);
     });
   }
