@@ -20,7 +20,12 @@
     },
     "android": {
       "icon": "./assets/icons/icon-android.png",
-      "package": "com.travelmadezy.travoramaoperator"
+      "package": "com.travelmadezy.travoramaoperator",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAO1G0xY7slJppr3ibKsjUCzWl5l9lsbZs"
+        }
+      }
     }
   }
 }
