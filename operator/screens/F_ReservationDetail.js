@@ -38,7 +38,6 @@ export default class F_ReservationDetail extends React.Component {
     let totalPayment = getPaymentSumInSteps(rsv.paymentSteps);
     let completedPayment = getPaymentSumInSteps(rsv.paymentSteps, true);
     let isSettled = completedPayment == totalPayment;
-    console.warn('potensi bug di Tanggal Pelunasan: uda pasti blom kalo tanggal terakhir itu ada di array terakhir?')
     let dueDate = formatDate(rsv.paymentSteps[rsv.paymentSteps.length - 1].date);
     let paxCount = getPaxCountText(rsv.paxCount);
     return (

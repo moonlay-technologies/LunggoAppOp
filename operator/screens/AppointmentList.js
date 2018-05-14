@@ -60,7 +60,7 @@ class ListItem extends React.PureComponent {
             </View>
             <View style={{marginTop:5,}}>
               <Text style={styles.status}>
-                {Moment(item.date).fromNow()}
+                {Moment(item.date).diff(Moment(), 'days')} hari lagi
               </Text>
             </View>
           </View>

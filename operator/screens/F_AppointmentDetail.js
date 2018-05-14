@@ -13,6 +13,7 @@ import {
   getPaymentSumInReservations as getPaymentSum,
 } from '../../commons/otherCommonFunctions';
 import Avatar from './../../commons/components/Avatar';
+import { Icon } from 'react-native-elements';
 
 export default class F_AppointmentDetail extends React.Component {
 
@@ -93,7 +94,7 @@ class ListItem extends React.PureComponent {
           onPress={this.props.onPressItem}
         >
           <Avatar size={40} style={styles.containerAvatar} name={item.contact.name} />
-          <View style={{ width: '80%', flexDirection: 'column' }}>
+          <View style={{ width: '75%' }}>
             <Text style={styles.namaPax}>{item.contact.name}</Text>
             <Text style={styles.activityDesc}>{paxCount}</Text>
             <View style={{ flexDirection: 'row' }} >
@@ -108,6 +109,15 @@ class ListItem extends React.PureComponent {
                 <Text style={styles.nominalKecil}> {totalPayment}</Text>
               </View>
             </View>
+          </View>
+          <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginLeft: 10 }}>
+            <Icon
+              style={{ marginTop: 10 }}
+              name='chevron-thin-right'
+              type='entypo'
+              size={20}
+              color='#707070'
+            />
           </View>
         </TouchableOpacity>
         <View style={styles.divider} />
