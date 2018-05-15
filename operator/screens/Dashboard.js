@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  Image, Platform, ScrollView, Text, TouchableOpacity, View,
+  Image, Platform, ScrollView, Text, TouchableOpacity, View, RefreshControl,
   TextInput, ActivityIndicator, TouchableNativeFeedback, StyleSheet,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -28,6 +28,7 @@ export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
       name: '...',
       balance: 9999999,
       avatar: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png',
@@ -100,12 +101,15 @@ export default class Dashboard extends React.Component {
   }
 
   _refreshData = () => {
+    this.setState({ isLoading: true });
     Promise.all([
       this._getAppointmentList(),
       this._getAppointmentRequests(),
       this._getActivityList(),
       // this._getReservationList()
-    ]);
+    ]).then(() => {
+      this.setState({ isLoading: false });
+    });
   }
 
   _getAppointmentRequests = () => {
@@ -171,7 +175,10 @@ export default class Dashboard extends React.Component {
   render() {
     // let nameInitial = item.contact.name.substr(0,1);
     return (
-      <ScrollView style={{ backgroundColor: '#f7f8fb' }}>
+      <ScrollView
+        style={{ backgroundColor: '#f7f8fb' }}
+        refreshControl={<RefreshControl onRefresh={this._refreshData} refreshing={this.state.isLoading} />}
+      >
         <View style={{ height: 310 }}>
           <Image style={{ height: 250, resizeMode: 'cover' }} source={require('../../assets/images/bg1.jpg')} />
           <View style={styles.containerDashboard}>
