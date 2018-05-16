@@ -1,5 +1,6 @@
 import { Permissions, Notifications } from 'expo';
 import { fetchTravoramaApi, AUTH_LEVEL } from './Common';
+import { Dashboard } from './../operator/screens/Screens';
 
 // Example server, implemented in Rails: https://git.io/vKHKv
 // const PUSH_ENDPOINT = 'https://expo-push-server.herokuapp.com/tokens';
@@ -46,4 +47,20 @@ export async function deletePushNotificationAsync(){
    data: { handle:token },
    requiredAuthLevel: AUTH_LEVEL.Guest
  })
+}
+
+export async function notificationListener({ origin, data }) {
+  console.log("cool data: " + origin + data);
+  if (data.function && data.function == "refreshAppointment" && origin == "received") {
+    console.log("refreshing dashboard");
+    //fungsi untuk refresh data
+  }
+  if (data.function && data.function == "refreshAppointment" && origin == "selected") {
+    console.log("selecting notif");
+    this.props.navigation.navigate("AppointmentRequest");
+  }
+}
+
+export async function addNotificationListener(){
+  Notifications.addListener(notificationListener); 
 }
