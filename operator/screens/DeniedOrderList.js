@@ -2,77 +2,82 @@
 
 import React from 'react';
 import {
-  Platform, StyleSheet, Text, View, Image,
-  ScrollView, TouchableOpacity, FlatList,
+  Platform, StyleSheet, Text, View, Image, ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import OfflineNotificationBar from '../../commons/components/OfflineNotificationBar';
-import ReactNativeDatepicker from 'react-native-datepicker';
-import { dateFullShort } from '../../components/Formatter';
-import { fetchAppointmentList } from './Appointments/AppointmentController';
+import { fetchTravoramaApi, AUTH_LEVEL } from '../../api/Common';
 import LoadingAnimation from '../../components/LoadingAnimation';
-import {
-  getTotalPaxCountsText,
-  getPaymentSumInReservations as getPaymentInfo,
-  getPaymentSumInAppointments as getPaymentSum,
-} from '../../commons/otherCommonFunctions';
+import { timeFromNow, date, rupiah } from '../../components/Formatter';
+import { getPaxCountText } from '../../commons/otherCommonFunctions';
 import Moment from 'moment';
-import 'moment/locale/id';
+import { dateFullShort } from './../../components/Formatter';
+import ReactNativeDatepicker from 'react-native-datepicker';
+import { fetchAppointmentList } from './Appointments/AppointmentController';
 
-export default class F_AppointmentList extends React.Component {
+export default class DeniedOrders extends React.Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isLoading: true,
       list: [],
       startDate: Moment().startOf('Month'),
       endDate: Moment(new Date()),
-    };
+    }
   }
 
   static navigationOptions = {
-    title: 'Penghasilan',
+    title: 'Pesanan Ditolak',
   }
 
   componentDidMount() {
     this.setState({ isLoading: true });
-    this._getAppointmentList(this.state);
+    this._getDeniedList(this.state);
   }
 
-  _getAppointmentList = ({ startDate, endDate }) => {
+  _getDeniedList = ({ startDate, endDate }) => {
     let start = Moment(startDate).format('MM/DD/YYYY');
     let end = Moment(endDate).format('MM/DD/YYYY');
-    // let start = Moment.utc(startDate).format('MM/DD/YYYY');
-    // let end   = Moment.utc( endDate ).format('MM/DD/YYYY');
     let params = `type=order&startDate=${start}&endDate=${end}`;
     fetchAppointmentList(params)
-      .then(res => this.setState({ list: res.appointments }))
+      .then(res => {
+        console.log('res');
+        console.log(res);
+        let rsvList = res.appointments.reduce((list, app) => list.concat(app.reservations), []);
+        // console.log('rsvList');
+        // console.log(rsvList);
+        let deniedList = rsvList.filter(rsv => rsv.rsvStatus == 'CAOP' || rsv.rsvStatus == 'DENY');
+        // console.log('deniedList');
+        // console.log(deniedList);
+        this.setState({ list: deniedList });
+      })
       .catch(e => console.warn(e))
       .finally(() => this.setState({ isLoading: false }));
   }
 
-  _keyExtractor = (item, index) => index
-  _renderItem = ({ item, index }) =>
-    <ListItem item={item} index={index} {...this.props} />
+  _goToDetail = rsv => this.props.navigation.navigate('F_ReservationDetail', {
+    rsv, activityDetail: {
+      name: rsv.activityName, date: rsv.activityDate, session: rsv.session
+    }
+  });
 
   _changeDate = (date, whichDate) => {
     date = Moment(date, 'dddd, D MMM YYYY');
-    this._getAppointmentList({ ...this.state, [whichDate]: date });
+    this._getDeniedList({ ...this.state, [whichDate]: date });
     this.setState({ [whichDate]: date });
-  }
+  };
 
   render() {
-    let { startDate, endDate, list, isLoading } = this.state;
+    let { list, isLoading, startDate, endDate } = this.state;
+    let totalAmount = list.reduce((total, rsv) => { return total + rsv.paxCount.totalPrice; }, 0);
     return (
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.center}>
-            <Text style={styles.nominalBesar1}>Total Pendapatan</Text>
-            <Text style={styles.nominalBesar}>{getPaymentSum(list)}</Text>
+            <Text style={styles.nominalBesar1}>Total Potensi yang Ditolak</Text>
+            <Text style={styles.nominalBesar}>{rupiah(totalAmount)}</Text>
             <View style={{ marginTop: 10, alignItems: 'center' }}>
-              <Text style={styles.activityDesc}>Sudah Dibayar
-                <Text style={styles.nominalKecil}> {getPaymentSum(list, 'completed')}</Text>
-              </Text>
               <View style={{ marginTop: 3 }}>
                 <Text style={styles.activityDesc}>
                   Periode {dateFullShort(startDate)} ‒ {dateFullShort(endDate)}
@@ -100,72 +105,36 @@ export default class F_AppointmentList extends React.Component {
             />
           </View>
           <View style={styles.divider}></View>
-          {isLoading ? <LoadingAnimation /> :
-            list.length ?
-              <FlatList
-                style={{ paddingTop: 15 }}
-                data={list}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}
-              />
-              :
-              <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-                <Text>Tidak ada transaksi pada rentang tanggal ini</Text>
-              </View>
-          }
+          {list && list.map((item, i) =>
+            <View key={i} >
+              <TouchableOpacity style={styles.boxReservation} onPress={() => this._goToDetail(item)}>
+                <View style={{ marginRight: 10, width: '20%' }}>
+                  <Image style={{ height: 55, width: '100%', }} source={{ uri: item.mediaSrc }} />
+                </View>
+                <View style={{ width: '80%' }}>
+                  <Text style={styles.activityTitle}>
+                    {item.activityName}
+                  </Text>
+                  <Text style={styles.activityTanggal}>
+                    Pemesan: {item.contact.name}
+                  </Text>
+                  <Text style={styles.activityTanggal}>
+                    Peserta: {getPaxCountText(item.paxCount)}
+                  </Text>
+                  <Text style={styles.activityTanggal}>Potensi tertolak:
+                    <Text style={styles.nominalKecil}> {rupiah(item.paxCount.totalPrice)}</Text>
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.divider} />
+            </View>
+          )}
         </ScrollView>
         <OfflineNotificationBar />
       </View>
     );
   }
 }
-
-class ListItem extends React.PureComponent {
-
-  _goToFAppointmentDetail = () => this.props.navigation.navigate(
-    'F_AppointmentDetail', { details: this.props.item }
-  )
-
-  render() {
-    let { item } = this.props;
-    return (
-      <View>
-        <TouchableOpacity style={styles.boxReservation} onPress={this._goToFAppointmentDetail}>
-          <View style={{ marginRight: 10, width: '20%' }}>
-            <Image style={{ height: 55, width: '100%', }} source={{ uri: item.mediaSrc }} />
-          </View>
-          <View style={{ width: '80%' }}>
-            <View style={{ marginBottom: 10 }}>
-              <Text style={styles.activityTitle}>
-                {item.name}
-              </Text>
-              <Text style={styles.activityTanggal}>
-                {dateFullShort(item.date)}{item.session && ' pk. ' + item.session}
-              </Text>
-            </View>
-
-            <View style={{ width: '95%', flexDirection: 'row' }} >
-              <View style={{ flex: 1.5, }}>
-                <Text style={styles.activityTanggal}>Jumlah Pesanan</Text>
-                <Text style={styles.activityTanggal}>Total Peserta</Text>
-                <Text style={styles.activityTanggal}>Sudah Dibayar</Text>
-                <Text style={styles.activityTanggal}>Harga</Text>
-              </View>
-              <View style={{ flex: 1.5, alignItems: 'flex-end' }}>
-                <Text style={styles.activityTanggal}>{item.reservations.length}</Text>
-                <Text style={styles.activityTanggal}>{getTotalPaxCountsText(item.reservations)}</Text>
-                <Text style={styles.nominalKecil}> {getPaymentInfo(item.reservations, 'completed')}</Text>
-                <Text style={styles.nominalKecil}> {getPaymentInfo(item.reservations)}</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.divider} />
-      </View>
-    );
-  }
-}
-
 
 const DatePicker = props => (
   <TouchableOpacity style={{ flex: 1, alignItems: 'center' }}>
@@ -243,9 +212,7 @@ const styles = StyleSheet.create({
     color: '#00d3c5',
     ...Platform.select({
       ios: {
-        lineHeight: 12,
-        paddingTop: 9,
-        marginBottom: -8,
+        height: 45
       },
       android: {
         lineHeight: 20,
@@ -292,7 +259,7 @@ const styles = StyleSheet.create({
       ios: {
         lineHeight: 12,
         paddingTop: 9,
-        marginBottom: -8,
+        marginBottom: -10,
       },
       android: {
 
@@ -323,9 +290,4 @@ const styles = StyleSheet.create({
   containerTanggal: {
     width: '90%',
   },
-  // dateInput: {
-  //   borderRadius: 3,
-  //   borderColor: '#cdcdcd',
-  //   height:35,
-  // },
 });

@@ -20,7 +20,7 @@ export default class F_ReservationDetail extends React.Component {
     this.timelineData = props.navigation.state.params.rsv
       .paymentSteps.map(step => ({
         time: Moment(step.date).format('D MMM'),
-        title: 'Down Payment 1',
+        title: step.description,
         description: rupiah(step.amount),
         circleColor: timelineCircleColor[step.status]
       }));

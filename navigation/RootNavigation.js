@@ -24,6 +24,7 @@ import F_AppointmentDetail from '../operator/screens/F_AppointmentDetail';
 import F_AppointmentList from '../operator/screens/F_AppointmentList';
 import F_ReservationDetail from '../operator/screens/F_ReservationDetail';
 import Refund from '../operator/screens/Refund';
+import DeniedOrders from '../operator/screens/DeniedOrderList';
 import HelpScreen from '../operator/screens/HelpScreen';
 import AddActivityScreen from '../operator/screens/AddActivityScreen';
 
@@ -62,6 +63,7 @@ export default class RootNavigator extends React.Component {
       F_AppointmentDetail: { screen: F_AppointmentDetail },
       F_ReservationDetail: { screen: F_ReservationDetail },
       Refund: { screen: Refund },
+      DeniedOrders: { screen: DeniedOrders },
       HelpScreen: { screen: HelpScreen },
       AddActivityScreen: { screen: AddActivityScreen },
       DetailScreen: {screen: DetailScreen},

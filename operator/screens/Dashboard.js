@@ -152,6 +152,7 @@ export default class Dashboard extends React.Component {
 
   _goToActivityList = () => this.props.navigation.navigate('ActivityList');
   _goToFAppointmentList = () => this.props.navigation.navigate('F_AppointmentList');
+  _goToDeniedOrders = () => this.props.navigation.navigate('DeniedOrders');
   _goToAccountScreen = () => this.props.navigation.navigate('AccountPage');
   _goToMessageScreen = () => this.props.navigation.navigate('NotFound');
   _goToDealsScreen = () => this.props.navigation.navigate('NotFound');
@@ -367,6 +368,26 @@ export default class Dashboard extends React.Component {
               />
             </View>
             <Text style={styles.labelHeader}>Penghasilan</Text>
+            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
+              <Icon
+                name='chevron-thin-right'
+                type='entypo'
+                size={18}
+                color='#cdcdcd'
+              />
+            </View>
+          </TouchableOpacity>
+          <View style={styles.separatorListDashbord}></View>
+          <TouchableOpacity style={styles.row} onPress={this._goToDeniedOrders}>
+            <View style={{ marginRight: 15 }}>
+              <Icon
+                name='md-close-circle'
+                type='ionicon'
+                size={26}
+                color='#00d3c5'
+              />
+            </View>
+            <Text style={styles.labelHeader}>Pesanan Ditolak</Text>
             <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
               <Icon
                 name='chevron-thin-right'
