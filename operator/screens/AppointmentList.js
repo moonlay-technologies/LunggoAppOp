@@ -43,7 +43,7 @@ class ListItem extends React.PureComponent {
               </View>
             </View>
 
-            <View style={{ flex: 3 }}>
+            <View style={{ flex: 3 }}>  
               <Text style={styles.activityTitle}>{item.name}</Text>
               <Text style={[styles.timeActivity, { marginTop: 7 }]}>{item.reservations.length} Pesanan, total {item.totalPax} pax</Text>
               <View style={{ width: '100%', marginTop: 5, flexDirection: 'row', }}>

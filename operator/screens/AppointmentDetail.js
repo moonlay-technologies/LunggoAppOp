@@ -88,7 +88,7 @@ export default class AppointmentDetail extends React.Component {
 
                 <View style={{ alignItems: 'center', flex: 1, borderWidth: 1, borderColor: '#00d3c5', borderRadius: 3, paddingBottom: 10, marginRight: 10 }}>
                   {/*<Text style={styles.infoTitle}>Tanggal</Text>*/}
-                  <View style={{ marginBottom: -5, marginTop: 5 }}>
+                  <View style={{ marginTop: 5 }}>
                     <Icon
                       name='ios-calendar'
                       type='ionicon'
@@ -110,7 +110,7 @@ export default class AppointmentDetail extends React.Component {
                 <View style={{ alignItems: 'center', flex: 1, borderWidth: 1, borderColor: '#00d3c5', borderRadius: 3, paddingBottom: 10 }}>
                   {/*<Text style={styles.infoTitle}>Total Pax</Text>*/}
                   <Icon
-                    style={{ marginBottom: -5, marginTop: 5 }}
+                    style={{ marginTop: 5 }}
                     name='ios-people'
                     type='ionicon'
                     size={30}
@@ -135,27 +135,43 @@ export default class AppointmentDetail extends React.Component {
                   onPress={this._onPress}
                   underlayColor='#ddd'
                 >
-                  <View style={{ flexDirection: 'row', }}>
-                    <View style={{ flex: 1 }}>
-                      <View>
-                        <Text style={[styles.namaPeserta, { color: '#454545' }]}>
-                          {rsv.contact.name}
+                  <View>
+                    <View style={{ marginBottom: 5, flexDirection: 'row' }}>
+                      <Text style={[styles.namaPeserta, { flex: 1, color: '#454545' }]}>
+                        a.n. {rsv.contact.name}
+                      </Text>
+                      <View style={{ justifyContent: 'center' }}>
+                        <Text style={[styles.activityDesc, { alignItems: 'flex-end' }]}>
+                          No. Pesanan {rsv.rsvNo}
                         </Text>
-                        <Text style={styles.activityDesc}>{getPaxCountText(rsv.paxCount)}</Text>
                       </View>
-                      <Text style={styles.activityDesc}>{reversePhoneWithoutCountryCode_Indonesia(rsv.contact.phone)}</Text>
-                      <Text style={styles.activityDesc}>{rsv.contact.email}</Text>
                     </View>
-                    {rsv.isVerified && <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
-                      <Icon
-                        style={{ marginTop: 4, marginHorizontal: 10 }}
-                        name='md-checkmark-circle-outline'
-                        type='ionicon'
-                        size={23}
-                        color='#00d3c5'
-                      />
-                    </View>}
-                    {/* <View style={{flex:1, alignItems:'flex-end', justifyContent:'center'}}>
+                    <View style={{ flexDirection: 'row', }}>
+                      <View style={{ flex: 1 }}>
+
+                        <Text style={styles.activityDesc}>{getPaxCountText(rsv.paxCount)}</Text>
+                        <Text style={styles.activityDesc}>{reversePhoneWithoutCountryCode_Indonesia(rsv.contact.phone)}</Text>
+                        <Text style={styles.activityDesc}>{rsv.contact.email}</Text>
+                        {rsv.isVerified &&
+                          <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                            <Icon
+                              style={{ marginRight: 10 }}
+                              name='md-checkmark-circle-outline'
+                              type='ionicon'
+                              size={18}
+                              color='#00d3c5'
+                            />
+                            <View style={{ justifyContent: 'center' }}>
+                              <Text style={{ color: '#00d3c5' }}>Terverifikasi</Text>
+                            </View>
+
+                          </View>}
+                      </View>
+                      {rsv.isVerified && <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+
+
+                      </View>}
+                      {/* <View style={{flex:1, alignItems:'flex-end', justifyContent:'center'}}>
                   <Icon
                     style={{marginTop:10}}
                     name='chevron-thin-right'
@@ -164,6 +180,7 @@ export default class AppointmentDetail extends React.Component {
                     color='#707070'
                   />
                 </View> */}
+                    </View>
                   </View>
                 </TouchableHighlight>
               </View>
@@ -402,7 +419,7 @@ const styles = StyleSheet.create({
       },
       android: {
         lineHeight: 30,
-        marginBottom: 5,
+        // marginBottom: 5,
         //paddingTop: 23 - (23* 1),
 
       },

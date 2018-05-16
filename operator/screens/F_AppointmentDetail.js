@@ -94,30 +94,39 @@ class ListItem extends React.PureComponent {
           onPress={this.props.onPressItem}
         >
           <Avatar size={40} style={styles.containerAvatar} name={item.contact.name} />
-          <View style={{ width: '75%' }}>
-            <Text style={styles.namaPax}>{item.contact.name}</Text>
-            <Text style={styles.activityDesc}>{paxCount}</Text>
-            <View style={{ flexDirection: 'row' }} >
-              <View style={{ flex: 1 }} >
-                <Text style={styles.activityTanggal}>Tanggal Pesan</Text>
-                <Text style={styles.activityTanggal}>Sudah Dibayar</Text>
-                <Text style={styles.activityTanggal}>Total Pembayaran</Text>
-              </View>
-              <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                <Text style={styles.activityTanggal}>{dateFullShort(item.rsvTime)}</Text>
-                <Text style={styles.nominalKecil}> {completedPayment}</Text>
-                <Text style={styles.nominalKecil}> {totalPayment}</Text>
+          <View style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <Text style={styles.namaPax}>{item.contact.name}</Text>
+              <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 10 }}>
+                <Text style={styles.activityTanggal}>No. Pesanan {item.rsvNo}</Text>
               </View>
             </View>
-          </View>
-          <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginLeft: 10 }}>
-            <Icon
-              style={{ marginTop: 10 }}
-              name='chevron-thin-right'
-              type='entypo'
-              size={20}
-              color='#707070'
-            />
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.activityDesc}>{paxCount}</Text>
+                <View style={{ flexDirection: 'row' }} >
+                  <View style={{ flex: 1 }} >
+                    <Text style={styles.activityTanggal}>Tanggal Pesan</Text>
+                    <Text style={styles.activityTanggal}>Sudah Dibayar</Text>
+                    <Text style={styles.activityTanggal}>Total Pembayaran</Text>
+                  </View>
+                  <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                    <Text style={styles.activityTanggal}>{dateFullShort(item.rsvTime)}</Text>
+                    <Text style={styles.nominalKecil}> {completedPayment}</Text>
+                    <Text style={styles.nominalKecil}> {totalPayment}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={{ width: '7.5%', alignItems: 'flex-end', justifyContent: 'center', marginLeft: 10 }}>
+                <Icon
+                  style={{ marginTop: 10 }}
+                  name='chevron-thin-right'
+                  type='entypo'
+                  size={20}
+                  color='#707070'
+                />
+              </View>
+            </View>
           </View>
         </TouchableOpacity>
         <View style={styles.divider} />
@@ -136,7 +145,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   boxReservation: {
-    paddingHorizontal: 15,
+    paddingLeft: 15,
+    paddingRight: 5,
     flexDirection: 'row',
     flex: 1,
     width: '100%',

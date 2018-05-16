@@ -112,12 +112,15 @@ class ListItem extends React.Component {
           <View style={[{ flex: 1 }, styles.containerListAppointment]}>
 
             <View style={{ flex: 3 }}>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                 <Text style={styles.activityTitle}>
                   {item.activityName}
                 </Text>
               </View>
-              <View style={{ width: '100%', flexDirection: 'row', marginTop: 5 }}>
+              <Text style={styles.activityDesc}>
+                No. Pesanan {item.rsvNo}
+              </Text>
+              <View style={{ width: '100%', flexDirection: 'row' }}>
                 <Text style={styles.activityDesc}>
                   {dateFullShort(item.date)}
                 </Text>
