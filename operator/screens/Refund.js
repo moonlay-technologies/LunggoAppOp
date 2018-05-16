@@ -90,6 +90,9 @@ export default class Refund extends React.Component {
                     {item.activityName}
                   </Text>
                   <Text style={styles.activityTanggal}>
+                    No. Pesanan: {item.rsvNo}
+                  </Text>
+                  <Text style={styles.activityTanggal}>
                     Pemesan: {item.contact.name}
                   </Text>
                   <Text style={styles.activityTanggal}>
