@@ -35,6 +35,8 @@ export default class Dashboard extends React.Component {
   };
 
   _goToEditProfile = () => this.props.navigation.navigate('ChangeProfile', { profile: this.state.profile })
+  _askLogout = () => this._openLogoutModal();
+  _openLogoutModal = () => this.refs.logoutModal.openModal();
 
   componentDidMount() {
     getProfile().then(profile => {
@@ -48,34 +50,60 @@ export default class Dashboard extends React.Component {
       <ScrollView
         style={{ backgroundColor: '#f7f8fb' }}
       >
-        <View style={{ flexDirection: 'row' }}>
+        <LogoutConfirmationModal ref='logoutModal' {...this.props} />
+        <View style={styles.container}>
+          <View style={{ flexDirection: 'row' }}>
 
-          <View style={{ flex: 2 }}>
-            <View>
-              <Text style={styles.namaProfile}>{profile.name}</Text>
-            </View>
-            <View>
-              <Text style={styles.descProfile}>{profile.email}</Text>
-            </View>
-            <View>
-              <Text style={styles.descProfile}>{reversePhoneWithoutCountryCode_Indonesia(profile.phone)}</Text>
-            </View>
-          </View>
-
-          <TouchableOpacity onPress={this._goToEditProfile}>
-            <View style={{ flex: 1, alignItems: 'flex-end', }}>
+            <View style={{ flex: 2 }}>
               <View>
-                <Text style={styles.editProfile}>Ubah</Text>
+                <Text style={styles.namaProfile}>{profile.name}</Text>
+              </View>
+              <View>
+                <Text style={styles.descProfile}>{profile.email}</Text>
+              </View>
+              <View>
+                <Text style={styles.descProfile}>{reversePhoneWithoutCountryCode_Indonesia(profile.phone)}</Text>
               </View>
             </View>
-          </TouchableOpacity>
+
+            <TouchableOpacity onPress={this._goToEditProfile}>
+              <View style={{ flex: 1, alignItems: 'flex-end', }}>
+                <View>
+                  <Text style={styles.editProfile}>Ubah</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        <View style={styles.boxSeparator}></View>
 
         <View style={styles.boxDetail}>
-
           <MenuButton
-            label='lalalala' />
+            label='Rekening Terdaftar'
+            icon={
+              <Icon
+                name='ios-card'
+                type='ionicon'
+                size={26}
+                color='#00d3c5'
+              />
+            }
+          />
+          <MenuButton
+            label='Keluar Akun'
+            icon={
+              <Icon
+                name='ios-log-out'
+                type='ionicon'
+                size={26}
+                color='#00d3c5'
+              />
+            }
+            onPress={this._askLogout}
+          />
         </View>
+
       </ScrollView>
     );
   }
@@ -149,8 +177,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#e1e1e1',
     borderBottomWidth: 1,
-    paddingHorizontal: 15,
-    marginBottom: 20,
     flex: 1
   },
   avatarBig: {
@@ -462,8 +488,14 @@ const styles = StyleSheet.create({
     }),
   },
   container: {
-    flex: 1,
     padding: 20,
-    backgroundColor: '#f7f8fb',
+    backgroundColor: '#fff',
+    flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e5e5',
+    marginBottom: 20
+  },
+  boxSeparator: {
+    height: 20
   },
 });

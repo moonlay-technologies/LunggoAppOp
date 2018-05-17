@@ -163,10 +163,7 @@ export default class Dashboard extends React.Component {
 
   _goToMutasi = () => this.props.navigation.navigate('Mutasi');
   _goToRefund = () => this.props.navigation.navigate('Refund');
-
-  _openLogoutModal = () => this.refs.logoutModal.openModal();
-  _askLogout = () => this._openLogoutModal();
-
+  
   render() {
     // let nameInitial = item.contact.name.substr(0,1);
     return (
@@ -191,8 +188,6 @@ export default class Dashboard extends React.Component {
                   </View>
                 </TouchableOpacity>*/}
               </View>
-
-              <LogoutConfirmationModal ref='logoutModal' {...this.props} />
 
               <Avatar size={90} style={styles.avatarBig} name={this.state.name} source={{ uri: this.state.avatar }} />
               <View style={{ marginTop: 20 }}>
@@ -328,7 +323,7 @@ export default class Dashboard extends React.Component {
             label='Pengaturan Akun'
             icon={
               <Icon
-                name='ios-contacts-outline'
+                name='ios-contacts'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
@@ -359,18 +354,6 @@ export default class Dashboard extends React.Component {
               />
             }
             onPress={this._goToHelpScreen}
-          />
-          <MenuButton
-            label='Keluar Akun'
-            icon={
-              <Icon
-                name='ios-log-out'
-                type='ionicon'
-                size={26}
-                color='#00d3c5'
-              />
-            }
-            onPress={this._askLogout}
           />
         </View>
 

@@ -32,6 +32,7 @@ import AccountScreen from '../screens/AccountScreen';
 import NotFound from '../screens/NotFoundScreen';
 import DetailScreen from './../screens/DetailScreen';
 import MapScreen from './../screens/MapScreen';
+import ChangeProfile from './../screens/ChangeProfile';
 
 export default class RootNavigator extends React.Component {
 
@@ -70,6 +71,7 @@ export default class RootNavigator extends React.Component {
       AccountScreen: { screen: AccountScreen },
       DetailScreen: { screen: DetailScreen },
       MapScreen: { screen: MapScreen },
+      ChangeProfile: { screen: ChangeProfile },
     },
     {
       initialRouteName: (this.props.isLoggedIn) ? 'Main' : 'LoginScreen',
