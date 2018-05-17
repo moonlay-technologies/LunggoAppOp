@@ -9,7 +9,7 @@ export default class Avatar extends React.Component {
 
   constructor(props) {
     super(props);
-    this.bgColor = this._toColor(this.props.name.hashCode());
+    this.bgColor = this._toColor(hash(this.props.name));
     let split = this.props.name.split(' ');
     this.initial = split.length == 1
       ? split[0].substring(0, 1).toUpperCase()
@@ -61,11 +61,11 @@ export default class Avatar extends React.Component {
   }
 }
 
-String.prototype.hashCode = function () {
+function hash(str) {
   var hash = 0, i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr = this.charCodeAt(i);
+  if (str.length === 0) return hash;
+  for (i = 0; i < str.length; i++) {
+    chr = str.charCodeAt(i);
     hash = ((hash << 5) - hash) + chr;
     hash |= 0; // Convert to 32bit integer
   }

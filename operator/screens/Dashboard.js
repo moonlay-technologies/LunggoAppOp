@@ -18,10 +18,11 @@ import LogoutConfirmationModal from '../../commons/components/LogoutConfirmation
 import { checkUserLoggedIn } from '../../api/Common';
 import { NavigationActions } from 'react-navigation';
 import {
-  fetchAppointmentRequests, getAppointmentList, getReservationList, fetchAppointmentList
+  fetchAppointmentRequests, getAppointmentList, fetchAppointmentList
 } from './Appointments/AppointmentController';
 import { getActivityList, fetchActivityList } from './ActivityController';
 import Avatar from './../../commons/components/Avatar';
+import MenuButton from './../components/MenuButton';
 
 export default class Dashboard extends React.Component {
 
@@ -133,13 +134,6 @@ export default class Dashboard extends React.Component {
     ).catch(e => console.warn(e));;
   }
 
-  _getReservationList = () => {
-    getReservationList().then(({ reservations }) =>
-      // this.props.navigation.isFocused() &&
-      this.setState({ reservations })
-    ).catch(e => console.warn(e));;
-  }
-
   _goToAppointmentRequest = () => {
     let { requests = [] } = this.state;
     this.props.navigation.navigate('AppointmentRequest', { requests });
@@ -231,236 +225,141 @@ export default class Dashboard extends React.Component {
           </View>
         </View>
 
-        {/*<View style={styles.boxDetail}>
-          <View style={{flexDirection:'row',}}>
-            <View style={{marginRight:15}}>
-              <Icon
-                name='ios-add-circle'
-                type='ionicon'
-                size={26}
-                color='#00d3c5' 
-              />
-            </View>
-            <Text style={styles.labelHeader}>Tambah Aktifitas</Text>
-            <View style={{alignItems:'flex-end', justifyContent:'flex-start'}}>
-              <Icon
-                name='ios-arrow-forward'
-                type='ionicon'
-                size={26}
-                color='#cdcdcd' 
-              />
-            </View>
-          </View>
-        </View>*/}
-
         <View style={styles.boxDetail}>
 
-          <TouchableOpacity style={styles.row} onPress={this._goToActivityList}>
-            <View style={{ marginRight: 15 }}>
+          <MenuButton
+            label='Aktivitasku'
+            icon={
               <Icon
                 name='ios-bicycle'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Aktivitasku</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row} onPress={this._goToAppointmentList}>
-            <View style={{ marginRight: 15 }}>
+            }
+            onPress={this._goToActivityList}
+          />
+          <MenuButton
+            label='Pesanan Terjadwal'
+            icon={
               <Icon
                 name='md-clipboard'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Pesanan Terjadwal</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row} onPress={this._goToAppointmentRequest}>
-            <View style={{ marginRight: 15 }}>
+            }
+            onPress={this._goToAppointmentList}
+          />
+          <MenuButton
+            label='Pesanan Baru'
+            icon={
               <Icon
                 name='new-message'
                 type='entypo'
                 size={24}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Pesanan Baru</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
+            }
+            onPress={this._goToAppointmentList}
+          />
         </View>
+
+        <View style={styles.boxSeparator}></View>
 
         <View style={styles.boxDetail}>
 
-          <TouchableOpacity style={styles.row} onPress={this._goToMutasi}>
-            <View style={{ marginRight: 15 }}>
+          <MenuButton
+            label='Pencairan Dana'
+            icon={
               <Icon
                 name='md-trending-up'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Pencairan Dana</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row} onPress={this._goToRefund}>
-            <View style={{ marginRight: 15 }}>
+            }
+            onPress={this._goToMutasi}
+          />
+          <MenuButton
+            label='Pembatalan dan Pengembalian'
+            icon={
               <Icon
                 name='md-undo'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Pembatalan dan Pengembalian</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row} onPress={this._goToFAppointmentList}>
-            <View style={{ marginRight: 15 }}>
+            }
+            onPress={this._goToRefund}
+          />
+          <MenuButton
+            label='Penghasilan'
+            icon={
               <Icon
                 name='ios-cash'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Penghasilan</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row} onPress={this._goToDeniedOrders}>
-            <View style={{ marginRight: 15 }}>
+            }
+            onPress={this._goToFAppointmentList}
+          />
+          <MenuButton
+            label='Pesanan Ditolak'
+            icon={
               <Icon
                 name='md-close-circle'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Pesanan Ditolak</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
+            }
+            onPress={this._goToDeniedOrders}
+          />
+
         </View>
 
+        <View style={styles.boxSeparator}></View>
+
         <View style={styles.boxDetail}>
-          <TouchableOpacity style={styles.row} onPress={this._goToAddActivityScreen}>
-            <View style={{ marginRight: 15 }}>
+
+          <MenuButton
+            label='Tambah Aktivitas'
+            icon={
               <Icon
                 name='md-add-circle'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Tambah Aktivitas</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity style={styles.row} onPress={this._goToHelpScreen}>
-            <View style={{ marginRight: 15 }}>
+            }
+            onPress={this._goToAddActivityScreen}
+          />    
+          <MenuButton
+            label='Bantuan'
+            icon={
               <Icon
                 name='md-help-circle'
                 type='ionicon'
                 size={26}
                 color='#00d3c5'
               />
-            </View>
-            <Text style={styles.labelHeader}>Bantuan</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
+            }
+            onPress={this._goToHelpScreen}
+          />
+          <MenuButton
+            label='Keluar Akun'
+            icon={
               <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
+                name='ios-log-out'
+                type='ionicon'
+                size={26}
+                color='#00d3c5'
               />
-            </View>
-          </TouchableOpacity>
-          <View style={styles.separatorListDashbord}></View>
-          <TouchableOpacity
-            style={styles.row}
+            }
             onPress={this._askLogout}
-          >
-            <Icon
-              style={{ marginRight: 15 }}
-              name='ios-log-out'
-              type='ionicon'
-              size={26}
-              color='#00d3c5'
-            />
-            <Text style={styles.labelHeader}>Keluar Akun</Text>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Icon
-                name='chevron-thin-right'
-                type='entypo'
-                size={18}
-                color='#cdcdcd'
-              />
-            </View>
-          </TouchableOpacity>
+          />
         </View>
 
 
@@ -507,11 +406,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
 
   },
-  separatorListDashbord: {
-    backgroundColor: '#eeeeee',
-    height: 1,
-    width: '100%',
-  },
   containerBoxDashboard: {
     backgroundColor: '#ffffff',
     borderRadius: 5,
@@ -537,9 +431,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#e1e1e1',
     borderBottomWidth: 1,
-    paddingHorizontal: 15,
-    marginBottom: 20,
     flex: 1
+  },
+  boxSeparator: {
+    height:20
   },
   avatarBig: {
     width: 90,

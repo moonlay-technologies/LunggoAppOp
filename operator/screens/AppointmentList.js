@@ -9,8 +9,13 @@ import Moment from 'moment';
 import 'moment/locale/id';
 import { Icon } from 'react-native-elements';
 import { getAppointmentList, shouldRefreshAppointmentList } from './Appointments/AppointmentController';
+import { setMomentFutureString } from './../../commons/components/MomentString';
 
 class ListItem extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    setMomentFutureString(Moment, 'id');
+  }
 
   _onPress = () => this.props.onPressItem(this.props.item);
 
@@ -43,7 +48,7 @@ class ListItem extends React.PureComponent {
               </View>
             </View>
 
-            <View style={{ flex: 3 }}>  
+            <View style={{ flex: 3 }}>
               <Text style={styles.activityTitle}>{item.name}</Text>
               <Text style={[styles.timeActivity, { marginTop: 7 }]}>{item.reservations.length} Pesanan, total {item.totalPax} pax</Text>
               <View style={{ width: '100%', marginTop: 5, flexDirection: 'row', }}>
@@ -60,8 +65,8 @@ class ListItem extends React.PureComponent {
               </View>
               <View style={{ marginTop: 5, }}>
                 <Text style={styles.status}>
-                  {Moment(item.date).diff(Moment(), 'days')} hari lagi
-              </Text>
+                  {Moment(item.date).fromNow()}
+                </Text>
               </View>
             </View>
 
