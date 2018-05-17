@@ -11,26 +11,27 @@ import registerForPushNotificationsAsync
 import {
   Dashboard, AppointmentList, AppointmentDetail, AppointmentRequest,
   ActivityList, Mutasi,
-} from '../operator/screens/Screens';
+} from '../screens/Screens';
 
-import EditActivity from '../operator/screens/EditActivity';
-import EditDetailActivity from '../operator/screens/EditDetailActivity';
+import EditActivity from '../screens/EditActivity';
+import EditDetailActivity from '../screens/EditDetailActivity';
 import {
   ForgotPassword, OtpVerification, NewPassword,
   Registration, LoginScreen, BeforeLoginScreen
-} from '../commons/Auth/screens/Screens';
+} from '../screens/Auth/screens/Screens';
 
-import F_AppointmentDetail from '../operator/screens/F_AppointmentDetail';
-import F_AppointmentList from '../operator/screens/F_AppointmentList';
-import F_ReservationDetail from '../operator/screens/F_ReservationDetail';
-import Refund from '../operator/screens/Refund';
-import DeniedOrders from '../operator/screens/DeniedOrderList';
-import HelpScreen from '../operator/screens/HelpScreen';
-import AddActivityScreen from '../operator/screens/AddActivityScreen';
+import F_AppointmentDetail from '../screens/F_AppointmentDetail';
+import F_AppointmentList from '../screens/F_AppointmentList';
+import F_ReservationDetail from '../screens/F_ReservationDetail';
+import Refund from '../screens/Refund';
+import DeniedOrders from '../screens/DeniedOrderList';
+import HelpScreen from '../screens/HelpScreen';
+import AddActivityScreen from '../screens/AddActivityScreen';
+import AccountScreen from '../screens/AccountScreen';
 
-import NotFound from '../commons/NotFoundScreen';
-import DetailScreen from './../operator/screens/DetailScreen';
-import MapScreen from './../operator/screens/MapScreen';
+import NotFound from '../screens/NotFoundScreen';
+import DetailScreen from './../screens/DetailScreen';
+import MapScreen from './../screens/MapScreen';
 
 export default class RootNavigator extends React.Component {
 
@@ -43,15 +44,15 @@ export default class RootNavigator extends React.Component {
         // screen:Dashboard
         screen: Dashboard
       } : {
-        screen: Dashboard
-      },
+          screen: Dashboard
+        },
       Registration: { screen: Registration },
       LoginScreen: { screen: LoginScreen },
       AppointmentList: { screen: AppointmentList },
       AppointmentDetail: { screen: AppointmentDetail },
       AppointmentRequest: { screen: AppointmentRequest },
       ActivityList: { screen: ActivityList },
-      Mutasi: { screen: Mutasi,  },
+      Mutasi: { screen: Mutasi, },
       ForgotPassword: { screen: ForgotPassword },
       EditActivity: { screen: EditActivity },
       EditDetailActivity: { screen: EditDetailActivity },
@@ -66,8 +67,9 @@ export default class RootNavigator extends React.Component {
       DeniedOrders: { screen: DeniedOrders },
       HelpScreen: { screen: HelpScreen },
       AddActivityScreen: { screen: AddActivityScreen },
-      DetailScreen: {screen: DetailScreen},
-      MapScreen: {screen: MapScreen},
+      AccountScreen: { screen: AccountScreen },
+      DetailScreen: { screen: DetailScreen },
+      MapScreen: { screen: MapScreen },
     },
     {
       initialRouteName: (this.props.isLoggedIn) ? 'Main' : 'LoginScreen',

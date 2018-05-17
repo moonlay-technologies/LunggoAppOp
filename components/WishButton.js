@@ -5,10 +5,10 @@ import { TouchableOpacity, View, Text, StyleSheet, Platform,
   InteractionManager } from 'react-native';
 import Button from 'react-native-button';
 import { Icon } from 'react-native-elements';
-import { toggleWishlist, checkUserLoggedIn } from '../../api/Common';
+import { toggleWishlist, checkUserLoggedIn } from '../api/Common';
 import Modal from 'react-native-modal';
-import globalStyles from '../../commons/globalStyles';
-import Colors from '../../constants/Colors';
+import globalStyles from '../components/globalStyles';
+import Colors from '../constants/Colors';
 
 export default class WishButton extends React.Component {
 
