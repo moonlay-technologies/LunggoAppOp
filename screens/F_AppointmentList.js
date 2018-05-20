@@ -17,6 +17,7 @@ import {
 } from '../logic/otherCommonFunctions';
 import Moment from 'moment';
 import 'moment/locale/id';
+import Colors from '../constants/Colors';
 
 export default class F_AppointmentList extends React.Component {
 
@@ -73,14 +74,19 @@ export default class F_AppointmentList extends React.Component {
               <Text style={styles.activityDesc}>Sudah Dibayar
                 <Text style={styles.nominalKecil}> {getPaymentSum(list, 'completed')}</Text>
               </Text>
-              <View style={{ marginTop: 3 }}>
+              {/* <View style={{ marginTop: 3 }}>
                 <Text style={styles.activityDesc}>
                   Periode {dateFullShort(startDate)} ‒ {dateFullShort(endDate)}
                 </Text>
-              </View>
+              </View> */}
             </View>
           </View>
           <View style={styles.divider} />
+          <View style={{ marginBottom: 3 }}>
+            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Periode
+            </Text>
+          </View>
           <View style={{ flexDirection: 'row' }}>
             <DatePicker
               mode="date"
@@ -178,14 +184,23 @@ const DatePicker = props => (
       minDate={Moment().subtract(1, 'years').format('dddd, D MMM YYYY')}
       maxDate={Moment().add(1, 'years').format('dddd, D MMM YYYY')}
       showIcon={false}
-      confirmBtnText="Confirm"
+      confirmBtnText="OK"
       cancelBtnText="Cancel"
       customStyles={{
+        placeholderText: {
+          fontSize: 20,
+          color: '#fff'
+        },
+        dateText: {
+          color: '#fff',
+          fontWeight: 'bold'
+        },
         dateInput: {
           borderRadius: 3,
           borderColor: '#cdcdcd',
-          height: 35,
-        }
+          backgroundColor: Colors.bottomTabSelected,
+          height: 35
+        },
       }}
       onDateChange={props.onDateChange}
     />

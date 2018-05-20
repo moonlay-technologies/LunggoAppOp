@@ -14,6 +14,7 @@ import Moment from 'moment';
 import { dateFullShort } from './../components/Formatter';
 import ReactNativeDatepicker from 'react-native-datepicker';
 import { fetchAppointmentList } from './Appointments/AppointmentController';
+import Colors from '../constants/Colors';
 
 export default class DeniedOrders extends React.Component {
 
@@ -77,15 +78,20 @@ export default class DeniedOrders extends React.Component {
           <View style={styles.center}>
             <Text style={styles.nominalBesar1}>Total Potensi yang Ditolak</Text>
             <Text style={styles.nominalBesar}>{rupiah(totalAmount)}</Text>
-            <View style={{ marginTop: 10, alignItems: 'center' }}>
+            {/* <View style={{ marginTop: 10, alignItems: 'center' }}>
               <View style={{ marginTop: 3 }}>
                 <Text style={styles.activityDesc}>
                   Periode {dateFullShort(startDate)} ‒ {dateFullShort(endDate)}
                 </Text>
               </View>
-            </View>
+            </View> */}
           </View>
           <View style={styles.divider} />
+          <View style={{ marginBottom: 3 }}>
+            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Periode
+            </Text>
+          </View>
           <View style={{ flexDirection: 'row' }}>
             <DatePicker
               mode="date"
@@ -150,14 +156,23 @@ const DatePicker = props => (
       minDate={Moment().subtract(1, 'years').format('dddd, D MMM YYYY')}
       maxDate={Moment().add(1, 'years').format('dddd, D MMM YYYY')}
       showIcon={false}
-      confirmBtnText="Confirm"
+      confirmBtnText="OK"
       cancelBtnText="Cancel"
       customStyles={{
+        placeholderText: {
+          fontSize: 20,
+          color: '#fff'
+        },
+        dateText: {
+          color: '#fff',
+          fontWeight: 'bold'
+        },
         dateInput: {
           borderRadius: 3,
           borderColor: '#cdcdcd',
-          height: 35,
-        }
+          backgroundColor: Colors.bottomTabSelected,
+          height: 35
+        },
       }}
       onDateChange={props.onDateChange}
     />
