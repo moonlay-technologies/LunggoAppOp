@@ -3,7 +3,7 @@
 import React from 'react';
 import { Icon } from 'react-native-elements'
 import {
-  Platform, StyleSheet, Text, View, Image, TouchableOpacity, NetInfo,
+  Platform, StyleSheet, Text, View, Image, TouchableOpacity, NetInfo, Dimensions,
   TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView, Keyboard
 } from 'react-native';
 import { LinearGradient } from 'expo';
@@ -11,6 +11,8 @@ import { dateFullShort, reversePhoneWithoutCountryCode_Indonesia } from '../comp
 import { getPaxCountText } from '../logic/otherCommonFunctions';
 import { fetchVerifyTicket } from './Appointments/AppointmentController';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { getTotalPaxCountsText } from './../logic/otherCommonFunctions';
+import { Header } from 'react-navigation';
 
 export default class AppointmentDetail extends React.Component {
 
@@ -21,12 +23,27 @@ export default class AppointmentDetail extends React.Component {
       reservations,
       verificationCode: '',
       showInputWarning: false,
-      keyboard: 150
+      keyboard: 150,
+      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey',
     };
   }
 
   static navigationOptions = {
     title: 'Detail Appointment',
+  }
+
+  componentDidMount() {
+    this.keyboardHideListener = Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide', this.keyboardHideListener);
+  }
+
+  componentWillUnmount() {
+    this.keyboardHideListener.remove()
+  }
+
+  keyboardHideListener = () => {
+    this.setState({
+      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey' + new Date().getTime()
+    });
   }
 
   _verify = () => {
@@ -74,20 +91,17 @@ export default class AppointmentDetail extends React.Component {
     let { showInputWarning, verificationCode } = this.state;
     // let {paxGroups} = details;
     return (
-      <KeyboardAwareScrollView keyboardShouldPersistTaps="handled" enableOnAndroid={true} accessible={true} extraScrollHeight={Platform.OS == 'android' ? this.state.keyboard : 0}>
-        <ScrollView keyboardShouldPersistTaps="handled" style={{ flex: 1, backgroundColor: '#f1f0f0' }}>
-
-          <View style={{ flex: 1, backgroundColor: '#f1f0f0', }}>
-
+      <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'flex-end' }} behavior='height' keyboardVerticalOffset={70} key={this.state.keyboardAvoidingViewKey} enabled>
+        <View style={{ flex: -1, backgroundColor: '#f1f0f0' }}>
+          <ScrollView>
             <View style={styles.containerListAppointmentHeader}>
               <Text style={styles.activityTitle2}>
                 {details.name}
               </Text>
 
-              <View style={{ flexDirection: 'row', marginTop: 20 }}>
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
 
                 <View style={{ alignItems: 'center', flex: 1, borderWidth: 1, borderColor: '#00d3c5', borderRadius: 3, paddingBottom: 10, marginRight: 10 }}>
-                  {/*<Text style={styles.infoTitle}>Tanggal</Text>*/}
                   <View style={{ marginTop: 5 }}>
                     <Icon
                       name='ios-calendar'
@@ -95,16 +109,12 @@ export default class AppointmentDetail extends React.Component {
                       size={30}
                       color='#00d3c5' />
                   </View>
-                  <View>
-                    <Text style={styles.activityDesc}>
-                      {dateFullShort(details.date)}
-                    </Text>
-                  </View>
-                  <View >
-                    <Text style={styles.activityDesc}>
-                      {details.session}
-                    </Text>
-                  </View>
+                  <Text style={styles.activityDesc}>
+                    {dateFullShort(details.date)}
+                  </Text>
+                  <Text style={styles.activityDesc}>
+                    {details.session}
+                  </Text>
                 </View>
 
                 <View style={{ alignItems: 'center', flex: 1, borderWidth: 1, borderColor: '#00d3c5', borderRadius: 3, paddingBottom: 10 }}>
@@ -116,8 +126,11 @@ export default class AppointmentDetail extends React.Component {
                     size={30}
                     color='#00d3c5' />
                   <Text style={styles.activityDesc}>
-                    {details.totalPax} peserta
-                </Text>
+                    {details.reservations.length} Pesanan
+                    </Text>
+                  <Text style={styles.activityDesc}>
+                    {getTotalPaxCountsText(details.reservations)}
+                  </Text>
                 </View>
 
               </View>
@@ -171,82 +184,22 @@ export default class AppointmentDetail extends React.Component {
 
 
                       </View>}
-                      {/* <View style={{flex:1, alignItems:'flex-end', justifyContent:'center'}}>
-                  <Icon
-                    style={{marginTop:10}}
-                    name='chevron-thin-right'
-                    type='entypo'
-                    size={20}
-                    color='#707070'
-                  />
-                </View> */}
+
                     </View>
                   </View>
                 </TouchableHighlight>
               </View>
 
             )}
+          </ScrollView>
+        </View>
+        <View style={{ flex: 1 }}></View>
+        <View style={{ height: 80 }}>
 
-            {/*paxGroups.map(pg =>
-              <View style={{flexDirection:'row', marginTop:40,}}>
-
-                <View style={{flex:1}}>
-                  <View>
-                    <Text style={styles.activityTitle}>pg.contact.name</Text>
-                  </View>
-                  <View>
-                    <Text style={{color:'#00d3ca', fontSize:13, fontStyle:'italic'}}>Verified</Text>
-                    <Text style={{color:'#9a9a9a', fontSize:13, fontStyle:'italic'}}>Waiting for verification</Text>
-                  </View>
-                </View>
-
-                <View style={{flex:1}}>
-                  <View style={{marginTop:10, alignItems:'flex-end'}}>
-                    <Icon
-                      name='chevron-thin-right'
-                      type='entypo'
-                      size={24}
-                      color='#707070'
-                    />
-                  </View>
-                </View> 
-
-              </View>
-              )}
-
-              {/*<View style={{marginTop:25,}}>
-                <View style={{flexDirection:'row',}}>
-                  <View style={{alignItems:'flex-start',}}>
-                    <Icon
-                      name='check'
-                      type='entypo'
-                      color='#517fa4'
-                      size={15}
-                    />
-                  </View>
-                  <View style={{marginLeft:8}}>
-                    <Text>Penguin North Verified 09182309</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'row', marginTop:12}}>
-                  <View style={{alignItems:'flex-start',}}>
-                    <Icon
-                      name='check'
-                      type='entypo'
-                      color='#517fa4'
-                      size={15}
-                    />
-                  </View>
-                  <View style={{marginLeft:8}}>
-                    <Text>Penguin North Verified 09182309</Text>
-                  </View>
-                </View>
-              </View>*/}
-
-
-            <View style={styles.containerListAppointmentVerifikasi}>
-              <View>
-                <Text style={styles.label}>Masukkan Kode Verifikasi</Text>
+          <View style={styles.containerListAppointmentVerifikasi}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.label}>Masukkan Kode Verifikasi</Text>
+              <View style={{ flexDirection: 'row' }}>
                 <TextInput
                   underlineColorAndroid='transparent'
                   style={[styles.txtInput, { borderColor: showInputWarning ? 'red' : '#e5e5e5' }]}
@@ -260,57 +213,34 @@ export default class AppointmentDetail extends React.Component {
                     keyboard: 0
                   })}
                 />
-                {showInputWarning && (
-                  <Text style={{ color: 'red' }}> Kode verifikasi salah </Text>
-                )
-                }
+                <TouchableOpacity
+                  style={{ width: '35%' }}
+                  onPress={this._verify}
+                >
+                  <LinearGradient
+                    colors={['#00d3c5', '#35eac6', '#6affc6']}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    style={{ justifyContent: 'center', alignItems: 'center', borderRadius: 5, flex: 1, paddingTop: 8 }}>
+                    <Text style={{
+                      backgroundColor: 'transparent',
+                      fontSize: 15, color: '#ffffff',
+                      fontFamily: 'Hind-Bold',
+                    }}>
+                      Verifikasi
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity
-                style={{ alignItems: 'center', width: '100%', justifyContent: 'center', marginTop: 15 }}
-                onPress={this._verify}
-              >
-                <LinearGradient
-                  colors={['#00d3c5', '#35eac6', '#6affc6']}
-                  start={[0, 0]}
-                  end={[1, 0]}
-                  style={{ height: 35, paddingTop: 8, alignItems: 'center', borderRadius: 5, width: '50%' }}>
-                  <Text style={{
-                    backgroundColor: 'transparent',
-                    fontSize: 15, color: '#ffffff',
-                    fontFamily: 'Hind-Bold',
-                  }}>
-                    Verifikasi
-                </Text>
-                </LinearGradient>
-              </TouchableOpacity>
+              {showInputWarning && (
+                <Text style={{ color: 'red' }}> Kode verifikasi salah </Text>
+              )
+              }
             </View>
-
-            {/*              <View style={{marginTop:40, alignItems:'center'}}>
-                <Button
-                    containerStyle={{
-                      height: 50,
-                      width:50,
-                      paddingTop: 10,
-                      paddingBottom :10,
-                      overflow: 'hidden',
-                      borderRadius: 50,
-                      backgroundColor: '#437ef7',
-                    }}
-                    style={{fontSize: 14, color: '#ffffff'}}
-                  >
-                  </Button>
-                  <View style={{marginTop:8}}>
-                    <Text>Scan Barcode</Text>
-                  </View>
-              </View>*/}
-
-
-
           </View>
 
-        </ScrollView>
-      </KeyboardAwareScrollView>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -330,10 +260,11 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   containerListAppointmentVerifikasi: {
-    padding: 15,
+    flexDirection: 'row',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: 30,
   },
   txtInput: {
     height: 35,

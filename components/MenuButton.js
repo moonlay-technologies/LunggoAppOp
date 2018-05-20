@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Platform, TouchableNativeFeedback } from 'react-native';
+import { Text, View, StyleSheet, Platform, TouchableHighlight, TouchableNativeFeedback } from 'react-native';
 import { Icon } from 'react-native-elements';
+import PlatformTouchable from 'react-native-platform-touchable';
 
 export default class MenuButton extends React.Component {
   constructor(props) {
@@ -9,8 +10,10 @@ export default class MenuButton extends React.Component {
 
   render() {
     return (
-      <TouchableNativeFeedback
+      <PlatformTouchable
         onPress={this.props.onPress}
+        fallback={TouchableHighlight}
+        underlayColor={'lightgray'}
       >
         <View style={styles.row}>
           <View style={{ width: '15%' }}>
@@ -26,8 +29,9 @@ export default class MenuButton extends React.Component {
             />
           </View>
         </View>
-      </TouchableNativeFeedback>
-    );
+      </PlatformTouchable>
+    )
+
   }
 }
 
