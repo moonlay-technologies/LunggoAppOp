@@ -8,7 +8,7 @@ import { Slider } from 'react-native-elements';
 import { CheckBox } from 'react-native-elements';
 import {
   Platform, StyleSheet, Text, View, Image, TextInput,
-  ScrollView,
+  ScrollView, Alert, InteractionManager
 } from 'react-native';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common'
 import * as Formatter from '../components/Formatter'
@@ -36,37 +36,52 @@ export default class Mutasi extends React.Component {
   };
 
   componentDidMount() {
-    this._getTrx();
+    this._getTrx(this.state.startDate, this.state.endDate);
   }
 
-  _getTrx() {
+  _verifyDate(startDate, endDate) {
+    let startEndDiff = Moment(endDate).diff(Moment(startDate), 'days');
+    if (startEndDiff > 31) {
+      setTimeout(() =>  // because showing alert right after closing modal make iOS stuck
+        Alert.alert('Perhatian', 'Maksimal rentang tanggal mutasi adalah 31 hari'), 750);
+      return false;
+    }
+    if (startEndDiff < 0) {
+      setTimeout(() => // because showing alert right after closing modal make iOS stuck
+        Alert.alert('Perhatian', 'Tanggal akhir tidak boleh kurang dari tanggal awal'), 750);
+      return false;
+    }
+    return true;
+  }
+
+  _getTrx(startDate, endDate) {
+    let isDateValid = this._verifyDate(startDate, endDate);
+    if (!isDateValid) {
+      this.setState({ isDateInvalid: true });
+      return;
+    }
+
     this.setState({ isLoading: true });
     let endpoint = '/v1/operator/transactionstatement';
-    endpoint += '?startdate=' + Moment(this.state.startDate).format('YYYY-MM-DD');
-    endpoint += '&enddate=' + Moment(this.state.endDate).format('YYYY-MM-DD');
+    endpoint += '?startdate=' + Moment(startDate).format('YYYY-MM-DD');
+    endpoint += '&enddate=' + Moment(endDate).format('YYYY-MM-DD');
     fetchTravoramaApi({
       path: endpoint,
       method: 'GET',
       requiredAuthLevel: AUTH_LEVEL.User
     }).then(response => {
       if (response.status == 200)
-        this.setState({ trx: response.transactionStatements, isLoading: false, isDateOutOfBound: false });
+        this.setState({ trx: response.transactionStatements, isLoading: false, isDateInvalid: false });
       else if (response.error == 'ERR_DATETIME_OUT_OF_RANGE')
-        this.setState({ isDateOutOfBound: true, isLoading: false });
+        this.setState({ isDateInvalid: true, isLoading: false });
     })
   }
 
   _showTrxList = () => {
-    let startEndDiff = Moment(this.state.endDate).diff(Moment(this.state.startDate), 'days');
-    if (startEndDiff > 31 || this.state.isDateOutOfBound)
+    if (this.state.isDateInvalid)
       return (
-        <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center', }}>
-          <Text>Rentang tanggal maksimal 31 hari</Text>
-        </View>);
-    if (startEndDiff < 0)
-      return (
-        <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center', }}>
-          <Text>Tanggal akhir tidak boleh kurang dari tanggal awal</Text>
+        <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+          <Text>Silakan ganti rentang tanggal terlebih dahulu.</Text>
         </View>);
     if (this.state.isLoading)
       return <LoadingAnimation />;
@@ -115,8 +130,9 @@ export default class Mutasi extends React.Component {
                   confirmBtnText="OK"
                   cancelBtnText="Cancel"
                   onDateChange={(date) => {
-                    this.setState({ startDate: Moment(date, this.format, this.locale) });
-                    this._getTrx();
+                    let formattedDate = Moment(date, this.format, this.locale);
+                    this.setState({ startDate: formattedDate });
+                    this._getTrx(formattedDate, this.state.endDate);
                   }}
                   customStyles={{
                     placeholderText: {
@@ -146,11 +162,12 @@ export default class Mutasi extends React.Component {
                   format={this.format}
                   minDate={Moment(this.state.startDate).format(this.format)}
                   maxDate={Moment(new Date()).format(this.format)}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="OK"
+                  confirmBtnText="OK"
+                  cancelBtnText="Cancel"
                   onDateChange={(date) => {
-                    this.setState({ endDate: Moment(date, this.format, this.locale) });
-                    this._getTrx();
+                    let formattedDate = Moment(date, this.format, this.locale);
+                    this.setState({ endDate: formattedDate });
+                    this._getTrx(this.state.startDate, formattedDate);
                   }}
                   customStyles={{
                     placeholderText: {

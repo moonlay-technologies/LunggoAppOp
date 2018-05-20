@@ -4,7 +4,7 @@ import React from 'react';
 import { Icon } from 'react-native-elements'
 import {
   Platform, StyleSheet, Text, View, Image, TouchableOpacity, NetInfo, Dimensions,
-  TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView, Keyboard
+  TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView, Keyboard, Alert
 } from 'react-native';
 import { LinearGradient } from 'expo';
 import { dateFullShort, reversePhoneWithoutCountryCode_Indonesia } from '../components/Formatter';
@@ -23,7 +23,6 @@ export default class AppointmentDetail extends React.Component {
       reservations,
       verificationCode: '',
       showInputWarning: false,
-      keyboard: 150,
       keyboardAvoidingViewKey: 'keyboardAvoidingViewKey',
     };
   }
@@ -48,15 +47,16 @@ export default class AppointmentDetail extends React.Component {
 
   _verify = () => {
     Keyboard.dismiss();
-    this.setState({
-      keyboard: 0
-    });
     let { verificationCode: code, reservations } = this.state;
     this.setState({ verificationCode: '' });
     let { verifiedRsv, markedRsvs } = this._verifyOffline(code);
-    if (!verifiedRsv) this.setState({ showInputWarning: true });
+    if (!verifiedRsv)
+      this.setState({ showInputWarning: true });
     else {
       this._verifyOnline(code, verifiedRsv.rsvNo, reservations);
+      Alert.alert(
+        'Pesanan Terverifikasi',
+        'No. Pesanan ' + verifiedRsv.rsvNo + '\na.n. ' + verifiedRsv.contact.name + '\n' + getPaxCountText(verifiedRsv.paxCount));
       this.setState({ reservations: markedRsvs });
     }
   }
@@ -206,12 +206,6 @@ export default class AppointmentDetail extends React.Component {
                   onChangeText={this._onVerificationCodeChanged}
                   value={verificationCode}
                   placeholder="Kode verifikasi"
-                  onFocus={() => this.setState({
-                    keyboard: 150
-                  })}
-                  onEndEditing={() => this.setState({
-                    keyboard: 0
-                  })}
                 />
                 <TouchableOpacity
                   style={{ width: '35%' }}
