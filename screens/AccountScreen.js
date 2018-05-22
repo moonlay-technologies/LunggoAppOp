@@ -21,7 +21,7 @@ import Avatar from './../components/Avatar';
 import MenuButton from './../components/MenuButton';
 import { reversePhoneWithoutCountryCode_Indonesia } from './../components/Formatter';
 
-export default class Dashboard extends React.Component {
+export default class AccountScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -35,6 +35,7 @@ export default class Dashboard extends React.Component {
   };
 
   _goToEditProfile = () => this.props.navigation.navigate('ChangeProfile', { profile: this.state.profile })
+  _goToBankAccountScreen = () => this.props.navigation.navigate('BankAccountScreen')
   _askLogout = () => this._openLogoutModal();
   _openLogoutModal = () => this.refs.logoutModal.openModal();
 
@@ -66,19 +67,31 @@ export default class Dashboard extends React.Component {
               </View>
             </View>
 
-            <TouchableOpacity onPress={this._goToEditProfile}>
+            {/* <TouchableOpacity onPress={this._goToEditProfile}>
               <View style={{ flex: 1, alignItems: 'flex-end', }}>
                 <View>
                   <Text style={styles.editProfile}>Ubah</Text>
                 </View>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
         <View style={styles.boxSeparator}></View>
 
         <View style={styles.boxDetail}>
+          <MenuButton
+            label='Ubah Profil'
+            icon={
+              <Icon
+                name='new-message'
+                type='entypo'
+                size={24}
+                color='#00d3c5'
+              />
+            }
+            onPress={this._goToEditProfile}
+          />
           <MenuButton
             label='Rekening Terdaftar'
             icon={
@@ -89,6 +102,7 @@ export default class Dashboard extends React.Component {
                 color='#00d3c5'
               />
             }
+            onPress={this._goToBankAccountScreen}
           />
           <MenuButton
             label='Keluar Akun'

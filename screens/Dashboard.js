@@ -30,6 +30,7 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
+      refreshing: false,
       name: '...',
       balance: 9999999,
       avatar: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png',
@@ -109,7 +110,7 @@ export default class Dashboard extends React.Component {
       this._getActivityList(),
       // this._getReservationList()
     ]).then(() => {
-      this.setState({ isLoading: false });
+      this.setState({ isLoading: false, refreshing: false });
     });
   }
 
@@ -163,13 +164,13 @@ export default class Dashboard extends React.Component {
 
   _goToMutasi = () => this.props.navigation.navigate('Mutasi');
   _goToRefund = () => this.props.navigation.navigate('Refund');
-  
+
   render() {
     // let nameInitial = item.contact.name.substr(0,1);
     return (
       <ScrollView
         style={{ backgroundColor: '#f7f8fb' }}
-        refreshControl={<RefreshControl onRefresh={this._refreshData} refreshing={this.state.isLoading} />}
+        refreshControl={<RefreshControl onRefresh={this._refreshData} refreshing={this.state.refreshing} />}
       >
         <View style={{ height: 310 }}>
           <Image style={{ height: 250, resizeMode: 'cover' }} source={require('../assets/images/bg1.jpg')} />

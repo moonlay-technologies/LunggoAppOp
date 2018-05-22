@@ -28,6 +28,7 @@ import DeniedOrders from '../screens/DeniedOrderList';
 import HelpScreen from '../screens/HelpScreen';
 import AddActivityScreen from '../screens/AddActivityScreen';
 import AccountScreen from '../screens/AccountScreen';
+import BankAccountScreen from '../screens/BankAccountScreen';
 
 import NotFound from '../screens/NotFoundScreen';
 import DetailScreen from './../screens/DetailScreen';
@@ -69,6 +70,7 @@ export default class RootNavigator extends React.Component {
       HelpScreen: { screen: HelpScreen },
       AddActivityScreen: { screen: AddActivityScreen },
       AccountScreen: { screen: AccountScreen },
+      BankAccountScreen: { screen: BankAccountScreen },
       DetailScreen: { screen: DetailScreen },
       MapScreen: { screen: MapScreen },
       ChangeProfile: { screen: ChangeProfile },

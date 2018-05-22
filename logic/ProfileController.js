@@ -42,3 +42,17 @@ export async function shouldRefreshProfile() {
 export async function purgeProfile() {
   deleteItemAsync('profile');
 }
+
+export async function getUserBankAccounts() {
+  const version = 'v1';
+  let request = {
+    path: `/${version}/payment/user/bankaccounts`,
+    requiredAuthLevel: AUTH_LEVEL.User,
+  }
+  let response = await fetchTravoramaApi(request);
+  let { status } = response;
+  if (status == 200)
+    return response.bankAccounts;
+  else
+    throw new Error();
+}
