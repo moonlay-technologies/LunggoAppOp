@@ -33,12 +33,14 @@ export default class F_ReservationDetail extends React.Component {
   render() {
     let { rsv, activityDetail: { name, date, session } } =
       this.props.navigation.state.params;
+    console.log(rsv);
+    console.log('yey');
     let activityTime = formatDate(date);
-    if (!!session) activityTime += ', ' +  session;
+    if (!!session) activityTime += ', ' + session;
     let totalPayment = getPaymentSumInSteps(rsv.paymentSteps);
     let completedPayment = getPaymentSumInSteps(rsv.paymentSteps, true);
     let isSettled = completedPayment == totalPayment;
-    let dueDate = formatDate(rsv.paymentSteps[rsv.paymentSteps.length - 1].date);
+    let dueDate = rsv.paymentSteps.length ? formatDate(rsv.paymentSteps[rsv.paymentSteps.length - 1].date) : null;
     let paxCount = getPaxCountText(rsv.paxCount);
     return (
       <ScrollView style={styles.container}>
@@ -55,7 +57,7 @@ export default class F_ReservationDetail extends React.Component {
             <View style={{ marginTop: 3 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={[styles.labelDesc]}>Nama Aktivitas</Text>
-                <Text style={[styles.activityDesc, {flex : 1}, {marginLeft: 40}]} numberOfLines={1}>{name}</Text>
+                <Text style={[styles.activityDesc, { flex: 1 }, { marginLeft: 40 }]} numberOfLines={1}>{name}</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={styles.labelDesc}>Waktu</Text>
@@ -128,17 +130,20 @@ export default class F_ReservationDetail extends React.Component {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={styles.labelDesc}>Status</Text>
               <Text style={isSettled ? styles.nominalKecil : styles.danger}>
-                {isSettled ? 'Lunas' : 'Belum Lunas'}
+                {rsv.rsvStatus == 'DeniedByOperator' ? 'Ditolak' : isSettled ? 'Lunas' : 'Belum Lunas'}
               </Text>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.labelDesc}>Total Seluruh Pembayaran</Text>
-              <Text style={styles.nominalKecil}>{totalPayment}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.labelDesc}>Tanggal Pelunasan</Text>
-              <Text style={styles.activityDesc}>{dueDate}</Text>
-            </View>
+            {rsv.rsvStatus == 'DeniedByOperator' ||
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.labelDesc}>Total Seluruh Pembayaran</Text>
+                <Text style={styles.nominalKecil}>{totalPayment}</Text>
+              </View>}
+            {rsv.rsvStatus == 'DeniedByOperator' ||
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.labelDesc}>Tanggal Pelunasan</Text>
+                <Text style={styles.activityDesc}>{dueDate}</Text>
+              </View>
+            }
           </View>
         </View>
       </ScrollView>

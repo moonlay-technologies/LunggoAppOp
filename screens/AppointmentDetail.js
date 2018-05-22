@@ -1,9 +1,10 @@
+
 'use strict';
 
 import React from 'react';
 import { Icon } from 'react-native-elements'
 import {
-  Platform, StyleSheet, Text, View, Image, TouchableOpacity, NetInfo, Dimensions,
+  Platform, StyleSheet, Text, View, Image, TouchableOpacity, NetInfo, Dimensions, Linking,
   TextInput, ScrollView, TouchableHighlight, KeyboardAvoidingView, Keyboard, Alert
 } from 'react-native';
 import { LinearGradient } from 'expo';
@@ -13,6 +14,7 @@ import { fetchVerifyTicket } from './Appointments/AppointmentController';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getTotalPaxCountsText } from './../logic/otherCommonFunctions';
 import { Header } from 'react-navigation';
+import PlatformTouchable from 'react-native-platform-touchable';
 
 export default class AppointmentDetail extends React.Component {
 
@@ -86,6 +88,10 @@ export default class AppointmentDetail extends React.Component {
     this.setState({ verificationCode, showInputWarning: false });
   }
 
+  _callOperator = (contact) => Linking.openURL('tel:' + contact.countryCallCd + contact.phone)
+  _smsOperator = (contact) => Linking.openURL('sms:' + contact.countryCallCd + contact.phone)
+
+
   render() {
     let { details } = this.props.navigation.state.params;
     let { showInputWarning, verificationCode } = this.state;
@@ -144,50 +150,59 @@ export default class AppointmentDetail extends React.Component {
             {this.state.reservations.map((rsv, index) =>
 
               <View key={rsv.rsvNo} style={styles.containerListAppointment}>
-                <TouchableHighlight
-                  onPress={this._onPress}
-                  underlayColor='#ddd'
-                >
-                  <View>
-                    <View style={{ marginBottom: 5, flexDirection: 'row' }}>
-                      <Text style={[styles.namaPeserta, { flex: 1, color: '#454545' }]}>
-                        a.n. {rsv.contact.name}
+                <View>
+                  <View style={{ marginBottom: 5, flexDirection: 'row' }}>
+                    <Text style={[styles.namaPeserta, { flex: 1, color: '#454545' }]}>
+                      a.n. {rsv.contact.name}
+                    </Text>
+                    <View style={{ justifyContent: 'center' }}>
+                      <Text style={[styles.activityDesc, { alignItems: 'flex-end' }]}>
+                        No. Pesanan {rsv.rsvNo}
                       </Text>
-                      <View style={{ justifyContent: 'center' }}>
-                        <Text style={[styles.activityDesc, { alignItems: 'flex-end' }]}>
-                          No. Pesanan {rsv.rsvNo}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={{ flexDirection: 'row', }}>
-                      <View style={{ flex: 1 }}>
-
-                        <Text style={styles.activityDesc}>{getPaxCountText(rsv.paxCount)}</Text>
-                        <Text style={styles.activityDesc}>{reversePhoneWithoutCountryCode_Indonesia(rsv.contact.phone)}</Text>
-                        <Text style={styles.activityDesc}>{rsv.contact.email}</Text>
-                        {rsv.isVerified &&
-                          <View style={{ flexDirection: 'row', marginTop: 5 }}>
-                            <Icon
-                              style={{ marginRight: 10 }}
-                              name='md-checkmark-circle-outline'
-                              type='ionicon'
-                              size={18}
-                              color='#00d3c5'
-                            />
-                            <View style={{ justifyContent: 'center' }}>
-                              <Text style={{ color: '#00d3c5' }}>Terverifikasi</Text>
-                            </View>
-
-                          </View>}
-                      </View>
-                      {rsv.isVerified && <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
-
-
-                      </View>}
-
                     </View>
                   </View>
-                </TouchableHighlight>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1 }}>
+
+                      <Text style={styles.activityDesc}>{getPaxCountText(rsv.paxCount)}</Text>
+                      <Text style={styles.activityDesc}>{reversePhoneWithoutCountryCode_Indonesia(rsv.contact.phone)}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+                      <TouchableOpacity onPress={() => this._callOperator(rsv.contact)} style={[styles.iconKontak, { marginRight: 15 }]}>
+                        <Icon
+                          name='ios-call'
+                          type='ionicon'
+                          size={23}
+                          color='#00d3c5' />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => this._smsOperator(rsv.contact)} style={styles.iconKontak}>
+                        <Icon
+                          name='ios-mail'
+                          type='ionicon'
+                          size={23}
+                          color='#00d3c5' />
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.activityDesc}>{rsv.contact.email}</Text>
+                    {rsv.isVerified &&
+                      <View style={{ flexDirection: 'row', marginTop: 5 }}>
+                        <Icon
+                          style={{ marginRight: 10 }}
+                          name='md-checkmark-circle-outline'
+                          type='ionicon'
+                          size={18}
+                          color='#00d3c5'
+                        />
+                        <View style={{ justifyContent: 'center' }}>
+                          <Text style={{ color: '#00d3c5' }}>Terverifikasi</Text>
+                        </View>
+
+                      </View>}
+                  </View>
+                </View>
               </View>
 
             )}
@@ -406,5 +421,12 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
+  iconKontak: {
+    width: 35,
+    height: 35,
+    borderWidth: 1,
+    borderRadius: 25,
+    borderColor: '#00d3c5',
+    justifyContent: 'center'
+  },
 });

@@ -22,7 +22,7 @@ export default class DeniedOrders extends React.Component {
     super(props);
     this.state = {
       isLoading: true,
-      list: [],
+      rsvList: [],
       startDate: Moment().startOf('Month'),
       endDate: Moment(new Date()),
     }
@@ -33,35 +33,34 @@ export default class DeniedOrders extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true });
     this._getDeniedList(this.state);
   }
 
   _getDeniedList = ({ startDate, endDate }) => {
+    this.setState({ isLoading: true });
     let start = Moment(startDate).format('MM/DD/YYYY');
     let end = Moment(endDate).format('MM/DD/YYYY');
-    let params = `type=order&startDate=${start}&endDate=${end}`;
+    let params = `type=order&startDate=${start}&endDate=${end}&bookingStatusCd=DeniedByOperator`;
     fetchAppointmentList(params)
       .then(res => {
         console.log('res');
         console.log(res);
-        let rsvList = res.appointments.reduce((list, app) => list.concat(app.reservations), []);
-        // console.log('rsvList');
-        // console.log(rsvList);
-        let deniedList = rsvList.filter(rsv => rsv.rsvStatus == 'CAOP' || rsv.rsvStatus == 'DENY');
-        // console.log('deniedList');
-        // console.log(deniedList);
-        this.setState({ list: deniedList });
+        let rsvList = res.appointments.reduce((list, app) => list.concat([...app.reservations.map(rsv => ({ ...rsv, name: app.name, mediaSrc: app.mediaSrc }))]), []);
+        this.setState({ rsvList });
       })
       .catch(e => console.warn(e))
       .finally(() => this.setState({ isLoading: false }));
   }
 
-  _goToDetail = rsv => this.props.navigation.navigate('F_ReservationDetail', {
-    rsv, activityDetail: {
-      name: rsv.activityName, date: rsv.activityDate, session: rsv.session
-    }
-  });
+  _goToDetail = rsv => {
+    console.log(rsv);
+    console.log('yoy');
+    this.props.navigation.navigate('F_ReservationDetail', {
+      rsv, activityDetail: {
+        name: rsv.name, date: rsv.date, session: rsv.session
+      }
+    });
+  };
 
   _changeDate = (date, whichDate) => {
     date = Moment(date, 'dddd, D MMM YYYY');
@@ -70,8 +69,8 @@ export default class DeniedOrders extends React.Component {
   };
 
   render() {
-    let { list, isLoading, startDate, endDate } = this.state;
-    let totalAmount = list.reduce((total, rsv) => { return total + rsv.paxCount.totalPrice; }, 0);
+    let { rsvList, isLoading, startDate, endDate } = this.state;
+    let totalAmount = rsvList.reduce((total, rsv) => { return total + rsv.paxCount.reduce((tot, pax) => tot + pax.totalPrice, 0) }, 0);
     return (
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
@@ -111,27 +110,29 @@ export default class DeniedOrders extends React.Component {
             />
           </View>
           <View style={styles.divider}></View>
-          {list && list.map((item, i) =>
+          {isLoading && <LoadingAnimation />}
+
+          {rsvList && rsvList.map((rsv, i) =>
             <View key={i} >
-              <TouchableOpacity style={styles.boxReservation} onPress={() => this._goToDetail(item)}>
+              <TouchableOpacity style={styles.boxReservation} onPress={() => this._goToDetail(rsv)}>
                 <View style={{ marginRight: 10, width: '20%' }}>
-                  <Image style={{ height: 55, width: '100%', }} source={{ uri: item.mediaSrc }} />
+                  <Image style={{ height: 55, width: '100%', }} source={{ uri: rsv.mediaSrc }} />
                 </View>
                 <View style={{ width: '80%' }}>
                   <Text style={styles.activityTitle}>
-                    {item.activityName}
+                    {rsv.name}
                   </Text>
                   <Text style={styles.activityTanggal}>
-                    No. Pesanan: {item.rsvNo}
+                    No. Pesanan: {rsv.rsvNo}
                   </Text>
                   <Text style={styles.activityTanggal}>
-                    Pemesan: {item.contact.name}
+                    Pemesan: {rsv.contact.name}
                   </Text>
                   <Text style={styles.activityTanggal}>
-                    Peserta: {getPaxCountText(item.paxCount)}
+                    Peserta: {getPaxCountText(rsv.paxCount)}
                   </Text>
-                  <Text style={styles.activityTanggal}>Potensi tertolak:
-                    <Text style={styles.nominalKecil}> {rupiah(item.paxCount.totalPrice)}</Text>
+                  <Text style={styles.activityTanggal}>Potensi ditolak:
+                    <Text style={styles.nominalKecil}> {rupiah(rsv.paxCount.reduce((tot, pax) => tot + pax.totalPrice, 0))}</Text>
                   </Text>
                 </View>
               </TouchableOpacity>
