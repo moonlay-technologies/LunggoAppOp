@@ -22,31 +22,31 @@ export default (async function registerForPushNotificationsAsync() {
   return fetchTravoramaApi({
     path: PUSH_ENDPOINT,
     method: 'PUT',
-    data: { handle:token },
+    data: { handle: token },
     requiredAuthLevel: AUTH_LEVEL.User,
   });
 });
 
-export async function deletePushNotificationAsync(){
+export async function deletePushNotificationAsync() {
 
   // Android remote notification permissions are granted during the app
- // install, so this will only ask on iOS
- let { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  // install, so this will only ask on iOS
+  let { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
- // Stop here if the user did not grant permissions
- if (status !== 'granted') return;
+  // Stop here if the user did not grant permissions
+  if (status !== 'granted') return;
 
- // Get the token that uniquely identifies this device
- let token = await Notifications.getExpoPushTokenAsync();
+  // Get the token that uniquely identifies this device
+  let token = await Notifications.getExpoPushTokenAsync();
 
- // POST the token to our backend so we can use it to send pushes from there
+  // POST the token to our backend so we can use it to send pushes from there
 
- return fetchTravoramaApi({
-   path: PUSH_ENDPOINT,
-   method: "DELETE",
-   data: { handle:token },
-   requiredAuthLevel: AUTH_LEVEL.Guest
- })
+  return fetchTravoramaApi({
+    path: PUSH_ENDPOINT,
+    method: "DELETE",
+    data: { handle: token },
+    requiredAuthLevel: AUTH_LEVEL.Guest
+  })
 }
 
 export async function notificationListener({ origin, data }) {
@@ -57,10 +57,11 @@ export async function notificationListener({ origin, data }) {
   }
   if (data.function && data.function == "refreshAppointment" && origin == "selected") {
     console.log("selecting notif");
+    let { reset, navigate } = NavigationActions;
     this.props.navigation.navigate("AppointmentRequest");
   }
 }
 
-export async function addNotificationListener(){
-  Notifications.addListener(notificationListener); 
+export async function addNotificationListener() {
+  Notifications.addListener(notificationListener);
 }
