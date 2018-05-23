@@ -109,18 +109,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  divider: {
-    height: 1,
-    width: '100%',
-    backgroundColor: '#e1e1e1',
-  },
-
-
-  container: {
-    backgroundColor: '#fff',
-    flex:1,
-    padding:20,
-  },
   h1:{
     fontFamily: 'Hind-SemiBold',
     fontSize: 20,
@@ -154,23 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#454545',
     fontFamily: 'Hind-SemiBold',
-    ...Platform.select({
-      ios: {
-        lineHeight: 14,
-        paddingTop: 9,
-        marginBottom: -10
-      },
-      android: {
-        //lineHeight:24
-        //paddingTop: 23 - (23* 1),
-
-      },
-    }),
-  },
-  activityDesc: {
-    fontSize: 14,
-    color: '#454545',
-    fontFamily: 'Hind-Light',
     ...Platform.select({
       ios: {
         lineHeight: 14,

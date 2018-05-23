@@ -3,10 +3,10 @@
 import React from 'react';
 import Button from 'react-native-button';
 import { Platform, StyleSheet, Text, View, } from 'react-native';
-import globalStyles from '../../commons/globalStyles';
-// import Modal from '../../commons/components/Modal';
+import globalStyles from '../components/globalStyles';
+// import Modal from '../../components/Modal';
 import Modal from 'react-native-modal';
-import { backToMain } from '../../api/Common';
+import { backToMain } from '../api/Common';
 import { NavigationActions } from 'react-navigation';
 
 export default class ContinueToCartModal extends React.Component {

@@ -1,9 +1,9 @@
 'use strict';
 import { API_DOMAIN, AUTH_LEVEL, } from '../constants/env';
-import { getAuthAccess } from '../commons/Auth/AuthController';
+import { getAuthAccess } from '../screens/Auth/AuthController';
 import { NavigationActions } from 'react-navigation';
 
-export { checkUserLoggedIn } from '../commons/Auth/AuthController';
+export { checkUserLoggedIn } from '../screens/Auth/AuthController';
 export { AUTH_LEVEL } from '../constants/env';
 
 const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
