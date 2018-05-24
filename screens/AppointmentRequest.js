@@ -8,10 +8,11 @@ import {
 } from 'react-native';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common';
 import { dateFullShort, timeFromNow } from '../components/Formatter';
-import { fetchAppointmentRequests, shouldRefreshAppointmentList } from './Appointments/AppointmentController';
+import { fetchAppointmentRequests, shouldRefreshAppointmentList, appointmentRequestItemStore, _refreshAppointmentRequest } from './Appointments/AppointmentController';
 import LoadingModal from './../components/LoadingModal';
 import { getPaxCountText } from '../logic/otherCommonFunctions';
-
+import { observer } from 'mobx-react';
+@observer
 export default class AppointmentRequests extends React.Component {
 
   constructor(props) {
@@ -31,9 +32,15 @@ export default class AppointmentRequests extends React.Component {
     this._refreshList();
   }
 
-  _refreshList = () => fetchAppointmentRequests().then(res =>
-    this.setState({ list: res.appointmentRequests })
-  )
+  _refreshList = () => {
+    fetchAppointmentRequests().then(res => {
+      this.setState({ list: res.appointmentRequests });
+      _refreshAppointmentRequest().then(res => {
+        this.setState({ isLoading: false })
+      });
+    }
+    )
+  }
 
   _keyExtractor = (item, index) => index
   _renderItem = ({ item, index }) => (
@@ -58,21 +65,22 @@ export default class AppointmentRequests extends React.Component {
       this._refreshList();
       this.setState({ list: list.filter(e => e.rsvNo != rsvNo) });
     }).catch(error => console.log(error)
-    ).finally(() => this.setState({ isLoading: false }));
+    );
   }
 
   _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm');
   _declineRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'decline');
 
   render() {
-    let { isLoading, list } = this.state;
+    let { isLoading } = this.state;
+    let list = appointmentRequestItemStore.appointmentRequestItem;
     return (
       isLoading ? <LoadingModal isVisible={isLoading} />
         :
         (list && list.length > 0) ?
           <View style={{ marginBottom: 10, backgroundColor: '#fff', }}>
             <FlatList
-              data={this.state.list}
+              data={list}
               keyExtractor={this._keyExtractor}
               renderItem={this._renderItem}
               refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}

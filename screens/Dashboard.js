@@ -18,12 +18,16 @@ import LogoutConfirmationModal from '../components/LogoutConfirmationModal';
 import { checkUserLoggedIn } from '../api/Common';
 import { NavigationActions } from 'react-navigation';
 import {
-  fetchAppointmentRequests, getAppointmentList, fetchAppointmentList
+  fetchAppointmentRequests, getAppointmentList, fetchAppointmentList, appointmentRequestItemStore, _getAppointmentRequests, _refreshAppointmentRequest, fetchAppointmentListActive, appointmentListActiveItemStore, _refreshAppointmentListActive
 } from './Appointments/AppointmentController';
 import { getActivityList, fetchActivityList } from './ActivityController';
 import Avatar from './../components/Avatar';
 import MenuButton from './../components/MenuButton';
+import intervalController from './IntervalController';
+import { observable, observer } from 'mobx-react';
 
+const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
+@observer
 export default class Dashboard extends React.Component {
 
   constructor(props) {
@@ -100,13 +104,15 @@ export default class Dashboard extends React.Component {
       }
     });
     this.props.navigation.addListener('didFocus', this._refreshData);
+    this.props.navigation.addListener('didFocus', () => intervalController.register(fetchAppointmentRequests));
+    this.props.navigation.addListener('didFocus', () => intervalController.register(fetchAppointmentListActive));
   }
 
   _refreshData = () => {
     this.setState({ isLoading: true });
     Promise.all([
-      this._getAppointmentList(),
-      this._getAppointmentRequests(),
+      _refreshAppointmentListActive(),
+      _refreshAppointmentRequest(),
       this._getActivityList(),
       // this._getReservationList()
     ]).then(() => {
@@ -114,11 +120,15 @@ export default class Dashboard extends React.Component {
     });
   }
 
-  _getAppointmentRequests = () => {
-    fetchAppointmentRequests().then(res =>
-      // this.props.navigation.isFocused() &&
-      this.setState({ requests: res.appointmentRequests })
-    ).catch(e => console.warn(e));;
+  _getAppointmentRequests = async () => {
+    var appointmentRequestsJson = await getItemAsync("appointmentRequests");
+    if (!appointmentRequests) {
+      var response = await fetchAppointmentRequests();
+    }
+    else{
+      var appointmentRequests = JSON.parse(appointmentRequestsJson);
+      appointmentRequestItemStore.setAppointmentRequestItem(appointmentRequests);
+    }
   }
 
   _getAppointmentList = () => {
@@ -136,13 +146,13 @@ export default class Dashboard extends React.Component {
   }
 
   _goToAppointmentRequest = () => {
-    let { requests = [] } = this.state;
+    let { requests = [] } = appointmentRequestItemStore.appointmentRequestItem;
     this.props.navigation.navigate('AppointmentRequest', { requests });
   }
 
   _goToAppointmentList = () =>
     this.props.navigation.navigate(
-      'AppointmentList', { list: this.state.appointments || [] }
+      'AppointmentList', { list: appointmentListActiveItemStore.appointmentListActiveItem || [] }
     );
 
   _goToActivityList = () => this.props.navigation.navigate('ActivityList');
@@ -206,14 +216,14 @@ export default class Dashboard extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this._goToAppointmentList} style={{ flex: 1, alignItems: 'center' }}>
                   <Text style={styles.teks1}>Terjadwal</Text>
-                  {this.state.appointments == null ? <LoadingAnimation height={40} width={40} /> :
-                    <Text style={styles.teks2}>{this.state.appointments.length}</Text>
+                  {appointmentListActiveItemStore.appointmentListActiveItem == null ? <LoadingAnimation height={40} width={40} /> :
+                    <Text style={styles.teks2}>{appointmentListActiveItemStore.appointmentListActiveItem.length}</Text>
                   }
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this._goToAppointmentRequest} style={{ flex: 1, alignItems: 'center' }}>
                   <Text style={styles.teks1}>Pesanan Baru</Text>
-                  {this.state.requests == null ? <LoadingAnimation height={40} width={40} /> :
-                    <Text style={styles.teks2}>{this.state.requests.length}</Text>
+                  {appointmentRequestItemStore.appointmentRequestItem == null ? <LoadingAnimation height={40} width={40} /> :
+                    <Text style={styles.teks2}>{appointmentRequestItemStore.appointmentRequestItem.length}</Text>
                   }
                 </TouchableOpacity>
               </View>

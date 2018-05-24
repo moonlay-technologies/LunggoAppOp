@@ -4,6 +4,8 @@ import Expo, { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 import Colors from './constants/Colors';
+import { addNotificationListener } from './api/NotificationController';
+import intervalController from './screens/IntervalController';
 
 const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 
@@ -74,8 +76,10 @@ export default class App extends React.Component {
         { 'Hind-SemiBold': require('./assets/fonts/hind-semibold.ttf') },
         { 'Hind-Light': require('./assets/fonts/hind-light.ttf') },
 
-      ]),
-    ]);
+      ]),      
+      addNotificationListener(),
+      intervalController.start()
+    ]);    
   };
 
   _handleLoadingError = error => {
