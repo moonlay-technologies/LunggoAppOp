@@ -35,7 +35,9 @@ export default class AppointmentRequests extends React.Component {
   _refreshList = () => {
     fetchAppointmentRequests().then(res => {
       this.setState({ list: res.appointmentRequests });
-      _refreshAppointmentRequest();
+      _refreshAppointmentRequest().then(res => {
+        this.setState({ isLoading: false })
+      });
     }
     )
   }
@@ -63,7 +65,7 @@ export default class AppointmentRequests extends React.Component {
       this._refreshList();
       this.setState({ list: list.filter(e => e.rsvNo != rsvNo) });
     }).catch(error => console.log(error)
-    ).finally(() => this.setState({ isLoading: false }));
+    );
   }
 
   _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm');

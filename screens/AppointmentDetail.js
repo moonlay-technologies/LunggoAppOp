@@ -10,7 +10,7 @@ import {
 import { LinearGradient } from 'expo';
 import { dateFullShort, reversePhoneWithoutCountryCode_Indonesia } from '../components/Formatter';
 import { getPaxCountText } from '../logic/otherCommonFunctions';
-import { fetchVerifyTicket } from './Appointments/AppointmentController';
+import { fetchVerifyTicket, fetchAppointmentListActive } from './Appointments/AppointmentController';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getTotalPaxCountsText } from './../logic/otherCommonFunctions';
 import { Header } from 'react-navigation';
@@ -81,6 +81,7 @@ export default class AppointmentDetail extends React.Component {
     if (!isConnected) return false;
     let res = await fetchVerifyTicket({ ticketNumber, rsvNo });
     if (res.status != 200) this.setState({ reservations: previousRsvs });
+    await fetchAppointmentListActive();
     return true;
   }
 
