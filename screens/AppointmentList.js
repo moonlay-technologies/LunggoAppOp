@@ -8,9 +8,9 @@ import {
 import Moment from 'moment';
 import 'moment/locale/id';
 import { Icon } from 'react-native-elements';
-import { getAppointmentList, shouldRefreshAppointmentList } from './Appointments/AppointmentController';
+import { getAppointmentList, shouldRefreshAppointmentList, appointmentListActiveItemStore } from './Appointments/AppointmentController';
 import { setMomentFutureString } from './../components/MomentString';
-
+import { observer } from 'mobx-react';
 class ListItem extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -91,7 +91,7 @@ class ListItem extends React.PureComponent {
     );
   }
 }
-
+@observer
 export default class AppointmentList extends React.Component {
 
   constructor(props) {
@@ -131,7 +131,7 @@ export default class AppointmentList extends React.Component {
   }
 
   render() {
-    let { list } = this.state;
+    let list = appointmentListActiveItemStore.appointmentListActiveItem;
     return (
       (list && list.length > 0) ?
         <View style={{ backgroundColor: '#fff' }}>

@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 import Colors from './constants/Colors';
 import { addNotificationListener } from './api/NotificationController';
+import intervalController from './screens/IntervalController';
 
 const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 
@@ -77,6 +78,7 @@ export default class App extends React.Component {
 
       ]),      
       addNotificationListener(),
+      intervalController.start()
     ]);    
   };
 
