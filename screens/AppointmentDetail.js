@@ -30,7 +30,7 @@ export default class AppointmentDetail extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Detail Appointment',
+    title: 'Daftar Pesanan',
   }
 
   componentDidMount() {
@@ -88,8 +88,8 @@ export default class AppointmentDetail extends React.Component {
     this.setState({ verificationCode, showInputWarning: false });
   }
 
-  _callOperator = (contact) => Linking.openURL('tel:' + contact.countryCallCd + contact.phone)
-  _smsOperator = (contact) => Linking.openURL('sms:' + contact.countryCallCd + contact.phone)
+  _callOperator = (contact) => Linking.openURL('tel:' + contact.countryCallCd + contact.phone);
+  _smsOperator = (contact) => Linking.openURL('sms:' + contact.countryCallCd + contact.phone);
 
 
   render() {

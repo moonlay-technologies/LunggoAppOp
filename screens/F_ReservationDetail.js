@@ -27,7 +27,7 @@ export default class F_ReservationDetail extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Reservation Detail',
+    title: 'Detail Pesanan',
   }
 
   render() {

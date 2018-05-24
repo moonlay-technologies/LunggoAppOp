@@ -18,7 +18,7 @@ import { Icon } from 'react-native-elements';
 export default class F_AppointmentDetail extends React.Component {
 
   static navigationOptions = {
-    title: 'Appointment Detail',
+    title: 'Detail Penghasilan',
   }
 
   _keyExtractor = (item, index) => index
