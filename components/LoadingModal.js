@@ -1,14 +1,8 @@
 'use strict';
 
 import React from 'react';
-import Button from 'react-native-button';
-import {
-  Platform, StyleSheet, Text, View, Image, TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import globalStyles from '../components/globalStyles';
+import { Text, View } from 'react-native';
 import Modal from './Modal';
-import { NavigationActions } from 'react-navigation';
 import LoadingAnimation from './../components/LoadingAnimation';
 
 export default class LoadingModal extends React.Component {

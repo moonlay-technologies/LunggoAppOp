@@ -16,8 +16,10 @@ export async function fetchTravoramaApi(request) {
     method = method || 'GET';
     let url = API_DOMAIN + (path || request);
     LOGGING && console.log('fetching ' + method + ' from ' + url + ' ...')
-    if (!requiredAuthLevel)
+    if (!requiredAuthLevel) {
+      console.log(`error feching: please specify requiredAuthLevel when calling fetchTravoramaAPI: ${requiredAuthLevel}`)
       throw 'ERROR fetch: requiredAuthLevel needed!';
+    }
 
     //// Get auth info and check if user authorized for the request
     let { accessToken, authLevel } = await getAuthAccess();
@@ -25,9 +27,12 @@ export async function fetchTravoramaApi(request) {
     //// check if client have sufficent authLevel for request
     authLevel = parseInt(authLevel);
     requiredAuthLevel = parseInt(requiredAuthLevel);
-    if (authLevel < requiredAuthLevel) return {
-      status: 401, message: 'Not Authorized: Not enough auth level!',
-      requiredAuthLevel,
+    if (authLevel < requiredAuthLevel) {
+      LOGGING && console.log(`error feching: insufficent authLevel! expected:${requiredAuthLevel}; actual:`+ authLevel)
+      return {
+        status: 401, message: 'Not Authorized: Not enough auth level!',
+        requiredAuthLevel,
+      }
     }
     //// Execute request
     let response = await fetch(url, {
@@ -38,7 +43,7 @@ export async function fetchTravoramaApi(request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(request.data),
-    }).catch(console.error);
+    }).catch(console.log);
     if (response == null || response == ' ') {
       console.log('response null, please check your connection!');
       return { message: 'response null, please check your connection!' }

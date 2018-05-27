@@ -180,7 +180,7 @@ export default class PersonDataForm extends React.Component {
                     phone, errorPhone: null, error: null
                   })}
                   returnKeyType={this.props.hasPasswordField ? 'next' : 'done'}
-                  onSubmitEditing={this.props.hasPasswordField ? this.passwordInput.focus : this._onSubmitForm}
+                  onSubmitEditing={ () => this.props.hasPasswordField ? this.passwordInput.focus() : this._onSubmitForm()}
                 />
               </View>
             </View>
@@ -208,7 +208,7 @@ export default class PersonDataForm extends React.Component {
                     autoCorrect={false}
                     secureTextEntry={!showPassword}
                     returnKeyType={"done"}
-                    onSubmitEditing={this._onSubmitForm}
+                    onSubmitEditing={() =>this._onSubmitForm()}
                   />
                   {errorMessagePassword}
                   {errorMessage}

@@ -21,9 +21,10 @@ import { fetchProfile } from '../../../logic/ProfileController';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from '../../../components/LoadingModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import withConnectivityHandler from '../../../higherOrderComponents/withConnectivityHandler';
 const { setItemAsync } = Expo.SecureStore;
 
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = { error: [], isLoading: false };
@@ -50,9 +51,6 @@ export default class LoginScreen extends React.Component {
   };
 
   _login = () => {
-    let { navigation } = this.props;
-    let { navigate, goBack, replace, pop } = navigation;
-    let { params } = navigation.state;
     let isPhoneNo = !validatePhone(this.state.userName);
     let phoneNumber, countryCallCd, email;
     if (isPhoneNo) {
@@ -64,33 +62,33 @@ export default class LoginScreen extends React.Component {
 
     this.setState({ isLoading: true });
 
-    fetchTravoramaLoginApi(email, countryCallCd, phoneNumber, this.state.password)
-      .then(response => {
-        this.setState({ isLoading: false });
+    this.props.withConnectivityHandler( () => fetchTravoramaLoginApi(
+      email, countryCallCd, phoneNumber, this.state.password
+    )).then(response => {
         if (response.status == 200) {
           setItemAsync('isLoggedIn', 'true');
+          fetchProfile(); //// need await????
           registerForPushNotificationsAsync();
-            backToMain(navigation);
+          backToMain(this.props.navigation);
         } else {
-          console.log(response);
-          let error;
+          let errorMessage;
           switch (response.error) {
             case 'ERR_NOT_REGISTERED':
-              error = 'Akun ' + this.state.userName + ' tidak ditemukan'
+              errorMessage = 'Akun ' + this.state.userName + ' tidak ditemukan'
               break;
             case 'ERR_INVALID_PASSWORD':
-              error = 'Password salah';
+              errorMessage = 'Password salah';
               break;
             default:
-              error = 'Terjadi kesalahan pada server';
+              errorMessage = 'Terjadi kesalahan pada server';
+              console.log(response);
           }
-          this.setState({ error });
+          this.setState({ error: errorMessage });
         }
       }).catch(error => {
         console.log("Login error!!");
         console.log(error);
-        this.setState({ isLoading: false })
-      });
+      }).finally( () => this.setState({ isLoading: false }) );
   }
 
   _toggleShowPassword = () => {
@@ -121,7 +119,7 @@ export default class LoginScreen extends React.Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
        <KeyboardAwareScrollView enableOnAndroid = {true} enableAutomaticScroll = {true} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
-          <LoadingModal isVisible={isLoading} />
+          {/*<LoadingModal isVisible={isLoading} />*/}
           <View style={{ marginBottom: 30 }}>
             <Text style={globalStyles.categoryTitle1}>Login</Text>
           </View>
@@ -216,6 +214,8 @@ export default class LoginScreen extends React.Component {
     );
   }
 }
+
+export default withConnectivityHandler(LoginScreen);
 
 const styles = StyleSheet.create({
   container: {

@@ -5,19 +5,20 @@ import { StyleSheet, View, Text, NetInfo, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements';
 
 export default class OfflineNotificationBar extends React.Component {
-  state = {
-    isConnected: null,
-    isClosed: false,
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      showNotification: false,
+    };
+    NetInfo.isConnected.addEventListener(
+      'connectionChange',
+      this._handleConnectivityChange
+    );
   }
 
   componentDidMount() {
-    NetInfo.isConnected.addEventListener(
-        'connectionChange',
-        this._handleConnectivityChange
-    );
-    NetInfo.isConnected.fetch().done(
-        isConnected => { this.setState({isConnected}); }
-    );
+    NetInfo.isConnected.fetch().then(this._handleConnectivityChange);
   }
 
   componentWillUnmount() {
@@ -26,22 +27,19 @@ export default class OfflineNotificationBar extends React.Component {
         this._handleConnectivityChange
     );
   }
+  
+  _handleConnectivityChange = isConnected =>
+    setTimeout(
+      () => this.setState({showNotification: !isConnected})
+    , 300)
 
-  componentWillReceiveProps({isClosed}) {
-    this.setState({isClosed});
-  }
-
-  _handleConnectivityChange = (isConnected) => {
-    this.setState({isConnected});
-  }
-
-  _onClose = () => this.setState({isClosed: true})
+  _onClose = () => this.setState({showNotification: false})
 
   render() {
-    return ( !this.state.isConnected && !this.state.isClosed &&
-    	<View style={styles.offlineState}>
-        <Text style={{color:'#454545'}}>
-          <Text style={{color:'#f57b76'}}>Error! </Text>
+    return ( this.state.showNotification &&
+      <View style={styles.offlineState}>
+        <Text style={{color:'#fff'}}>
+          <Text style={{color:'#fff', fontWeight:'bold'}}>Error! </Text>
           Terputus dari jaringan
         </Text>
         <TouchableOpacity onPress={this._onClose}>
@@ -50,7 +48,7 @@ export default class OfflineNotificationBar extends React.Component {
             name='md-close'
             type='ionicon'
             size={26}
-            color='#00D3C5'
+            color='#fff'
           />
         </TouchableOpacity>
       </View>
@@ -60,7 +58,7 @@ export default class OfflineNotificationBar extends React.Component {
 
 const styles = StyleSheet.create({
   offlineState: {
-    backgroundColor:'#fff',
+    backgroundColor:'#fd5751',
     justifyContent:'space-between', 
     alignItems:'center', 
     flexDirection:'row', 
@@ -71,5 +69,6 @@ const styles = StyleSheet.create({
     height:60,  
     borderTopColor:'#e1e1e1', 
     borderTopWidth:1,
+    zIndex: 999,
   },
 });
