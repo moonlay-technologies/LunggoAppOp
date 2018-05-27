@@ -3,9 +3,9 @@
 import React from 'react';
 import { View, NetInfo } from 'react-native';
 import OfflineNotificationBar
-  from '../commons/components/OfflineNotificationBar';
+  from '../components/OfflineNotificationBar';
 import ConnectionModals, { checkConnection }
-  from '../commons/components/ConnectionModals';
+  from '../components/ConnectionModals';
 
 const hasBeenHandledMessage =
   `Connection error, has been handled by withConnectivityHandler()`;
