@@ -3,7 +3,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
-import { fetchTravoramaApi, fetchWishlist, AUTH_LEVEL, backToMain } from '../../../api/Common';
+import { fetchTravoramaApi, AUTH_LEVEL, backToMain } from '../../../api/Common';
 import registerForPushNotificationsAsync from '../../../api/NotificationController';
 import { fetchTravoramaLoginApi } from '../AuthController';
 import PersonDataForm from '../../../components/PersonDataForm';
@@ -12,8 +12,6 @@ import LoadingModal from '../../../components/LoadingModal';
 import {
   validateUserName, validatePassword, validatePhone,
 } from '../../../logic/FormValidation';
-
-const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 
 export default class Registration extends React.Component {
 
@@ -70,13 +68,12 @@ export default class Registration extends React.Component {
 
     fetchTravoramaApi(request).then(response => {
       if (response.status == 200) {
-        fetchTravoramaLoginApi(accountData.email, '62', accountData.phone, accountData.password)
-          .then(response => {
+        screenProps.withConnHandler( () => fetchTravoramaLoginApi(
+          accountData.email, '62', accountData.phone, accountData.password
+        )).then(response => {
             if (response.status == 200) {
-              console.log('1212121');
-              setItemAsync('isLoggedIn', 'true');
+              Expo.SecureStore.setItemAsync('isLoggedIn', 'true');
               registerForPushNotificationsAsync();
-              fetchWishlist();
               goToPhoneVerification();
               // this.setState({ isLoading: false });
             } else {
@@ -93,8 +90,6 @@ export default class Registration extends React.Component {
       }
       else {
         this.setState({ isLoading: false });
-        console.log(request);
-        console.log(response);
         let error;
         switch (response.error) {
           case 'ERR_EMAIL_ALREADY_EXIST':

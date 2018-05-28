@@ -1,15 +1,12 @@
 'use strict';
-import { API_DOMAIN, AUTH_LEVEL, } from '../constants/env';
+import { API_DOMAIN } from '../constants/env';
 import { getAuthAccess } from '../screens/Auth/AuthController';
 import { NavigationActions } from 'react-navigation';
 
-export { checkUserLoggedIn } from '../screens/Auth/AuthController';
 export { AUTH_LEVEL } from '../constants/env';
 
-const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 const LOGGING = true;
 
-//// fetch API
 export async function fetchTravoramaApi(request) {
   try {
     let { path, method, data, requiredAuthLevel } = request;
@@ -49,7 +46,7 @@ export async function fetchTravoramaApi(request) {
       return { message: 'response null, please check your connection!' }
     }
     if (response.status == 401) {
-      await deleteItemAsync('expTime');
+      await Expo.SecureStore.deleteItemAsync('expTime');
       return fetchTravoramaApi(request);
     } else if (response.error == "ERRGEN98") { //invalid JSON format
       // console.log(JSON.stringify(request.data));
@@ -70,37 +67,6 @@ export async function fetchTravoramaApi(request) {
     console.log(request);
     console.log(err);
   }
-}
-
-export async function toggleWishlist(activityId, isEnabled = true) {
-  const version = 'v1';
-  let request = {
-    path: `/${version}/activities/wishlist`,
-    requiredAuthLevel: AUTH_LEVEL.User,
-  }
-  request.path += `/${activityId}`
-  request.method = (isEnabled) ? 'PUT' : 'DELETE';
-  let response = await fetchTravoramaApi(request);
-  // if (response.status == 401) throw 'blom login!! nanti munculin modal';
-  await fetchWishlist();
-}
-
-export function fetchWishlist() {
-  new Promise(() => {
-    const version = 'v1';
-    let request = {
-      path: `/${version}/activities/wishlist`,
-      requiredAuthLevel: AUTH_LEVEL.User,
-      method: 'GET'
-    }
-    let response = fetchTravoramaApi(request).then(response => {
-      if (response.status == 200)
-        setItemAsync('wishlist', JSON.stringify(response.activityList));
-      else
-        deleteItemAsync('wishlist');
-
-    });
-  });
 }
 
 export function backToMain(navigation) {

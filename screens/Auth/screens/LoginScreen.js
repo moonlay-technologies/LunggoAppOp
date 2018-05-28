@@ -15,7 +15,7 @@ import globalStyles from '../../../components/globalStyles';
 import { Notifications } from 'expo';
 import registerForPushNotificationsAsync
   from '../../../api/NotificationController';
-import { fetchWishlist, backToMain } from '../../../api/Common';
+import { backToMain } from '../../../api/Common';
 import { LinearGradient } from 'expo';
 import { fetchProfile } from '../../../logic/ProfileController';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';

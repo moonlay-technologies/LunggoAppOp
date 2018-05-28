@@ -11,7 +11,7 @@ import {
 import { validatePassword } from '../../../logic/FormValidation';
 import { resetPassword } from '../ResetPasswordController';
 import LoadingAnimation from '../../../components/LoadingAnimation'
-import { fetchWishlist, backToMain } from '../../../api/Common';
+import { backToMain } from '../../../api/Common';
 import { fetchTravoramaLoginApi } from '../AuthController';
 import registerForPushNotificationsAsync from '../../../api/NotificationController';
 import LoadingModal from '../../../components/LoadingModal';
@@ -46,12 +46,11 @@ export default class NewPasswordScreen extends React.Component {
     resetPassword(email, countryCallCd, phone, otp, password).then(response => {
       let { status, message } = response;
       if (status == 200) {
-        fetchTravoramaLoginApi(email, countryCallCd, phone, password)
+        screenProps.withConnHandler( () => fetchTravoramaLoginApi(email, countryCallCd, phone, password))
           .then(response => {
             if (response.status == 200) {
               setItemAsync('isLoggedIn', 'true');
               registerForPushNotificationsAsync();
-              fetchWishlist();
               backToMain(this.props.navigation);
             } else {
               console.log(response);

@@ -27,7 +27,6 @@ export default class DetailScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this._onWishlist = this._onWishlist.bind(this);
     let { details, id } = this.props.navigation.state.params;
 
     let item = { ...details }
@@ -75,12 +74,6 @@ export default class DetailScreen extends React.Component {
     }).catch(error => console.log(error));
   }
 
-  _onWishlist = async ({ wishlisted }) => {
-    new Promise(() => {
-      this.setState({ wishlisted });
-    });
-  }
-
   _isDateAvailable = (availableDates) => {
     if (availableDates.length > 0) {
       return (
@@ -96,7 +89,7 @@ export default class DetailScreen extends React.Component {
 
   render() {
     const { requiredPaxData, isLoading, name, city, duration, price, id,
-      mediaSrc, address, lat, long, wishlisted, shortDesc, contents,
+      mediaSrc, address, lat, long, shortDesc, contents,
       review, reviewCount, rating, ratingCount, additionalContents, isDateLoading, availableDateTimes } = this.state;
     return (
       <View>
@@ -161,7 +154,7 @@ export default class DetailScreen extends React.Component {
 
         </ScrollView>
         
-        <Header wishlisted={wishlisted} id={id} scrollY={this.state.scrollY} title={name} _onWishlist={this._onWishlist} {...this.props} />
+        <Header id={id} scrollY={this.state.scrollY} title={name} {...this.props} />
         {
           (!isLoading && !isDateLoading) &&  (
             <Footer price={this.state.price} details={this.state} {...this.props} _isDateAvailable = {this._isDateAvailable(availableDateTimes)} />
@@ -261,7 +254,7 @@ class Header extends React.Component {
   _goBack = () => this.props.navigation.goBack()
 
   render() {
-    let { wishlisted, id, title } = this.props;
+    let { id, title } = this.props;
     let { backgroundColor, elevation, opacity } = this.state;
     // let borderBottomWidth = opacity;
     return (
