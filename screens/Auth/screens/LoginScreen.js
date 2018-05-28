@@ -84,7 +84,7 @@ export default class LoginScreen extends React.Component {
               break;
             default:
               errorMessage = 'Terjadi kesalahan pada server';
-              __DEV__ && errorMessage = response.error;
+              if (__DEV__) errorMessage = response.error;
           }
           this.setState({ error: errorMessage });
         }
