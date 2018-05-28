@@ -40,13 +40,13 @@ export default class AccountScreen extends React.Component {
   _openLogoutModal = () => this.refs.logoutModal.openModal();
 
   componentDidMount() {
-    getProfile().then(profile => {
-      this.setState({ profile });
-    })
+    this.props.screenProps.withConnHandler(getProfile).then(
+      profile => this.setState({ profile })
+    );
   }
 
   render() {
-    let { profile } = this.state;
+    const { profile } = this.state;
     return (
       <ScrollView
         style={{ backgroundColor: '#f7f8fb' }}

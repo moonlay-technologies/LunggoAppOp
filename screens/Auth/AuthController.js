@@ -2,7 +2,6 @@
 import {
   clientId, clientSecret, deviceId, API_DOMAIN, AUTH_LEVEL,
 } from '../../constants/env';
-import { fetchProfile } from '../../logic/ProfileController';
 
 const LOGGING = true;
 
@@ -15,7 +14,7 @@ async function fetchAuth(data, isOperator) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data)
-  }).catch(console.error);
+  }).catch(console.log);
   response = await response.json();
   // LOGGING && __DEV__ && console.log('AUTH response:');
   // LOGGING && __DEV__ && console.log(response);

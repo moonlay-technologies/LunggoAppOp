@@ -31,7 +31,7 @@ export default class ChangeProfile extends React.Component {
     var changeProfileResponse = await fetchTravoramaApi(request);
 
     if (changeProfileResponse.status == 200) {
-      await fetchProfile();
+      await this.props.screenProps.withConnHandler(fetchProfile);
       this.props.navigation.dispatch(NavigationActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'Main' })],

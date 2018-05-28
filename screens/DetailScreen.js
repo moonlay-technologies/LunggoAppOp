@@ -14,9 +14,7 @@ import Button from 'react-native-button';
 import { Rating, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import LoadingAnimation from '../components/LoadingAnimation';
-import {
-  AUTH_LEVEL, fetchTravoramaApi, checkUserLoggedIn,
-} from '../api/Common';
+import { AUTH_LEVEL, fetchTravoramaApi } from '../api/Common';
 import { MultilineText } from '../components/StyledText'
 import Maps from '../components/Maps';
 import Avatar from './../components/Avatar';
@@ -170,20 +168,6 @@ class Footer extends React.Component {
   constructor(props) {
     super();
     this.state = { isLoading: false };
-  }
-
-  _goToBookingDetail = async () => {
-    this.setState({ isLoading: true })
-    const { requiredPaxData, price, id, availableDateTimes, name } = this.props.details;
-    let isUserLoggedIn = await checkUserLoggedIn();
-    let nextScreen = isUserLoggedIn ? 'BookingDetail' : 'BeforeLoginScreen';
-    this.props.navigation.navigate(nextScreen, {
-      price, requiredPaxData, availableDateTimes,
-      package: this.props.details.package,
-      activityId: id, title: name,
-      thruBeforeLogin: true
-    });
-    this.setState({ isLoading: false })
   }
 
   _goToEditActivity = () => this.props.navigation.navigate('EditDetailActivity')
