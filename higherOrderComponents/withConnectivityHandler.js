@@ -25,7 +25,7 @@ export default function withConnectivityHandler(WrappedComponent, customModifier
     
     static navigationOptions = WrappedComponent.navigationOptions
 
-    withConnectivityHandler = async (fn, shouldThrowOnConnectionError) => {
+    withConnHandler = async (fn, shouldThrowOnConnectionError) => {
       if (!await NetInfo.isConnected.fetch()) {
         if (shouldThrowOnConnectionError) throw 'CONNECTION_OFFLINE';
         this.showOfflineModal();
@@ -39,7 +39,7 @@ export default function withConnectivityHandler(WrappedComponent, customModifier
         .race([ timeout, fn() ])
         .then( res => { this.hideModal(); return res} )
         .catch(err => {
-          this.hideModal()
+          this.hideModal();
           if (err === 'REQUEST_TIMED_OUT') {
             if (shouldThrowOnConnectionError) throw err;
             this.showTimeoutModal();

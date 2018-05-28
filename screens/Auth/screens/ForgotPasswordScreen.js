@@ -13,9 +13,8 @@ import LoadingAnimation from '../../../components/LoadingAnimation';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from '../../../components/LoadingModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import withConnectivityHandler from '../../../higherOrderComponents/withConnectivityHandler';
 
-class ForgotPasswordScreen extends React.Component {
+export default class ForgotPasswordScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,15 +43,18 @@ class ForgotPasswordScreen extends React.Component {
       return this.setState({ errorMessage });
     }
     this.setState({ isLoading: true });
-    this.props.withConnectivityHandler( () => sendOtp(countryCallCd, phone))
+    const { screenProps, navigation } = this.props;
+    screenProps.withConnHandler( () => sendOtp(countryCallCd, phone))
       .then(response => {
         if (response.status == 200 ||
           response.error == 'ERR_TOO_MANY_SEND_SMS_IN_A_TIME') {
-          this.props.navigation.replace('OtpVerification', {
+          navigation.replace('OtpVerification', {
             countryCallCd, phone, onVerified: this._onOtpVerified
           });
-        } else this.setState({ isLoading: false, errorMessage: response.message });
-      }).catch( e => this.setState({ isLoading: false, errorMessage: e }) );
+        } else {
+          this.setState({isLoading: false, errorMessage: response.error});
+        }
+      }).catch( e => this.setState({isLoading: false, errorMessage: e}) );
   }
 
   render() {
@@ -161,5 +163,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
 });
-
-export default withConnectivityHandler(ForgotPasswordScreen);

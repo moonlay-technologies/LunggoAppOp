@@ -4,7 +4,7 @@ import { Notifications } from 'expo';
 import React from 'react';
 import { View, Image, Text, StyleSheet, Platform, Keyboard } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
+import withConnectivityHandler from '../higherOrderComponents/withConnectivityHandler';
 import registerForPushNotificationsAsync
   from '../api/NotificationController';
 
@@ -36,7 +36,7 @@ import DetailScreen from './../screens/DetailScreen';
 import MapScreen from './../screens/MapScreen';
 import ChangeProfile from './../screens/ChangeProfile';
 
-export default class RootNavigator extends React.Component {
+class RootNavigator extends React.Component {
 
   rootStackNavigator = StackNavigator(
     {
@@ -47,8 +47,8 @@ export default class RootNavigator extends React.Component {
         // screen:Dashboard
         screen: Dashboard
       } : {
-          screen: Dashboard
-        },
+        screen: Dashboard
+      },
       Registration: { screen: Registration },
       LoginScreen: { screen: LoginScreen },
       AppointmentList: { screen: AppointmentList },
@@ -110,7 +110,8 @@ export default class RootNavigator extends React.Component {
   }
 
   render() {
-    return <this.rootStackNavigator />;
+    return <this.rootStackNavigator
+      screenProps={this.props} />;
   }
 
   _registerForPushNotifications() {
@@ -132,3 +133,5 @@ export default class RootNavigator extends React.Component {
     );
   };
 }
+
+export default withConnectivityHandler(RootNavigator);
