@@ -6,6 +6,13 @@ import RootNavigation from './navigation/RootNavigation';
 import Colors from './constants/Colors';
 import { addNotificationListener } from './api/NotificationController';
 import intervalController from './screens/IntervalController';
+import Sentry from 'sentry-expo';
+// import { SentrySeverity, SentryLog } from 'react-native-sentry';
+
+// Remove this once Sentry is correctly setup.
+Sentry.enableInExpoDevelopment = true;
+
+Sentry.config('https://60c4810291f44f33a303b10f61ea60b4:f5ef22539da546278ffa8753ae5640bc@sentry.io/1214534').install();
 
 const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
 
