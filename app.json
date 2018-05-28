@@ -2,25 +2,27 @@
   "expo": {
     "name": "Travorama Operator",
     "description": "This project is really great.",
-    "slug": "LunggoAppOp",
-    "privacy": "public",
-    "sdkVersion": "21.0.0",
+    "slug": "travelmadezy-travorama-operator",
+    "scheme": "travorama-operator",
+    "privacy": "unlisted",
+    "sdkVersion": "27.0.0",
     "version": "0.1.2",
     "orientation": "portrait",
     "icon": "./assets/icons/app-icon.png",
     "splash": {
       "image": "./assets/icons/loading-icon.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover"
     },
     "ios": {
       "supportsTablet": true,
       "icon": "./assets/icons/icon-ios.png",
-      "bundleIdentifier": "com.travelmadezy.travoramaoperator"
+      "bundleIdentifier": "com.travelmadezy.travorama.operator",
+      "buildNumber": "1"
     },
     "android": {
       "icon": "./assets/icons/icon-android.png",
-      "package": "com.travelmadezy.travoramaoperator",
+      "package": "com.travelmadezy.travorama.operator",
+      "versionCode": 1,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAO1G0xY7slJppr3ibKsjUCzWl5l9lsbZs"

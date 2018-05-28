@@ -49,7 +49,7 @@ export default class BeforeLoginScreen extends React.Component {
               <Text style={{
                   backgroundColor: 'transparent',
                   fontSize: 18, color: '#ffffff', 
-                  fontFamily: 'Hind-SemiBold', 
+                  fontFamily: 'HindSemiBold', 
                 }}>
                 Daftar
               </Text>

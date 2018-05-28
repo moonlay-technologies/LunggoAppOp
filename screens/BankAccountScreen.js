@@ -71,7 +71,7 @@ export default class BankAccountScreen extends React.Component {
 
 const styles = StyleSheet.create({
   title: {
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     fontSize: 18,
     color: '#454545',
     ...Platform.select({
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     }),
   },
   desc: {
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     fontSize: 15,
     color: '#454545',
     ...Platform.select({

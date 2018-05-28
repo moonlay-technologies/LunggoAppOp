@@ -196,7 +196,7 @@ export default class LoginScreen extends React.Component {
               <Text style={{
                 backgroundColor: 'transparent',
                 fontSize: 18, color: '#ffffff',
-                fontFamily: 'Hind-SemiBold',
+                fontFamily: 'HindSemiBold',
               }}>
                 Masuk
               </Text>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     color: '#454545',
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     ...Platform.select({
       ios: {
         lineHeight: 14,

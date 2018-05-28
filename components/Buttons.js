@@ -20,7 +20,7 @@ export const WideCTAButton = props => (
       style={{ height: 45, paddingTop: 11, alignItems: 'center', borderRadius: 25, width: '100%' }}>
       <Text style={[{
         backgroundColor: 'transparent',
-        fontFamily: 'Hind-SemiBold',
+        fontFamily: 'HindSemiBold',
         fontSize: 18,
         color: '#fff',
       },{...props.textStyle}]}>

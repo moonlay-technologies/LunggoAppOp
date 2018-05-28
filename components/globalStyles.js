@@ -131,7 +131,7 @@ export default StyleSheet.create({
   },
   openingText: {
     fontSize:56, color:'#fff', 
-    fontFamily: 'Hind-Bold',
+    fontFamily: 'HindBold',
     ...Platform.select({
       ios: {
         lineHeight:56*0.4,
@@ -144,7 +144,7 @@ export default StyleSheet.create({
     }),
   },
   categoryTitle :{
-    fontFamily:'Hind-Bold',
+    fontFamily:'HindBold',
     fontSize:30,
     color:'#454545',
     ...Platform.select({
@@ -163,7 +163,7 @@ export default StyleSheet.create({
     }),
   },
   categoryTitle1 :{
-    fontFamily:'Hind-Bold',
+    fontFamily:'HindBold',
     fontSize:26,
     color:'#454545',
     ...Platform.select({

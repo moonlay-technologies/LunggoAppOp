@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     }),
   },
   activityTitle: {
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     fontSize: 24,
     color: '#454545',
     textAlign: 'center',
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   activityDesc: {
     fontSize: 15,
     color: '#454545',
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     ...Platform.select({
       ios: {
         lineHeight: 12,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   namaPax: {
     fontSize: 15,
     color: '#454545',
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     ...Platform.select({
       ios: {
         lineHeight: 12,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   activityTanggal: {
     fontSize: 15,
     color: '#636363',
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     ...Platform.select({
       ios: {
         lineHeight: 12,

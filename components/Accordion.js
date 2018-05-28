@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     }),
   },
   h1:{
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     fontSize: 20,
     color: '#454545',
     backgroundColor:'transparent',
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   activityJudulReward: {
     fontSize: 14,
     color: '#454545',
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     ...Platform.select({
       ios: {
         lineHeight: 14,

@@ -109,7 +109,7 @@ export default class WishButton extends React.Component {
 
 const styles = StyleSheet.create({
   textCart: {
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     color: '#454545',
     fontSize: 14,
     textAlign: 'center',

@@ -235,7 +235,7 @@ export default class AppointmentDetail extends React.Component {
                     <Text style={{
                       backgroundColor: 'transparent',
                       fontSize: 15, color: '#ffffff',
-                      fontFamily: 'Hind-Bold',
+                      fontFamily: 'HindBold',
                     }}>
                       Verifikasi
                     </Text>
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
   activityTitle1: {
     paddingLeft: 15,
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     fontSize: 18,
     color: '#454545',
     backgroundColor: 'transparent',
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     }),
   },
   activityTitle2: {
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     fontSize: 18,
     color: '#454545',
     backgroundColor: 'transparent',
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     }),
   },
   namaPeserta: {
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     fontSize: 16,
     color: '#454545',
     ...Platform.select({
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     }),
   },
   // infoTitle:{
-  //   fontFamily: 'Hind-SemiBold',
+  //   fontFamily: 'HindSemiBold',
   //   fontSize: 15,
   //   color: '#454545',
   //   backgroundColor:'transparent',
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
   activityDesc: {
     fontSize: 14,
     color: '#454545',
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     backgroundColor: 'transparent',
     ...Platform.select({
       ios: {

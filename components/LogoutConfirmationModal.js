@@ -58,7 +58,7 @@ export default class LogoutConfirmationModal extends React.Component {
 
 const styles = StyleSheet.create({
   h6: {
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     color: '#454545',
     fontSize: 14,
     textAlign: 'center',

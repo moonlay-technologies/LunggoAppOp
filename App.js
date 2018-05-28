@@ -55,9 +55,9 @@ export default class App extends React.Component {
         require('./assets/images/robot-dev.png'),
         require('./assets/images/robot-prod.png'),
       ]),
-      Font.loadAsync([
+      Font.loadAsync({
         // This is the font that we are using for our tab bar
-        Ionicons.font,
+        ...Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         // { 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf') },
@@ -73,17 +73,17 @@ export default class App extends React.Component {
         // { 'OpenSans-LightItalic': require('./assets/fonts/OpenSans-LightItalic.ttf') },
         // { 'OpenSans-Semibold': require('./assets/fonts/OpenSans-Semibold.ttf') },
         // { 'OpenSans-SemiboldItalic': require('./assets/fonts/OpenSans-SemiboldItalic.ttf') },
-        { 'Hurme-Bold': require('./assets/fonts/HurmeGeometricSans4-Bold.otf') },
-        { 'Hurme-SemiBold': require('./assets/fonts/HurmeGeometricSans4-SemiBold.otf') },
-        { 'Hurme': require('./assets/fonts/HurmeGeometricSans4.otf') },
-        { 'Hurme-Light': require('./assets/fonts/HurmeGeometricSans4-Light.otf') },
+        HurmeBold: require('./assets/fonts/HurmeGeometricSans4-Bold.otf'),
+        HurmeSemiBold: require('./assets/fonts/HurmeGeometricSans4-SemiBold.otf'),
+        Hurme: require('./assets/fonts/HurmeGeometricSans4.otf'),
+        HurmeLight: require('./assets/fonts/HurmeGeometricSans4-Light.otf'),
 
-        { 'Hind': require('./assets/fonts/hind-regular.ttf') },
-        { 'Hind-Bold': require('./assets/fonts/hind-bold.ttf') },
-        { 'Hind-SemiBold': require('./assets/fonts/hind-semibold.ttf') },
-        { 'Hind-Light': require('./assets/fonts/hind-light.ttf') },
+        Hind: require('./assets/fonts/hind-regular.ttf'),
+        HindBold: require('./assets/fonts/hind-bold.ttf'),
+        HindSemiBold: require('./assets/fonts/hind-semibold.ttf'),
+        HindLight: require('./assets/fonts/hind-light.ttf'),
 
-      ]),      
+      }),      
       addNotificationListener(),
       intervalController.start()
     ]);    

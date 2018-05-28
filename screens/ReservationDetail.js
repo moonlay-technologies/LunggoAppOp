@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   activityDesc: {
     fontSize: 14,
     color: '#454545',
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     ...Platform.select({
       ios: {
         lineHeight: 12,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   activityDescTimeline: {
     fontSize: 14,
     color: '#454545',
-    fontFamily: 'Hind-Light',
+    fontFamily: 'HindLight',
     ...Platform.select({
       ios: {
         lineHeight: 12,

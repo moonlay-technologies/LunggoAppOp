@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     }),
   },
   categoryTitle: {
-    fontFamily: 'Hind-Bold',
+    fontFamily: 'HindBold',
     fontSize: 18,
     color: '#454545',
     ...Platform.select({
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   },
   textKecil1: {
     fontSize: 14,
-    fontFamily: 'Hind-SemiBold',
+    fontFamily: 'HindSemiBold',
     color: '#676767',
     textAlign: 'center',
     ...Platform.select({
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   },
   kode: {
     fontSize: 14,
-    fontFamily: 'Hind-Bold',
+    fontFamily: 'HindBold',
     color: '#676767',
     ...Platform.select({
       ios: {

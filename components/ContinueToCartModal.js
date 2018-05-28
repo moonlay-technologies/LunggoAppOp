@@ -51,7 +51,7 @@ export default class ContinueToCartModal extends React.Component {
           <View style={{ marginVertical: 10 }}>
             <Button
               containerStyle={globalStyles.ctaButton2}
-              style={{ fontSize: 14, color: '#fff', fontFamily: 'Hind-SemiBold' }}
+              style={{ fontSize: 14, color: '#fff', fontFamily: 'HindSemiBold' }}
               onPress={this._goToCart}
             >
               Lanjut ke Pembayaran
