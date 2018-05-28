@@ -13,10 +13,11 @@ import LoadingAnimation from '../../../components/LoadingAnimation';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from '../../../components/LoadingModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import withConnectivityHandler from '../../../higherOrderComponents/withConnectivityHandler';
 
-export default class ForgotPasswordScreen extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+class ForgotPasswordScreen extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       countryCallCd: 62,
       phone: '',
@@ -26,7 +27,7 @@ export default class ForgotPasswordScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Lupa Password',
+    title: '',
   }
 
   _onOtpVerified = ({ navigation, countryCallCd, phone, email, otp }) => {
@@ -43,23 +44,22 @@ export default class ForgotPasswordScreen extends React.Component {
       return this.setState({ errorMessage });
     }
     this.setState({ isLoading: true });
-    sendOtp(countryCallCd, phone).then(response => {
-      if (response.status == 200 ||
-        response.error == 'ERR_TOO_MANY_SEND_SMS_IN_A_TIME') {
-        this.props.navigation.replace('OtpVerification', {
-          countryCallCd, phone, onVerified: this._onOtpVerified
-        });
-      } else
-        this.setState({ isLoading: false, errorMessage: response.message });
-    });
+    this.props.withConnectivityHandler( () => sendOtp(countryCallCd, phone))
+      .then(response => {
+        if (response.status == 200 ||
+          response.error == 'ERR_TOO_MANY_SEND_SMS_IN_A_TIME') {
+          this.props.navigation.replace('OtpVerification', {
+            countryCallCd, phone, onVerified: this._onOtpVerified
+          });
+        } else this.setState({ isLoading: false, errorMessage: response.message });
+      }).catch( e => this.setState({ isLoading: false, errorMessage: e }) );
   }
 
   render() {
     let { phone, isLoading, errorMessage } = this.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <KeyboardAwareScrollView enableOnAndroid={true} keyboardShouldPersistTaps="handled" enableAutomaticScroll = {true}>
-          <LoadingModal isVisible={isLoading} />
+        <KeyboardAwareScrollView enableOnAndroid={true} keyboardShouldPersistTaps="handled" enableAutomaticScroll = {true} style={styles.container}>
           <View style={{ marginBottom: 15 }}>
             <Text style={styles.categoryTitle}>Lupa Password?</Text>
           </View>
@@ -161,3 +161,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
 });
+
+export default withConnectivityHandler(ForgotPasswordScreen);

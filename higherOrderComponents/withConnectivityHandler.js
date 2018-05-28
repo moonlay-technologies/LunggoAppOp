@@ -8,7 +8,7 @@ import ConnectionModals, { checkConnection }
   from '../components/ConnectionModals';
 
 const hasBeenHandledMessage =
-  `Connection error, has been handled by withConnectivityHandler()`;
+  `Terdapat gangguan pada koneksi internet!`;
 
 export default function withConnectivityHandler(WrappedComponent, customModifiers={}) {
   class withConnectivityHandler extends React.Component {
