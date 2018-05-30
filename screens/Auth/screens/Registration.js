@@ -8,7 +8,6 @@ import registerForPushNotificationsAsync from '../../../api/NotificationControll
 import { fetchTravoramaLoginApi } from '../AuthController';
 import PersonDataForm from '../../../components/PersonDataForm';
 import { shouldRefreshProfile } from '../../../logic/ProfileController';
-import LoadingModal from '../../../components/LoadingModal';
 import {
   validateUserName, validatePassword, validatePhone,
 } from '../../../logic/FormValidation';
@@ -19,12 +18,14 @@ export default class Registration extends React.Component {
     super(props, context);
     this.state = {
       isLoading: false,
+      error: '',
     };
   }
 
   _register = accountData => {
-    let { navigate, goBack, replace, pop } = this.props.navigation;
-    let { params } = this.props.navigation.state;
+    const { navigation, screenProps } = this.props;
+    const { navigate, goBack, replace, pop } = navigation;
+    const { params } = navigation.state;
     this.setState({ isLoading: true });
 
     let onOtpPhoneVerified = ({ countryCallCd, phone, otp, navigation }) => {
@@ -35,12 +36,13 @@ export default class Registration extends React.Component {
         data: { countryCallCd, phoneNumber: phone, otp },
         requiredAuthLevel: AUTH_LEVEL.User,
       }
-      fetchTravoramaApi(request).then(({ status }) => {
+      screenProps.withConnHandler( () => fetchTravoramaApi(request))
+      .then(({ status }) => {
         shouldRefreshProfile();
         if (status = 200) {
           let { resetAfter, thruBeforeLogin } = params;
           if (resetAfter)
-            backToMain(this.props.navigation);
+            backToMain(navigation);
           else if (thruBeforeLogin)
             pop(2);
           else
@@ -114,9 +116,7 @@ export default class Registration extends React.Component {
 
   render() {
     return (
-
       <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <LoadingModal isVisible={this.state.isLoading} />
         <PersonDataForm onSubmit={this._register} formTitle='Daftar Akun Baru' hasPasswordField={true}
           submitButtonText='Daftarkan' buttonDisabled={this.state.isLoading}
         />

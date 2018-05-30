@@ -1,17 +1,13 @@
 'use strict';
 
 import React from 'react';
-import {
-  Platform, StyleSheet, Text, View, Image, TextInput,
-  ScrollView, TouchableOpacity, Animated
-} from 'react-native';
+import { Platform, StyleSheet, Text, View, ScrollView,
+  TouchableOpacity, Animated } from 'react-native';
 import * as Formatter from '../components/Formatter';
 import globalStyles from '../components/globalStyles';
-import Colors from '../constants/Colors';
-import ImageSlider from 'react-native-image-slider';
 import Accordion from '../components/Accordion';
 import Button from 'react-native-button';
-import { Rating, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import LoadingAnimation from '../components/LoadingAnimation';
 import { AUTH_LEVEL, fetchTravoramaApi } from '../api/Common';
@@ -54,7 +50,9 @@ export default class DetailScreen extends React.Component {
       path: `/${version}/activities/${id}`,
       requiredAuthLevel: AUTH_LEVEL.Guest,
     };
-    fetchTravoramaApi(request).then(response => {
+    const { withConnHandler } = this.props.screenProps;
+    withConnHandler( () => fetchTravoramaApi(request) )
+    .then(response => {
       this.setState(response.activityDetail);
       this.setState({ isLoading: false });
       if (!response.activityDetail.package) {
@@ -65,7 +63,8 @@ export default class DetailScreen extends React.Component {
     }).catch(error => console.log(error));
 
     request.path = `/${version}/activities/${id}/availabledates`;
-    fetchTravoramaApi(request).then(response => {
+    withConnHandler( () => fetchTravoramaApi(request) )
+    .then(response => {
       this.setState(response);
       this.setState({ isDateLoading: false });
       // this.forceUpdate( () => {/*this.marker.showCallout()*/} );
@@ -155,10 +154,6 @@ export default class DetailScreen extends React.Component {
 }
 
 class Footer extends React.Component {
-  constructor(props) {
-    super();
-    this.state = { isLoading: false };
-  }
 
   _goToEditActivity = () => this.props.navigation.navigate('EditDetailActivity')
 

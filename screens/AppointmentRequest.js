@@ -3,13 +3,13 @@
 import React from 'react';
 import Button from 'react-native-button';
 import {
-  Platform, StyleSheet, FlatList, Text, View, Image,
-  TextInput, ScrollView, TouchableHighlight, RefreshControl,
+  Platform, StyleSheet, FlatList, Text, View, ScrollView, RefreshControl,
 } from 'react-native';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common';
 import { dateFullShort, timeFromNow } from '../components/Formatter';
-import { fetchAppointmentRequests, shouldRefreshAppointmentList, appointmentRequestItemStore, _refreshAppointmentRequest } from './Appointments/AppointmentController';
-import LoadingModal from './../components/LoadingModal';
+import { fetchAppointmentRequests, shouldRefreshAppointmentList,
+  appointmentRequestItemStore, _refreshAppointmentRequest
+} from './Appointments/AppointmentController';
 import { getPaxCountText } from '../logic/otherCommonFunctions';
 import { observer } from 'mobx-react';
 @observer
@@ -60,12 +60,12 @@ export default class AppointmentRequests extends React.Component {
       method: 'POST',
       requiredAuthLevel: AUTH_LEVEL.User,
     }
-    fetchTravoramaApi(request).then(response => {
+    this.props.screenProps.withConnHandler(()=>fetchTravoramaApi(request))
+    .then(response => {
       shouldRefreshAppointmentList();
       this._refreshList();
       this.setState({ list: list.filter(e => e.rsvNo != rsvNo) });
-    }).catch(error => console.log(error)
-    );
+    }).catch(error => console.log(error));
   }
 
   _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm');
@@ -75,25 +75,23 @@ export default class AppointmentRequests extends React.Component {
     let { isLoading } = this.state;
     let list = appointmentRequestItemStore.appointmentRequestItem;
     return (
-      isLoading ? <LoadingModal isVisible={isLoading} />
+      (list && list.length > 0) ?
+        <View style={{ marginBottom: 10, backgroundColor: '#fff', }}>
+          <FlatList
+            data={list}
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+            refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={isLoading} />}
+          />
+        </View>
         :
-        (list && list.length > 0) ?
-          <View style={{ marginBottom: 10, backgroundColor: '#fff', }}>
-            <FlatList
-              data={list}
-              keyExtractor={this._keyExtractor}
-              renderItem={this._renderItem}
-              refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-            />
-          </View>
-          :
-          <ScrollView
-            style={{ backgroundColor: '#fff' }}
-            refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-            contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
-          >
-            <Text>Belum ada pesanan baru yang masuk</Text>
-          </ScrollView>
+        <ScrollView
+          style={{ backgroundColor: '#fff' }}
+          refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={isLoading} />}
+          contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
+        >
+          <Text>Belum ada pesanan baru yang masuk</Text>
+        </ScrollView>
     );
   }
 }
@@ -148,10 +146,10 @@ class ListItem extends React.Component {
               backgroundColor: 'transparent'
             }}
             style={{ fontSize: 14, color: '#454545' }}
-            onPress={() => this._onPressDecline()}
+            onPress={this._onPressDecline}
           >
             Tolak
-              </Button>
+          </Button>
           <Button
             containerStyle={{
               marginLeft: 10,
@@ -162,12 +160,10 @@ class ListItem extends React.Component {
               backgroundColor: '#00c8be'
             }}
             style={{ fontSize: 14, color: '#fff' }}
-            onPress={() => this._onPressAccept()}
+            onPress={this._onPressAccept}
           >
             Terima
-              </Button>
-
-
+          </Button>
         </View>
       </View>
     );
@@ -195,7 +191,6 @@ const styles = StyleSheet.create({
       android: {
         //lineHeight:24
         //paddingTop: 23 - (23* 1),
-
       },
     }),
   },
@@ -212,7 +207,6 @@ const styles = StyleSheet.create({
       android: {
         //lineHeight:24
         //paddingTop: 23 - (23* 1),
-
       },
     }),
   },
@@ -229,7 +223,6 @@ const styles = StyleSheet.create({
       android: {
         //lineHeight:24
         //paddingTop: 23 - (23* 1),
-
       },
     }),
   },
@@ -238,14 +231,4 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     fontWeight: 'bold'
   },
-  status: {
-    color: 'green',
-    fontSize: 12,
-  },
-  icon: {
-    width: 15,
-    height: 15,
-    marginRight: 3,
-  },
-
 });

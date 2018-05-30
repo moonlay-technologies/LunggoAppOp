@@ -17,7 +17,6 @@ export default class Refund extends React.Component {
     super(props);
     this.state = {
       refunds: [],
-      isLoading: true,
     }
   }
 
@@ -26,18 +25,18 @@ export default class Refund extends React.Component {
   }
 
   componentDidMount() {
-    //// start with isLoading:true; in the constructor
-    this._fetchRefund().then( ({refunds}) => this.setState({refunds}) )
-      .catch( e => console.warn(e) )
-      .finally( () => this.setState({isLoading:false}) );
+    this._fetchRefund()
+      .then( ({refunds}) => this.setState({refunds}) )
+      .catch(console.warn);
   }
 
-  _fetchRefund = async () => {
+  _fetchRefund = () => {
+    const { withConnHandler } = this.props.screenProps;
     const version = 'v1';
     const path = `/${version}/operator/pendingrefunds`;
     let request = { path, requiredAuthLevel: AUTH_LEVEL.User }
     try {
-      return await fetchTravoramaApi(request);
+      return withConnHandler( ()=>fetchTravoramaApi(request) );
     } catch (error) {
       console.warn(error);
     }
@@ -50,7 +49,7 @@ export default class Refund extends React.Component {
   })
 
   render() {
-    let { refunds, isLoading } = this.state;
+    let { refunds } = this.state;
     let totalAmount = refunds.reduce( (total,refund) => {
       return total + refund.refundAmount;
     },0 );
@@ -59,10 +58,7 @@ export default class Refund extends React.Component {
     let soonestAmount = rupiah(soonestRefund.refundAmount);
     return (
       <View style={{flex:1}}>
-      { isLoading ?
-        <LoadingAnimation/>
-      :
-      (!refunds.length) ?
+      { (!refunds.length) ?
         <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
           <Text>Tidak ada pembatalan yang harus dibayarkan</Text>
         </View>
@@ -104,7 +100,6 @@ export default class Refund extends React.Component {
                   <Text style={styles.activityTanggal}>Yang harus direfund:
                     <Text style={styles.nominalKecil}> {rupiah(item.refundAmount)}</Text>
                   </Text>
-                  
                 </View>
               </TouchableOpacity>
               <View style={styles.divider} />

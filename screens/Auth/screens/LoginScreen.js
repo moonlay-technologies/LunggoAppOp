@@ -67,7 +67,7 @@ export default class LoginScreen extends React.Component {
     )).then(response => {
         if (response.status == 200) {
           setItemAsync('isLoggedIn', 'true');
-          this.props.screenProps.withConnHandler(fetchProfile); //// need await????
+          screenProps.withConnHandler(fetchProfile); //// need await????
           registerForPushNotificationsAsync();
           backToMain(navigation);
         } else {

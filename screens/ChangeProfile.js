@@ -29,7 +29,7 @@ export default class ChangeProfile extends React.Component {
       requiredAuthLevel: AUTH_LEVEL.User,
     }
     var changeProfileResponse = await fetchTravoramaApi(request);
-
+    //// FIXME: ngefetch profile 2x???
     if (changeProfileResponse.status == 200) {
       await this.props.screenProps.withConnHandler(fetchProfile);
       this.props.navigation.dispatch(NavigationActions.reset({

@@ -1,22 +1,14 @@
 'use strict';
 
 import React from 'react';
-import ImageSlider from 'react-native-image-slider';
-import MapView from 'react-native-maps';
-import Button from 'react-native-button';
-import { Slider } from 'react-native-elements';
-import { CheckBox } from 'react-native-elements';
 import {
-  Platform, StyleSheet, Text, View, Image, TextInput,
-  ScrollView, Alert, InteractionManager
+  Platform, StyleSheet, Text, View, Image, ScrollView, Alert
 } from 'react-native';
-import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common'
-import * as Formatter from '../components/Formatter'
-import DatePicker from 'react-native-datepicker'
-import globalStyles from '../components/globalStyles';
+import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common';
+import * as Formatter from '../components/Formatter';
+import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
 // import 'moment/locale/id';
-import LoadingAnimation from '../components/LoadingAnimation';
 
 export default class Mutasi extends React.Component {
   constructor(props) {
@@ -27,7 +19,6 @@ export default class Mutasi extends React.Component {
       startDate: Moment(new Date()).add(-1, 'month').startOf('day'),
       endDate: Moment(new Date()).startOf('day'),
       trx: [],
-      isLoading: true
     };
   }
 
@@ -61,19 +52,18 @@ export default class Mutasi extends React.Component {
       return;
     }
 
-    this.setState({ isLoading: true });
     let endpoint = '/v1/operator/transactionstatement';
     endpoint += '?startdate=' + Moment(startDate).format('YYYY-MM-DD');
     endpoint += '&enddate=' + Moment(endDate).format('YYYY-MM-DD');
-    fetchTravoramaApi({
+    this.props.screenProps.withConnHandler( () => fetchTravoramaApi({
       path: endpoint,
       method: 'GET',
       requiredAuthLevel: AUTH_LEVEL.User
-    }).then(response => {
+    })).then(response => {
       if (response.status == 200)
-        this.setState({ trx: response.transactionStatements, isLoading: false, isDateInvalid: false });
+        this.setState({ trx: response.transactionStatements, isDateInvalid: false });
       else if (response.error == 'ERR_DATETIME_OUT_OF_RANGE')
-        this.setState({ isDateInvalid: true, isLoading: false });
+        this.setState({ isDateInvalid: true });
     })
   }
 
@@ -83,8 +73,6 @@ export default class Mutasi extends React.Component {
         <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
           <Text>Silakan ganti rentang tanggal terlebih dahulu.</Text>
         </View>);
-    if (this.state.isLoading)
-      return <LoadingAnimation />;
     else if (!this.state.trx.length)
       return (
         <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
@@ -232,9 +220,7 @@ const styles = StyleSheet.create({
         // paddingTop: 20 - (19 * 0.4),
         marginBottom: -8,
       },
-      android: {
-
-      },
+      android: {},
     }),
   },
   categoryTitle: {
@@ -247,8 +233,7 @@ const styles = StyleSheet.create({
         // paddingTop: 20 - (19 * 0.4),
         marginBottom: -15,
       },
-      android: {
-      },
+      android: {},
     }),
   },
   textKecil: {
