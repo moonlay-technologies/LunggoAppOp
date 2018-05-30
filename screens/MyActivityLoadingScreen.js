@@ -1,8 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { ActivityIndicator, Text, RefreshControl, ScrollView } from 'react-native';
-import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common';
+import { Text, RefreshControl, ScrollView } from 'react-native';
 import ListScreen from './ActivityList';
 import LoadingAnimation from '../components/LoadingAnimation';
 import { getActivityList } from './ActivityController';

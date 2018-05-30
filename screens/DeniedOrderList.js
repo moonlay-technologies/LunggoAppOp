@@ -5,13 +5,9 @@ import {
   Platform, StyleSheet, Text, View, Image, ScrollView,
   TouchableOpacity
 } from 'react-native';
-import OfflineNotificationBar from '../components/OfflineNotificationBar';
-import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common';
-import LoadingAnimation from '../components/LoadingAnimation';
-import { timeFromNow, date, rupiah } from '../components/Formatter';
+import { rupiah, /*dateFullShort*/ } from '../components/Formatter';
 import { getPaxCountText } from '../logic/otherCommonFunctions';
 import Moment from 'moment';
-import { dateFullShort } from './../components/Formatter';
 import ReactNativeDatepicker from 'react-native-datepicker';
 import { fetchAppointmentList } from './Appointments/AppointmentController';
 import Colors from '../constants/Colors';
@@ -21,7 +17,6 @@ export default class DeniedOrders extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
       rsvList: [],
       startDate: Moment().startOf('Month'),
       endDate: Moment(new Date()),
@@ -37,24 +32,18 @@ export default class DeniedOrders extends React.Component {
   }
 
   _getDeniedList = ({ startDate, endDate }) => {
-    this.setState({ isLoading: true });
     let start = Moment(startDate).format('MM/DD/YYYY');
     let end = Moment(endDate).format('MM/DD/YYYY');
     let params = `type=order&startDate=${start}&endDate=${end}&bookingStatusCd=DeniedByOperator`;
-    fetchAppointmentList(params)
+    this.props.screenProps.withConnHandler( () => fetchAppointmentList(params) )
       .then(res => {
-        console.log('res');
-        console.log(res);
         let rsvList = res.appointments.reduce((list, app) => list.concat([...app.reservations.map(rsv => ({ ...rsv, name: app.name, mediaSrc: app.mediaSrc }))]), []);
         this.setState({ rsvList });
       })
-      .catch(e => console.warn(e))
-      .finally(() => this.setState({ isLoading: false }));
+      .catch(e => console.warn(e));
   }
 
   _goToDetail = rsv => {
-    console.log(rsv);
-    console.log('yoy');
     this.props.navigation.navigate('F_ReservationDetail', {
       rsv, activityDetail: {
         name: rsv.name, date: rsv.date, session: rsv.session
@@ -69,7 +58,7 @@ export default class DeniedOrders extends React.Component {
   };
 
   render() {
-    let { rsvList, isLoading, startDate, endDate } = this.state;
+    let { rsvList, startDate, endDate } = this.state;
     let totalAmount = rsvList.reduce((total, rsv) => { return total + rsv.paxCount.reduce((tot, pax) => tot + pax.totalPrice, 0) }, 0);
     return (
       <View style={{ flex: 1 }}>
@@ -109,8 +98,7 @@ export default class DeniedOrders extends React.Component {
               onDateChange={d => this._changeDate(d, 'endDate')}
             />
           </View>
-          <View style={styles.divider}></View>
-          {isLoading && <LoadingAnimation />}
+          <View style={styles.divider} />
 
           {rsvList && rsvList.map((rsv, i) =>
             <View key={i} >
@@ -140,7 +128,6 @@ export default class DeniedOrders extends React.Component {
             </View>
           )}
         </ScrollView>
-        <OfflineNotificationBar />
       </View>
     );
   }
@@ -251,25 +238,24 @@ const styles = StyleSheet.create({
       },
       android: {
         lineHeight: 24,
-
       },
     }),
   },
-  activityDesc: {
-    fontSize: 15,
-    color: '#454545',
-    fontFamily: 'Hind-Light',
-    ...Platform.select({
-      ios: {
-        lineHeight: 12,
-        paddingTop: 9,
-        marginBottom: -10,
-      },
-      android: {
+  // activityDesc: {
+  //   fontSize: 15,
+  //   color: '#454545',
+  //   fontFamily: 'Hind-Light',
+  //   ...Platform.select({
+  //     ios: {
+  //       lineHeight: 12,
+  //       paddingTop: 9,
+  //       marginBottom: -10,
+  //     },
+  //     android: {
 
-      },
-    }),
-  },
+  //     },
+  //   }),
+  // },
   activityTanggal: {
     fontSize: 15,
     color: '#636363',
@@ -280,24 +266,7 @@ const styles = StyleSheet.create({
         paddingTop: 9,
         marginBottom: -10,
       },
-      android: {
-
-      },
-    }),
-  },
-  status: {
-    fontSize: 15,
-    color: '#f57b76',
-    fontFamily: 'Hind',
-    ...Platform.select({
-      ios: {
-        lineHeight: 14,
-        paddingTop: 9,
-        marginBottom: -10
-      },
-      android: {
-
-      },
+      android: {},
     }),
   },
   divider: {

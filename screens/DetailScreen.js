@@ -72,29 +72,19 @@ export default class DetailScreen extends React.Component {
     }).catch(error => console.log(error));
   }
 
-  _isDateAvailable = (availableDates) => {
-    if (availableDates.length > 0) {
-      return (
-        true
-      );
-    }
-    else {
-      return (
-        false
-      )
-    }
-  }
+  _isDateAvailable = availableDates => (availableDates.length > 0)
 
   render() {
-    const { requiredPaxData, isLoading, name, city, duration, price, id,
-      mediaSrc, address, lat, long, shortDesc, contents,
-      review, reviewCount, rating, ratingCount, additionalContents, isDateLoading, availableDateTimes } = this.state;
+    const { requiredPaxData, isLoading, name, city, duration, price,
+      id, mediaSrc, address, lat, long, shortDesc, contents, review,
+      reviewCount, rating, ratingCount, additionalContents,
+      isDateLoading, availableDateTimes, scrollY } = this.state;
     return (
       <View>
         <ScrollView
           style={{ backgroundColor: '#fff' }}
           onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: this.state.scrollY } } },
+            { nativeEvent: { contentOffset: { y: scrollY } } },
           ])}
           scrollEventThrottle={16}
         >
