@@ -52,7 +52,7 @@ export default class AppointmentRequests extends React.Component {
     />
   )
 
-  _respondRequest = (rsvNo, action) => {
+  _respondRequest = (rsvNo, action, cancellationReason = null) => {
     this.setState({ isLoading: true });
     const version = 'v1';
     let request = {
@@ -69,7 +69,7 @@ export default class AppointmentRequests extends React.Component {
   }
 
   _acceptRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'confirm');
-  _declineRequest = ({ rsvNo }) => this._respondRequest(rsvNo, 'decline');
+  _declineRequest = ({ rsvNo }) => this.props.navigation.navigate('CancellationReason', {rsvNo});
 
   render() {
     let { isLoading } = this.state;
