@@ -26,6 +26,18 @@
           "apiKey": "AIzaSyAO1G0xY7slJppr3ibKsjUCzWl5l9lsbZs"
         }
       }
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "Travel Madezy",
+            "project": "LunggoAppOp",
+            "authToken": "426332cc22c74c368ce938f9ec0a91969af3202f7933498dba4d69b45bba0e79"
+          }
+        }
+      ]
     }
   }
 }
