@@ -3,7 +3,7 @@
 import React from 'react';
 import {
     Image, Platform, ScrollView, Text, TouchableOpacity, View, RefreshControl,
-    TextInput, ActivityIndicator, TouchableNativeFeedback, StyleSheet,
+    TextInput, ActivityIndicator, TouchableNativeFeedback, StyleSheet, Alert
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Button from 'react-native-button';
@@ -54,7 +54,11 @@ export default class CancellationReason extends React.Component {
     }
 
     declineAppointment = (cancellationReason) => {
-        this._respondRequest(this.state.rsvNo, "decline", cancellationReason);
+        Alert.alert('Menolak Pesanan', 'Kamu yakin akan menolak pesanan ini dengan alasan ' + cancellationReason + '?', [
+            { text: 'Ya', onPress: () => this._respondRequest(this.state.rsvNo, "decline", cancellationReason) },
+            { text: 'Tidak' },
+        ]);
+        ;
     }
 
     render() {
