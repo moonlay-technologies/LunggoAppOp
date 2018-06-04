@@ -33,13 +33,12 @@ export default class AppointmentRequests extends React.Component {
   }
 
   _refreshList = () => {
-    fetchAppointmentRequests().then(res => {
+    this.props.screenProps.withConnHandler(fetchAppointmentRequests)
+    .then(res => {
       this.setState({ list: res.appointmentRequests });
-      _refreshAppointmentRequest().then(res => {
-        this.setState({ isLoading: false })
-      });
-    }
-    )
+      this.props.screenProps.withConnHandler(_refreshAppointmentRequest)
+      .then( () => this.setState({ isLoading: false }) );
+    });
   }
 
   _keyExtractor = (item, index) => index

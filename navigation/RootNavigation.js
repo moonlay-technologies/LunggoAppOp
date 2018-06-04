@@ -15,10 +15,8 @@ import {
 
 import EditActivity from '../screens/EditActivity';
 import EditDetailActivity from '../screens/EditDetailActivity';
-import {
-  ForgotPassword, OtpVerification, NewPassword,
-  Registration, LoginScreen, BeforeLoginScreen
-} from '../screens/Auth/screens/Screens';
+import { ForgotPassword, OtpVerification, NewPassword, LoginScreen
+  } from '../screens/Auth/screens/Screens';
 
 import F_AppointmentDetail from '../screens/F_AppointmentDetail';
 import F_AppointmentList from '../screens/F_AppointmentList';
@@ -49,7 +47,6 @@ class RootNavigator extends React.Component {
       } : {
         screen: Dashboard
       },
-      Registration: { screen: Registration },
       LoginScreen: { screen: LoginScreen },
       AppointmentList: { screen: AppointmentList },
       AppointmentDetail: { screen: AppointmentDetail },
@@ -62,7 +59,6 @@ class RootNavigator extends React.Component {
       OtpVerification: { screen: OtpVerification },
       NewPassword: { screen: NewPassword },
       NotFound: { screen: NotFound },
-      BeforeLoginScreen: { screen: BeforeLoginScreen },
       F_AppointmentList: { screen: F_AppointmentList },
       F_AppointmentDetail: { screen: F_AppointmentDetail },
       F_ReservationDetail: { screen: F_ReservationDetail },

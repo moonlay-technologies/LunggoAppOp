@@ -12,7 +12,7 @@ import LoadingAnimation from '../components/LoadingAnimation';
 import { checkUserLoggedIn } from '../api/Common';
 import { NavigationActions } from 'react-navigation';
 import {
-  fetchAppointmentRequests, getAppointmentList, fetchAppointmentList,
+  fetchAppointmentRequests, fetchAppointmentList,
   appointmentRequestItemStore, _getAppointmentRequests,
   _refreshAppointmentRequest, fetchAppointmentListActive,
   appointmentListActiveItemStore, _refreshAppointmentListActive
@@ -109,12 +109,12 @@ export default class Dashboard extends React.Component {
 
   _refreshData = () => {
     this.setState({ isLoading: true });
-    Promise.all([
+    this.props.screenProps.withConnHandler( () => Promise.all([
       _refreshAppointmentListActive(),
       _refreshAppointmentRequest(),
       this._getActivityList(),
       // this._getReservationList()
-    ]).then(() => {
+    ]) ).then(() => {
       this.setState({ isLoading: false, refreshing: false });
     });
   }
@@ -122,7 +122,7 @@ export default class Dashboard extends React.Component {
   _getAppointmentRequests = async () => {
     var appointmentRequestsJson = await getItemAsync("appointmentRequests");
     if (!appointmentRequests) {
-      var response = await fetchAppointmentRequests();
+      var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests);
     }
     else{
       var appointmentRequests = JSON.parse(appointmentRequestsJson);
@@ -131,14 +131,16 @@ export default class Dashboard extends React.Component {
   }
 
   _getAppointmentList = () => {
-    fetchAppointmentList().then(({ appointments }) =>
+    this.props.screenProps.withConnHandler(fetchAppointmentList)
+    .then(({ appointments }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ appointments })
-    ).catch(e => console.warn(e));
+    ).catch(console.warn);
   }
 
   _getActivityList = () => {
-    fetchActivityList().then(({ activityList }) =>
+    this.props.screenProps.withConnHandler(fetchActivityList)
+    .then(({ activityList }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ activities: activityList })
     ).catch(e => console.warn(e));;

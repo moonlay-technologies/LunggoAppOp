@@ -77,12 +77,10 @@ export default class AppointmentDetail extends React.Component {
   }
 
   _verifyOnline = async (ticketNumber, rsvNo, previousRsvs) => {
-    let isConnected = await NetInfo.isConnected.fetch();
-    if (!isConnected) return false;
-    let res = await fetchVerifyTicket({ ticketNumber, rsvNo });
+    const { withConnHandler } = this.props.screenProps;
+    let res = await withConnHandler( () => fetchVerifyTicket({ ticketNumber, rsvNo }));
     if (res.status != 200) this.setState({ reservations: previousRsvs });
-    await fetchAppointmentListActive();
-    return true;
+    withConnHandler(fetchAppointmentListActive);
   }
 
   _onVerificationCodeChanged = verificationCode => {

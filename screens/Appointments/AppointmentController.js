@@ -52,31 +52,31 @@ export const _refreshAppointmentListActive = async () => {
   await fetchAppointmentListActive();
 }
 
-export const _getAppointmentRequests = async () => {
-  var appointmentRequestsJson = await getItemAsync("appointmentRequests");
-  if (!appointmentRequestsJson) {
-    await deleteItemAsync('appointmentRequestLastUpdate')
-    var response = await fetchAppointmentRequests();
-  }
-  else {
-    var appointmentRequests = JSON.parse(appointmentRequestsJson);
-    appointmentRequestItemStore.setAppointmentRequestItem(appointmentRequests);
-  }
-}
+// export const _getAppointmentRequests = async () => {
+//   var appointmentRequestsJson = await getItemAsync("appointmentRequests");
+//   if (!appointmentRequestsJson) {
+//     await deleteItemAsync('appointmentRequestLastUpdate')
+//     var response = await fetchAppointmentRequests();
+//   }
+//   else {
+//     var appointmentRequests = JSON.parse(appointmentRequestsJson);
+//     appointmentRequestItemStore.setAppointmentRequestItem(appointmentRequests);
+//   }
+// }
 
-export const getAppointmentList = async () => {
-  let shouldRefresh = await getItemAsync('shouldRefresh.appointmentList');
-  if (shouldRefresh) {
-    deleteItemAsync('shouldRefresh.appointmentList');
-    return fetchAppointmentList();
-  } else {
-    let listJson = await getItemAsync('appointmentList');
-    if (!listJson || !listJson.includes("\"status\":200")) return fetchAppointmentList();
+// export const getAppointmentList = async () => {
+//   let shouldRefresh = await getItemAsync('shouldRefresh.appointmentList');
+//   if (shouldRefresh) {
+//     deleteItemAsync('shouldRefresh.appointmentList');
+//     return fetchAppointmentList();
+//   } else {
+//     let listJson = await getItemAsync('appointmentList');
+//     if (!listJson || !listJson.includes("\"status\":200")) return fetchAppointmentList();
 
-    let list = JSON.parse(listJson);
-    return list;
-  }
-}
+//     let list = JSON.parse(listJson);
+//     return list;
+//   }
+// }
 
 export const fetchAppointmentList = async (params = '') => {
   const version = 'v1';

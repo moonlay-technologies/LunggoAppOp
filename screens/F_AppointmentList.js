@@ -46,7 +46,7 @@ export default class F_AppointmentList extends React.Component {
     // let start = Moment.utc(startDate).format('MM/DD/YYYY');
     // let end   = Moment.utc( endDate ).format('MM/DD/YYYY');
     let params = `type=order&startDate=${start}&endDate=${end}`;
-    fetchAppointmentList(params)
+    this.props.screenProps.withConnHandler( () => fetchAppointmentList(params))
       .then(res => this.setState({ list: res.appointments }))
       .catch(e => console.warn(e))
       .finally(() => this.setState({ isLoading: false }));

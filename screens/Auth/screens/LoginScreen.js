@@ -10,16 +10,13 @@ import {
   validateUserName, validatePassword, validatePhone,
 } from '../../../logic/FormValidation';
 import { Icon } from 'react-native-elements';
-import Button from 'react-native-button';
 import globalStyles from '../../../components/globalStyles';
-import { Notifications } from 'expo';
 import registerForPushNotificationsAsync
   from '../../../api/NotificationController';
 import { backToMain } from '../../../api/Common';
 import { LinearGradient } from 'expo';
 import { fetchProfile } from '../../../logic/ProfileController';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
-import LoadingModal from '../../../components/LoadingModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const { setItemAsync } = Expo.SecureStore;
 
@@ -123,7 +120,6 @@ export default class LoginScreen extends React.Component {
        <KeyboardAwareScrollView enableOnAndroid={true}
         enableAutomaticScroll={true} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
-          {/*<LoadingModal isVisible={isLoading} />*/}
           <View style={{ marginBottom: 30 }}>
             <Text style={globalStyles.categoryTitle1}>Login</Text>
           </View>

@@ -1,16 +1,17 @@
 'use strict';
 
 import React from 'react';
-import {
-  Platform, StyleSheet, Text, View, Image, RefreshControl,
-  TextInput, ScrollView, TouchableHighlight, FlatList,
-} from 'react-native';
+import { StyleSheet, Text, View, RefreshControl, ScrollView,
+  TouchableHighlight, FlatList } from 'react-native';
 import Moment from 'moment';
 import 'moment/locale/id';
 import { Icon } from 'react-native-elements';
-import { getAppointmentList, shouldRefreshAppointmentList, appointmentListActiveItemStore, _refreshAppointmentListActive } from './Appointments/AppointmentController';
+import { appointmentListActiveItemStore, _refreshAppointmentListActive
+  } from './Appointments/AppointmentController';
 import { setMomentFutureString } from './../components/MomentString';
 import { observer } from 'mobx-react';
+
+
 class ListItem extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -30,27 +31,27 @@ class ListItem extends React.PureComponent {
     }, 0);
 
     return (
-      <View style={{ flex: 1, }}>
+      <View style={{ flex: 1 }}>
 
         <TouchableHighlight
           onPress={this._onPress}
           underlayColor='#ddd'
         >
           <View style={styles.containerListAppointment}>
-
             <View style={{ flex: 0.8, alignItems: 'flex-start' }}>
-              <View style={{}}>
-                <Icon
-                  name='calendar'
-                  type='evilicon'
-                  size={34}
-                  color='#454545' />
-              </View>
+              <Icon
+                name='calendar'
+                type='evilicon'
+                size={34}
+                color='#454545'
+              />
             </View>
 
             <View style={{ flex: 3 }}>
               <Text style={styles.activityTitle}>{item.name}</Text>
-              <Text style={[styles.timeActivity, { marginTop: 7 }]}>{item.reservations.length} Pesanan, total {item.totalPax} pax</Text>
+              <Text style={[styles.timeActivity, { marginTop: 7 }]}>
+                {item.reservations.length} Pesanan, total {item.totalPax} pax
+              </Text>
               <View style={{ width: '100%', marginTop: 5, flexDirection: 'row', }}>
                 <View style={{ flexDirection: 'row', marginRight: 10 }}>
                   <Text style={styles.timeActivity}>
@@ -80,17 +81,14 @@ class ListItem extends React.PureComponent {
                 />
               </View>
             </View>
-
           </View>
-
         </TouchableHighlight>
-
-        <View style={styles.divider}></View>
-
+        <View style={styles.divider} />
       </View>
     );
   }
 }
+
 @observer
 export default class AppointmentList extends React.Component {
 
@@ -106,11 +104,10 @@ export default class AppointmentList extends React.Component {
     title: 'Pesanan Terjadwal',
   }
 
-  _refreshList = (force = false) => {
-    this.setState({ isLoading: true })
-    _refreshAppointmentListActive().then(response => {
-      this.setState({ isLoading: false })
-    })
+  _refreshList = () => {
+    this.setState({ isLoading: true });
+    this.props.screenProps.withConnHandler(_refreshAppointmentListActive)
+    .then(response => this.setState({ isLoading: false }) );
   }
 
   _keyExtractor = (item, index) => index
@@ -129,7 +126,12 @@ export default class AppointmentList extends React.Component {
   }
 
   render() {
-    let list = appointmentListActiveItemStore.appointmentListActiveItem;
+    const list = appointmentListActiveItemStore.appointmentListActiveItem;
+    const refreshControl =
+      <RefreshControl
+        onRefresh={this._refreshList}
+        refreshing={this.state.isLoading}
+      />
     return (
       (list && list.length > 0) ?
         <View style={{ backgroundColor: '#fff' }}>
@@ -138,13 +140,13 @@ export default class AppointmentList extends React.Component {
             data={list}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
-            refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
+            refreshControl={refreshControl}
           />
         </View>
         :
         <ScrollView
           style={{ backgroundColor: '#fff' }}
-          refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
+          refreshControl={refreshControl}
         >
           <Text>Anda belum memiliki pesanan terjadwal</Text>
         </ScrollView>
@@ -169,11 +171,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     color: '#454545',
-  },
-  icon: {
-    width: 15,
-    height: 15,
-    marginRight: 3,
   },
   status: {
     color: '#ff7f00',

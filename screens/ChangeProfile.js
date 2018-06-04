@@ -21,6 +21,7 @@ export default class ChangeProfile extends React.Component {
 
   _changeProfile = async  profile => {
     this.setState({ isLoading: true });
+    const { withConnHandler } = this.props.screenProps;
 
     let request = {
       path: '/v1/profile',
@@ -28,10 +29,11 @@ export default class ChangeProfile extends React.Component {
       data: { ...profile },
       requiredAuthLevel: AUTH_LEVEL.User,
     }
-    var changeProfileResponse = await fetchTravoramaApi(request);
-    //// FIXME: ngefetch profile 2x???
+    const changeProfileResponse = await withConnHandler(
+      () => fetchTravoramaApi(request)
+    );
     if (changeProfileResponse.status == 200) {
-      await this.props.screenProps.withConnHandler(fetchProfile);
+      await withConnHandler(fetchProfile);
       this.props.navigation.dispatch(NavigationActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'Main' })],
