@@ -164,7 +164,6 @@ export default class AppointmentDetail extends React.Component {
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
-
                       <Text style={styles.activityDesc}>{getPaxCountText(rsv.paxCount)}</Text>
                       <Text style={styles.activityDesc}>{reversePhoneWithoutCountryCode_Indonesia(rsv.contact.phone)}</Text>
                     </View>
@@ -184,9 +183,8 @@ export default class AppointmentDetail extends React.Component {
                           color='#00d3c5' />
                       </TouchableOpacity>
                     </View>
-
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View>
                     <Text style={styles.activityDesc}>{rsv.contact.email}</Text>
                     {rsv.isVerified &&
                       <View style={{ flexDirection: 'row', marginTop: 5 }}>

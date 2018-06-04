@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 import { getAppointmentList, shouldRefreshAppointmentList, appointmentListActiveItemStore, _refreshAppointmentListActive } from './Appointments/AppointmentController';
 import { setMomentFutureString } from './../components/MomentString';
 import { observer } from 'mobx-react';
+import PlatformTouchable from 'react-native-platform-touchable';
 class ListItem extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -30,64 +31,59 @@ class ListItem extends React.PureComponent {
     }, 0);
 
     return (
-      <View style={{ flex: 1, }}>
+      <PlatformTouchable
+        onPress={this._onPress}
+        fallback={TouchableHighlight}
+        underlayColor='#ddd'
+        style={{ backgroundColor: 'white' }}
+      >
+        <View style={styles.containerListAppointment}>
 
-        <TouchableHighlight
-          onPress={this._onPress}
-          underlayColor='#ddd'
-        >
-          <View style={styles.containerListAppointment}>
-
-            <View style={{ flex: 0.8, alignItems: 'flex-start' }}>
-              <View style={{}}>
-                <Icon
-                  name='calendar'
-                  type='evilicon'
-                  size={34}
-                  color='#454545' />
-              </View>
+          <View style={{ flex: 0.8, alignItems: 'flex-start' }}>
+            <View style={{}}>
+              <Icon
+                name='calendar'
+                type='evilicon'
+                size={34}
+                color='#454545' />
             </View>
+          </View>
 
-            <View style={{ flex: 3 }}>
-              <Text style={styles.activityTitle}>{item.name}</Text>
-              <Text style={[styles.timeActivity, { marginTop: 7 }]}>{item.reservations.length} Pesanan, total {item.totalPax} pax</Text>
-              <View style={{ width: '100%', marginTop: 5, flexDirection: 'row', }}>
-                <View style={{ flexDirection: 'row', marginRight: 10 }}>
-                  <Text style={styles.timeActivity}>
-                    {Moment(item.date).format('ddd, D MMM YYYY')}
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.timeActivity}>
-                    {item.session}
-                  </Text>
-                </View>
+          <View style={{ flex: 3 }}>
+            <Text style={styles.activityTitle}>{item.name}</Text>
+            <Text style={[styles.timeActivity, { marginTop: 7 }]}>{item.reservations.length} Pesanan, total {item.totalPax} pax</Text>
+            <View style={{ width: '100%', marginTop: 5, flexDirection: 'row', }}>
+              <View style={{ flexDirection: 'row', marginRight: 10 }}>
+                <Text style={styles.timeActivity}>
+                  {Moment(item.date).format('ddd, D MMM YYYY')}
+                </Text>
               </View>
-              <View style={{ marginTop: 5, }}>
-                <Text style={styles.status}>
-                  {Moment(item.date).fromNow()}
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.timeActivity}>
+                  {item.session}
                 </Text>
               </View>
             </View>
-
-            <View style={{ flex: 1 }}>
-              <View style={{ marginTop: 10, alignItems: 'flex-end' }}>
-                <Icon
-                  name='chevron-thin-right'
-                  type='entypo'
-                  size={26}
-                  color='#707070'
-                />
-              </View>
+            <View style={{ marginTop: 5, }}>
+              <Text style={styles.status}>
+                {Moment(item.date).fromNow()}
+              </Text>
             </View>
-
           </View>
 
-        </TouchableHighlight>
+          <View style={{ flex: 1 }}>
+            <View style={{ marginTop: 10, alignItems: 'flex-end' }}>
+              <Icon
+                name='chevron-thin-right'
+                type='entypo'
+                size={26}
+                color='#707070'
+              />
+            </View>
+          </View>
+        </View>
 
-        <View style={styles.divider}></View>
-
-      </View>
+      </PlatformTouchable>
     );
   }
 }
@@ -131,23 +127,15 @@ export default class AppointmentList extends React.Component {
   render() {
     let list = appointmentListActiveItemStore.appointmentListActiveItem;
     return (
-      (list && list.length > 0) ?
-        <View style={{ backgroundColor: '#fff' }}>
-          <FlatList
-            style={{ paddingTop: 15 }}
-            data={list}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}
-            refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-          />
-        </View>
-        :
-        <ScrollView
-          style={{ backgroundColor: '#fff' }}
-          refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-        >
-          <Text>Anda belum memiliki pesanan terjadwal</Text>
-        </ScrollView>
+      <FlatList
+        data={list}
+        keyExtractor={this._keyExtractor}
+        renderItem={this._renderItem}
+        onRefresh={this._refreshList}
+        refreshing={this.state.isLoading}
+        ItemSeparatorComponent={() => (<View style={styles.divider} />)}
+        ListEmptyComponent={() => <Text>Anda belum memiliki pesanan terjadwal</Text>}
+      />
     );
   }
 }
@@ -156,14 +144,13 @@ const styles = StyleSheet.create({
   containerListAppointment: {
     padding: 10,
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
+    marginVertical: 10
   },
   divider: {
     height: 1,
     width: '100%',
     backgroundColor: '#efefef',
-    marginTop: 10,
-    marginBottom: 10,
   },
   activityTitle: {
     fontWeight: 'bold',

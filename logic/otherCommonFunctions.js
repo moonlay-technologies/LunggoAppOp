@@ -1,6 +1,6 @@
 'use strict';
 
-import {rupiah} from '../components/Formatter';
+import { rupiah } from '../components/Formatter';
 
 
 //// display how many pax (e.g. 2 Adults, 3 Children)
@@ -9,17 +9,17 @@ export const getPaxCountText = paxCount => paxCount.filter(p => p.count != 0)
 
 export const getTotalPaxCounts = arrayOfData => {
   let totalPaxCounts = {};
-  arrayOfData.map( ({paxCount}) =>
-  	paxCount.filter(p => p.count != 0)
-    .map( ({type, count}) => totalPaxCounts[type] = (totalPaxCounts[type] + count) || count )
+  arrayOfData.map(({ paxCount }) =>
+    paxCount.filter(p => p.count != 0)
+      .map(({ type, count }) => totalPaxCounts[type] = (totalPaxCounts[type] + count) || count)
   );
   return totalPaxCounts;
 }
 
 export const getTotalPaxCountsText = arrayOfData => {
   let totalPaxCounts = getTotalPaxCounts(arrayOfData);
-  return Object.keys( totalPaxCounts )
-    .map( e => totalPaxCounts[e] + " " + e)
+  return Object.keys(totalPaxCounts)
+    .map(e => totalPaxCounts[e] + " " + e)
     .join(', ')
 }
 
@@ -44,22 +44,23 @@ let totalPax = item.paxCount.reduce( (total2,paxType) => {
 
 export const getPaymentSumInSteps = (paymentSteps, isCompleted = false, formatted = true) => {
   let arr = isCompleted ?
-    paymentSteps.filter( step => step.isCompleted == true ) :
+    paymentSteps.filter(step => step.isCompleted == true) :
     paymentSteps;
-  let result = arr.reduce( (total, step) => total + step.amount, 0 );
+  let result = arr.reduce((total, step) => total + step.amount, 0);
   return formatted ? rupiah(result) : result;
 }
 
 export const getPaymentSumInReservations = (reservations, isCompleted = false, formatted = true) => {
-  let result = reservations.reduce( (total, rsv) =>
-    total + getPaymentSumInSteps(rsv.paymentSteps,isCompleted,false)
-  ,0 );
+  let result = reservations.reduce((total, rsv) =>
+    total + getPaymentSumInSteps(rsv.paymentSteps, isCompleted, false)
+    , 0);
   return formatted ? rupiah(result) : result;
 }
 
 export const getPaymentSumInAppointments = (appointments, isCompleted = false, formatted = true) => {
-  let result = appointments.reduce( (total, {reservations}) =>
-    total + getPaymentSumInReservations(reservations,isCompleted,false)
-  ,0 );
+  if (!appointments) return 0;
+  let result = appointments.reduce((total, { reservations }) =>
+    total + getPaymentSumInReservations(reservations, isCompleted, false)
+    , 0);
   return formatted ? rupiah(result) : result;
 }
