@@ -16,7 +16,7 @@ export default class MenuButton extends React.Component {
         underlayColor={'lightgray'}
       >
         <View style={styles.row}>
-          <View style={{ width: '15%' }}>
+          <View style={{ width: 60 }}>
             {this.props.icon}
           </View>
           <Text style={styles.labelHeader}>{this.props.label}</Text>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'Hind',
     fontSize: 16,
-    color: '#000',
+    color: '#454545',
     ...Platform.select({
       ios: {
         lineHeight: 14,

@@ -11,7 +11,7 @@ import { validateEmail, validatePassword, validateRequiredField, validatePhone }
   from '../logic/FormValidation';
 import globalStyles from '../components/globalStyles';
 import { reversePhoneWithoutCountryCode_Indonesia, phoneWithoutCountryCode_Indonesia } from '../components/Formatter';
-import { WideCTAButton } from './Buttons';
+import { CTA } from './CTA';
 
 
 export default class PersonDataForm extends React.Component {
@@ -231,7 +231,7 @@ export default class PersonDataForm extends React.Component {
               </View>
             }
 
-            <WideCTAButton
+            <CTA
               onPress={this._onSubmitForm}
               disabled={this.props.buttonDisabled}
               text={this.props.submitButtonText}

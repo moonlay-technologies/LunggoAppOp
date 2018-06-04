@@ -10,17 +10,18 @@ import {
   validateUserName, validatePassword, validatePhone,
 } from '../../../logic/FormValidation';
 import { Icon } from 'react-native-elements';
-import Button from 'react-native-button';
 import globalStyles from '../../../components/globalStyles';
 import { Notifications } from 'expo';
-import registerForPushNotificationsAsync
-  from '../../../api/NotificationController';
+import registerForPushNotificationsAsync from '../../../api/NotificationController';
 import { fetchWishlist, backToMain } from '../../../api/Common';
 import { LinearGradient } from 'expo';
 import { fetchProfile } from '../../../logic/ProfileController';
 import { phoneWithoutCountryCode_Indonesia } from '../../../components/Formatter';
 import LoadingModal from '../../../components/LoadingModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import FormInput from '../../../components/FormInput';
+import CTA from '../../../components/CTA';
+import Button from 'react-native-button';
 const { setItemAsync } = Expo.SecureStore;
 
 export default class LoginScreen extends React.Component {
@@ -70,7 +71,7 @@ export default class LoginScreen extends React.Component {
         if (response.status == 200) {
           setItemAsync('isLoggedIn', 'true');
           registerForPushNotificationsAsync();
-            backToMain(navigation);
+          backToMain(navigation);
         } else {
           console.log(response);
           let error;
@@ -119,67 +120,52 @@ export default class LoginScreen extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-       <KeyboardAwareScrollView enableOnAndroid = {true} enableAutomaticScroll = {true} keyboardShouldPersistTaps="handled">
-        <View style={styles.container}>
-          <LoadingModal isVisible={isLoading} />
-          <View style={{ marginBottom: 30 }}>
-            <Text style={globalStyles.categoryTitle1}>Login</Text>
-          </View>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={styles.label}>Email / No. Handphone</Text>
-          </View>
-          <View style={{ marginBottom: 10 }}>
-            <TextInput
-              style={this.state.errorUserName ?
-                styles.searchInputFalse : styles.searchInput
-              }
+        <KeyboardAwareScrollView style={{ backgroundColor: '#fff' }} enableOnAndroid={true} enableAutomaticScroll={true} keyboardShouldPersistTaps="handled">
+          <View style={styles.container}>
+            <LoadingModal isVisible={isLoading} />
+            <View style={{ marginBottom: 30 }}>
+              <Text style={globalStyles.categoryTitle1}>Login</Text>
+            </View>
+            <FormInput
+              label='Email / No.Handphone'
               keyboardType='email-address'
-              underlineColorAndroid='transparent'
-              autoCapitalize='none'
-              autoCorrect={false}
-              returnKeyType='next'
-              onSubmitEditing={(event) => {
-                this.refs.passwordInput.focus();
-              }}
-              // blurOnSubmit={false}
-              onChangeText={userName => this.setState({
-                userName, errorUserName: null, error: null
-              })}
             />
-          </View>
-
-          {errorMessageUserName}
-          <View style={{ marginTop: 0 }}>
-            <View style={{ marginBottom: 10 }}>
-              <Text style={styles.label}>Password</Text>
-            </View>
-            <TextInput
-              ref='passwordInput'
-              style={this.state.errorPassword ?
-                styles.searchInputFalse : styles.searchInput
-              }
-              underlineColorAndroid='transparent'
-              secureTextEntry={!showPassword}
-              autoCapitalize='none'
-              autoCorrect={false}
-              blurOnSubmit={true}
-              onChangeText={password => this.setState({
-                password, errorPassword: null, error: null
-              })}
-              onSubmitEditing={this._onLoginPressed}
-              returnKeyType='done'
+            <FormInput
+              label='Password'
+              password={true}
             />
-            <View style={{ position: 'absolute', right: 20, top: 40, }}>
-              <TouchableOpacity onPress={this._toggleShowPassword}>
-                <Icon
-                  name={showPassword ? 'eye' : 'eye-with-line'}
-                  type='entypo' size={22} color='#acacac'
-                />
-              </TouchableOpacity>
+            {errorMessageUserName}
+            <View style={{ marginTop: 0 }}>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={styles.label}>Password</Text>
+              </View>
+              <TextInput
+                ref='passwordInput'
+                style={this.state.errorPassword ?
+                  styles.searchInputFalse : styles.searchInput
+                }
+                underlineColorAndroid='transparent'
+                secureTextEntry={!showPassword}
+                autoCapitalize='none'
+                autoCorrect={false}
+                blurOnSubmit={true}
+                onChangeText={password => this.setState({
+                  password, errorPassword: null, error: null
+                })}
+                onSubmitEditing={this._onLoginPressed}
+                returnKeyType='done'
+              />
+              <View style={{ position: 'absolute', right: 20, top: 40, }}>
+                <TouchableOpacity onPress={this._toggleShowPassword}>
+                  <Icon
+                    name={showPassword ? 'eye' : 'eye-with-line'}
+                    type='entypo' size={22} color='#acacac'
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          {errorMessagePassword}
-          {errorMessage}
+            {errorMessagePassword}
+            {errorMessage}
 
           <TouchableOpacity
             onPress={this._onLoginPressed}
@@ -203,14 +189,13 @@ export default class LoginScreen extends React.Component {
             </LinearGradient>
           </TouchableOpacity>
 
-
-          <TouchableOpacity style={{ marginTop: 15, alignItems: 'flex-end' }}
-            onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-            <Text style={{ fontSize: 12, color: '#464646', fontFamily: 'Hind' }}>
-              Lupa Password?
+            <TouchableOpacity style={{ marginTop: 15, alignItems: 'flex-end' }}
+              onPress={() => this.props.navigation.navigate('ForgotPassword')}>
+              <Text style={{ fontSize: 1, color: '#464646', fontFamily: 'Hind' }}>
+                Lupa Password?
               </Text>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
         </KeyboardAwareScrollView>
       </TouchableWithoutFeedback>
     );
