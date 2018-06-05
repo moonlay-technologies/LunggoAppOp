@@ -44,7 +44,7 @@ export default class F_AppointmentList extends React.Component {
     let params = `type=order&startDate=${start}&endDate=${end}`;
     this.props.screenProps.withConnHandler( () => fetchAppointmentList(params))
       .then(res => this.setState({ list: res.appointments }))
-      .catch(console.warn;
+      .catch(console.warn);
   }
 
   _keyExtractor = (item, index) => index

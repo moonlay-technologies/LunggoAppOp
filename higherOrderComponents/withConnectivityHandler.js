@@ -19,14 +19,23 @@ export default function withConnectivityHandler(WrappedComponent) {
       };
     }
     
-    static navigationOptions = WrappedComponent.navigationOptions
+    static navigationOptions = WrappedComponent.navigationOptions;
 
-    withConnHandler = async (fn, customModifiers={}) => {
+    defaultAlertOptions = {
+      hasOfflineNotificationBar: true,
+      hasLoadingModal: true,
+      shouldThrowOnConnectionError: false,
+    };
+    alertOptions = {
+      ...this.defaultAlertOptions,
+      ...WrappedComponent.alertOptions,
+    };
+
+    withConnHandler = async (fn, options={}) => {
       const {
         shouldThrowOnConnectionError = false,
         hasLoadingModal = true,
-        hasOfflineNotificationBar = true,
-      } = customModifiers;
+      } = options;
       if (!await NetInfo.isConnected.fetch()) {
         if (shouldThrowOnConnectionError) throw 'CONNECTION_OFFLINE';
         this.showOfflineModal();
@@ -66,7 +75,10 @@ export default function withConnectivityHandler(WrappedComponent) {
             isVisible={true}
             {...this.props}
           />
-          { this.modifiers.hasOfflineNotificationBar && <OfflineNotificationBar /> }
+          {
+            this.alertOptions.hasOfflineNotificationBar &&
+            <OfflineNotificationBar />
+          }
           <WrappedComponent
             withConnHandler={this.withConnHandler}
             {...this.props}
