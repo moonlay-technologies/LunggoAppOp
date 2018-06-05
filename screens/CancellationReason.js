@@ -24,7 +24,6 @@ export default class CancellationReason extends React.Component {
     _respondRequest = (rsvNo, action, cancellationReason = null) => {
         const { withConnHandler } = this.props.screenProps;
         const version = 'v1';
-        this.setState({ isLoading: true });
         const request = {
             path: `/${version}/operator/appointments/${action}/${rsvNo}`,
             method: 'POST',

@@ -4,17 +4,14 @@ import React from 'react';
 import Colors from '../../../constants/Colors';
 import { Icon } from 'react-native-elements';
 import Button from 'react-native-button';
-import {
-  StyleSheet, Text, View, Image, TextInput, ScrollView, Keyboard,
-  KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback,
-} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Keyboard,
+  TouchableOpacity, TouchableWithoutFeedback,
+  } from 'react-native';
 import { validatePassword } from '../../../logic/FormValidation';
 import { resetPassword } from '../ResetPasswordController';
-import LoadingAnimation from '../../../components/LoadingAnimation'
 import { backToMain } from '../../../api/Common';
 import { fetchTravoramaLoginApi } from '../AuthController';
 import registerForPushNotificationsAsync from '../../../api/NotificationController';
-import LoadingModal from '../../../components/LoadingModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { getItemAsync, setItemAsync, deleteItemAsync } = Expo.SecureStore;
@@ -76,7 +73,6 @@ export default class NewPasswordScreen extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <KeyboardAwareScrollView enableOnAndroid={true} keyboardShouldPersistTaps="handled" enableAutomaticScroll = {true}>
-          <LoadingModal isVisible={isLoading} />
           <View style={{ marginBottom: 15 }}>
             <Text style={styles.categoryTitle}>Masukkan Password Baru</Text>
           </View>
@@ -132,7 +128,6 @@ export default class NewPasswordScreen extends React.Component {
           >
             Ubah Password
           </Button>
-          {isLoading && <LoadingAnimation />}
         </KeyboardAwareScrollView>
       </TouchableWithoutFeedback>
     );

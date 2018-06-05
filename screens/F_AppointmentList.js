@@ -5,11 +5,9 @@ import {
   Platform, StyleSheet, Text, View, Image,
   ScrollView, TouchableOpacity, FlatList,
 } from 'react-native';
-import OfflineNotificationBar from '../components/OfflineNotificationBar';
 import ReactNativeDatepicker from 'react-native-datepicker';
 import { dateFullShort } from '../components/Formatter';
 import { fetchAppointmentList } from './Appointments/AppointmentController';
-import LoadingAnimation from '../components/LoadingAnimation';
 import {
   getTotalPaxCountsText,
   getPaymentSumInReservations as getPaymentInfo,
@@ -24,7 +22,6 @@ export default class F_AppointmentList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoading: true,
       list: [],
       startDate: Moment().startOf('Month'),
       endDate: Moment(new Date()),
@@ -36,7 +33,6 @@ export default class F_AppointmentList extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true });
     this._getAppointmentList(this.state);
   }
 
@@ -48,8 +44,7 @@ export default class F_AppointmentList extends React.Component {
     let params = `type=order&startDate=${start}&endDate=${end}`;
     this.props.screenProps.withConnHandler( () => fetchAppointmentList(params))
       .then(res => this.setState({ list: res.appointments }))
-      .catch(e => console.warn(e))
-      .finally(() => this.setState({ isLoading: false }));
+      .catch(console.warn;
   }
 
   _keyExtractor = (item, index) => index
@@ -63,7 +58,7 @@ export default class F_AppointmentList extends React.Component {
   }
 
   render() {
-    let { startDate, endDate, list, isLoading } = this.state;
+    let { startDate, endDate, list } = this.state;
     return (
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
@@ -106,21 +101,19 @@ export default class F_AppointmentList extends React.Component {
             />
           </View>
           <View style={styles.divider}></View>
-          {isLoading ? <LoadingAnimation /> :
-            list.length ?
-              <FlatList
-                style={{ paddingTop: 15 }}
-                data={list}
-                keyExtractor={this._keyExtractor}
-                renderItem={this._renderItem}
-              />
-              :
-              <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-                <Text>Tidak ada transaksi pada rentang tanggal ini</Text>
-              </View>
+          { list.length ?
+            <FlatList
+              style={{ paddingTop: 15 }}
+              data={list}
+              keyExtractor={this._keyExtractor}
+              renderItem={this._renderItem}
+            />
+            :
+            <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+              <Text>Tidak ada transaksi pada rentang tanggal ini</Text>
+            </View>
           }
         </ScrollView>
-        <OfflineNotificationBar />
       </View>
     );
   }

@@ -3,7 +3,6 @@
 import React from 'react';
 import { Text, RefreshControl, ScrollView } from 'react-native';
 import ListScreen from './ActivityList';
-// import LoadingAnimation from '../components/LoadingAnimation';
 import { getActivityList } from './ActivityController';
 
 
@@ -26,6 +25,7 @@ export default class MyActivityLoadingScreen extends React.Component {
   }
 
   _refreshList = () => {
+    this.setState({isLoading: true});
     this.props.screenProps.withConnHandler(getActivityList)
     .then(res => this.setState({ list: res.activityList }) )
     .catch(console.warn)
@@ -40,8 +40,6 @@ export default class MyActivityLoadingScreen extends React.Component {
         onRefresh={this._refreshList}
         refreshing={this.state.isLoading}
       />
-    // if (isLoading) { return <LoadingAnimation /> }
-    // else 
     if (list && list.length > 0) {
       return (
         <ListScreen

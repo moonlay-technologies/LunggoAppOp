@@ -31,7 +31,6 @@ export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
       refreshing: false,
       name: '...',
       balance: 9999999,
@@ -91,7 +90,7 @@ export default class Dashboard extends React.Component {
 
   componentDidMount() {
     const { isLoggedIn, withConnHandler } = this.props.screenProps;
-    withConnHandler(getProfile)
+    withConnHandler(getProfile ,{hasLoadingModal:false})
       .then(profile => this.setState(profile))
       .catch(console.warn);
     if (!isLoggedIn) {
@@ -108,21 +107,21 @@ export default class Dashboard extends React.Component {
   }
 
   _refreshData = () => {
-    this.setState({ isLoading: true });
+    this.setState({ refreshing: true });
     this.props.screenProps.withConnHandler( () => Promise.all([
       _refreshAppointmentListActive(),
       _refreshAppointmentRequest(),
       this._getActivityList(),
       // this._getReservationList()
-    ]) ).then(() => {
-      this.setState({ isLoading: false, refreshing: false });
+    ]), {hasLoadingModal:false} ).finally(() => {
+      this.setState({ refreshing: false });
     });
   }
 
   _getAppointmentRequests = async () => {
     var appointmentRequestsJson = await getItemAsync("appointmentRequests");
     if (!appointmentRequests) {
-      var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests);
+      var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests ,{hasLoadingModal:false});
     }
     else{
       var appointmentRequests = JSON.parse(appointmentRequestsJson);
@@ -131,7 +130,7 @@ export default class Dashboard extends React.Component {
   }
 
   _getAppointmentList = () => {
-    this.props.screenProps.withConnHandler(fetchAppointmentList)
+    this.props.screenProps.withConnHandler(fetchAppointmentList ,{hasLoadingModal:false})
     .then(({ appointments }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ appointments })
@@ -139,7 +138,7 @@ export default class Dashboard extends React.Component {
   }
 
   _getActivityList = () => {
-    this.props.screenProps.withConnHandler(fetchActivityList)
+    this.props.screenProps.withConnHandler(fetchActivityList ,{hasLoadingModal:false})
     .then(({ activityList }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ activities: activityList })

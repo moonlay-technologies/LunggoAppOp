@@ -10,28 +10,29 @@ import ConnectionModals, { checkConnection }
 const hasBeenHandledMessage =
   `Terdapat gangguan pada koneksi internet!`;
 
-export default function withConnectivityHandler(WrappedComponent, customModifiers={}) {
+export default function withConnectivityHandler(WrappedComponent) {
   class withConnectivityHandler extends React.Component {
-    constructor(props) {
-      super(props);
+    constructor() {
+      super();
       this.state = {
         connectionStatus: '',
       };
-      const defaultModifiers = {
-        hasOfflineNotificationBar: true,
-      }
-      this.modifiers = { ...defaultModifiers, ...customModifiers };
     }
     
     static navigationOptions = WrappedComponent.navigationOptions
 
-    withConnHandler = async (fn, shouldThrowOnConnectionError) => {
+    withConnHandler = async (fn, customModifiers={}) => {
+      const {
+        shouldThrowOnConnectionError = false,
+        hasLoadingModal = true,
+        hasOfflineNotificationBar = true,
+      } = customModifiers;
       if (!await NetInfo.isConnected.fetch()) {
         if (shouldThrowOnConnectionError) throw 'CONNECTION_OFFLINE';
         this.showOfflineModal();
         throw hasBeenHandledMessage;
       }
-      this.showLoadingModal();
+      hasLoadingModal && this.showLoadingModal();
       const timeout = new Promise((resolve, reject) => {
         setTimeout(reject, 10000, 'REQUEST_TIMED_OUT');
       });
@@ -46,6 +47,7 @@ export default function withConnectivityHandler(WrappedComponent, customModifier
             throw hasBeenHandledMessage;
           } else if ( err == 'ERRGEN99' ) {
             //
+            throw err;
           }
           else throw err;
         });

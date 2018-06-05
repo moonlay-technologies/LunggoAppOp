@@ -4,17 +4,15 @@ import React from 'react';
 import { Platform, StyleSheet, Text, View, Image, ScrollView,
   TouchableOpacity
 } from 'react-native';
-import OfflineNotificationBar from '../components/OfflineNotificationBar';
 import { fetchTravoramaApi, AUTH_LEVEL } from '../api/Common';
-import LoadingAnimation from '../components/LoadingAnimation';
-import { timeFromNow, date, rupiah } from '../components/Formatter';
+import { date, rupiah } from '../components/Formatter';
 import { getPaxCountText } from '../logic/otherCommonFunctions';
 import Moment from 'moment';
 
 export default class Refund extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       refunds: [],
     }
@@ -107,7 +105,6 @@ export default class Refund extends React.Component {
           ) }
         </ScrollView>
       }
-      <OfflineNotificationBar/>
       </View>
     );
   }

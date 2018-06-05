@@ -6,7 +6,6 @@ import {
   TextInput, ActivityIndicator, TouchableNativeFeedback, StyleSheet,
 } from 'react-native';
 import { getUserBankAccounts } from '../logic/ProfileController';
-import LoadingAnimation from './../components/LoadingAnimation';
 
 export default class BankAccountScreen extends React.Component {
 
@@ -14,7 +13,6 @@ export default class BankAccountScreen extends React.Component {
     super(props);
     this.state = {
       bankAccounts: null,
-      isLoading: true
     };
   };
 
@@ -27,21 +25,17 @@ export default class BankAccountScreen extends React.Component {
   }
 
   getUserBankAccounts = () => {
-    getUserBankAccounts()
+    this.props.screenProps.withConnHandler(getUserBankAccounts)
       .then(bankAccounts => {
         this.setState({ bankAccounts });
       }).catch(() => {
         this.setState({ bankAccounts: null });
-      }).finally(() => {
-        this.setState({ isLoading: false });
-      })
+      });
   }
 
   render() {
-    let { bankAccounts, isLoading } = this.state;
-    if (isLoading)
-      return (<LoadingAnimation />);
-    else if (bankAccounts == null)
+    let { bankAccounts } = this.state;
+    if (bankAccounts == null)
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Gagal mengambil data dari server.{'\n'}Silakan coba kembali</Text>

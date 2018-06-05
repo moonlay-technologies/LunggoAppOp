@@ -51,7 +51,7 @@ export default class DetailScreen extends React.Component {
       requiredAuthLevel: AUTH_LEVEL.Guest,
     };
     const { withConnHandler } = this.props.screenProps;
-    withConnHandler( () => fetchTravoramaApi(request) )
+    withConnHandler( () => fetchTravoramaApi(request) ,{ hasLoadingModal: false })
     .then(response => {
       this.setState(response.activityDetail);
       this.setState({ isLoading: false });
@@ -63,7 +63,7 @@ export default class DetailScreen extends React.Component {
     }).catch(error => console.log(error));
 
     request.path = `/${version}/activities/${id}/availabledates`;
-    withConnHandler( () => fetchTravoramaApi(request) )
+    withConnHandler( () => fetchTravoramaApi(request) ,{ hasLoadingModal: false })
     .then(response => {
       this.setState(response);
       this.setState({ isDateLoading: false });
