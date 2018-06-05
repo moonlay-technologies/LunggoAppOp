@@ -90,18 +90,18 @@ export default class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.props.screenProps.withConnHandler(getProfile)
-      .then(profile => this.setState(profile)).catch(console.warn);
-    checkUserLoggedIn().then(isLoggedIn => {
-      if (!isLoggedIn) {
-        let { reset, navigate } = NavigationActions;
-        const action = reset({
-          index: 0,
-          actions: [navigate({ routeName: 'LoginScreen' })],
-        });
-        this.props.navigation.dispatch(action);
-      }
-    });
+    const { isLoggedIn, withConnHandler } = this.props.screenProps;
+    withConnHandler(getProfile)
+      .then(profile => this.setState(profile))
+      .catch(console.warn);
+    if (!isLoggedIn) {
+      let { reset, navigate } = NavigationActions;
+      const action = reset({
+        index: 0,
+        actions: [navigate({ routeName: 'LoginScreen' })],
+      });
+      this.props.navigation.dispatch(action);
+    }
     this.props.navigation.addListener('didFocus', this._refreshData);
     this.props.navigation.addListener('didFocus', () => intervalController.register(fetchAppointmentRequests));
     this.props.navigation.addListener('didFocus', () => intervalController.register(fetchAppointmentListActive));

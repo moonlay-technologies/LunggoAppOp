@@ -44,6 +44,8 @@ export default function withConnectivityHandler(WrappedComponent, customModifier
             if (shouldThrowOnConnectionError) throw err;
             this.showTimeoutModal();
             throw hasBeenHandledMessage;
+          } else if ( err == 'ERRGEN99' ) {
+            //
           }
           else throw err;
         });
@@ -64,7 +66,7 @@ export default function withConnectivityHandler(WrappedComponent, customModifier
           />
           { this.modifiers.hasOfflineNotificationBar && <OfflineNotificationBar /> }
           <WrappedComponent
-            withConnectivityHandler={this.withConnectivityHandler}
+            withConnHandler={this.withConnHandler}
             {...this.props}
           />
         </View>

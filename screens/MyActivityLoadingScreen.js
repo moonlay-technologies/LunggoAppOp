@@ -7,7 +7,7 @@ import ListScreen from './ActivityList';
 import { getActivityList } from './ActivityController';
 
 
-export default class ActivityListLoadingScreen extends React.Component {
+export default class MyActivityLoadingScreen extends React.Component {
 
   constructor(props) {
     super(props)
@@ -35,22 +35,30 @@ export default class ActivityListLoadingScreen extends React.Component {
   render() {
     let { isLoading, list } = this.state;
     let { props } = this;
+    const refreshControl =
+      <RefreshControl
+        onRefresh={this._refreshList}
+        refreshing={this.state.isLoading}
+      />
     // if (isLoading) { return <LoadingAnimation /> }
     // else 
     if (list && list.length > 0) {
-      return <ListScreen
-        list={list}
-        refreshControl={<RefreshControl onRefresh={this._refreshList}
-          refreshing={this.state.isLoading} />}
-        {...props} />
+      return (
+        <ListScreen
+          list={list}
+          refreshControl={refreshControl}
+          {...props}
+        />
+      );
     } else {
-      return
-      <ScrollView
-        contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
-        refreshControl={<RefreshControl onRefresh={this._refreshList} refreshing={this.state.isLoading} />}
-      >
-        <Text>Belum ada aktivitas Anda yang terdaftar</Text>
-      </ScrollView>
+      return (
+        <ScrollView
+          contentContainerStyle={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
+          refreshControl={refreshControl}
+        >
+          <Text>Belum ada aktivitas Anda yang terdaftar</Text>
+        </ScrollView>
+      );
     }
   }
 

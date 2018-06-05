@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Platform, StyleSheet, Text, View, ScrollView,
-  TouchableOpacity, Animated } from 'react-native';
+  TouchableOpacity, Animated, Image } from 'react-native';
 import * as Formatter from '../components/Formatter';
 import globalStyles from '../components/globalStyles';
 import Accordion from '../components/Accordion';
