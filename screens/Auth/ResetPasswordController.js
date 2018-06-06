@@ -10,9 +10,7 @@ export async function sendOtp(countryCallCd, phoneNumber) {
     data: { countryCallCd, phoneNumber },
   };
   try {
-    const response = await this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request)
-    );
+    const response = await fetchTravoramaApi(request);
     if (response) {
       if (response.status != 200) {
         switch (response.error) {
@@ -45,9 +43,7 @@ export async function verifyOtp(countryCallCd, phoneNumber, otp) {
     data: { countryCallCd, phoneNumber, otp },
   };
   try {
-    const response = await this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request)
-    );
+    const response = await fetchTravoramaApi(request);
     if (response) {
       if (response.status != 200) {
         switch (response.error) {
@@ -87,9 +83,7 @@ export async function resetPassword(email, countryCallCd, phoneNumber, otp, newP
     data: { email, countryCallCd, phoneNumber, otp, newPassword },
   };
   try {
-    const response = await this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request)
-    );
+    const response = await fetchTravoramaApi(request);
     if (response) {
       if (response.status != 200) {
         switch (response.error) {

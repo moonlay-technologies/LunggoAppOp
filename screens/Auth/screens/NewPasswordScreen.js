@@ -33,14 +33,16 @@ export default class NewPasswordScreen extends React.Component {
   _submit = () => {
     Keyboard.dismiss();
     let { password } = this.state;
-    let { countryCallCd, phone, email, otp } = this.props.navigation.state.params;
+    const { navigation, screenProps } = this.props
+    let { countryCallCd, phone, email, otp } = navigation.state.params;
     let errorPassword = validatePassword(password);
     if (errorPassword) {
       this.refs.password.focus();
       return this.setState({ errorPassword });
     }
     this.setState({ isLoading: true });
-    resetPassword(email, countryCallCd, phone, otp, password).then(response => {
+    screenProps.withConnHandler( () => resetPassword(email, countryCallCd, phone, otp, password))
+    .then(response => {
       let { status, message } = response;
       if (status == 200) {
         screenProps.withConnHandler( () => fetchTravoramaLoginApi(email, countryCallCd, phone, password))
@@ -48,7 +50,7 @@ export default class NewPasswordScreen extends React.Component {
             if (response.status == 200) {
               setItemAsync('isLoggedIn', 'true');
               registerForPushNotificationsAsync();
-              backToMain(this.props.navigation);
+              backToMain(navigation);
             } else {
               console.log(response);
               let error = 'Terjadi kesalahan pada server';

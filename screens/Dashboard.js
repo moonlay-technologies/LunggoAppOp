@@ -13,7 +13,7 @@ import { checkUserLoggedIn } from '../api/Common';
 import { NavigationActions } from 'react-navigation';
 import {
   fetchAppointmentRequests, fetchAppointmentList,
-  appointmentRequestItemStore, _getAppointmentRequests,
+  appointmentRequestItemStore, //_getAppointmentRequests,
   _refreshAppointmentRequest, fetchAppointmentListActive,
   appointmentListActiveItemStore, _refreshAppointmentListActive
 } from './Appointments/AppointmentController';
@@ -118,31 +118,30 @@ export default class Dashboard extends React.Component {
     });
   }
 
-  _getAppointmentRequests = async () => {
-    var appointmentRequestsJson = await getItemAsync("appointmentRequests");
-    if (!appointmentRequests) {
-      var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests ,{hasLoadingModal:false});
-    }
-    else{
-      var appointmentRequests = JSON.parse(appointmentRequestsJson);
-      appointmentRequestItemStore.setAppointmentRequestItem(appointmentRequests);
-    }
-  }
+  // _getAppointmentRequests = async () => {
+  //   var appointmentRequestsJson = await getItemAsync("appointmentRequests");
+  //   if (!appointmentRequests) {
+  //     var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests ,{hasLoadingModal:false});
+  //   }
+  //   else{
+  //     var appointmentRequests = JSON.parse(appointmentRequestsJson);
+  //     appointmentRequestItemStore.setAppointmentRequestItem(appointmentRequests);
+  //   }
+  // }
 
-  _getAppointmentList = () => {
-    this.props.screenProps.withConnHandler(fetchAppointmentList ,{hasLoadingModal:false})
-    .then(({ appointments }) =>
-      // this.props.navigation.isFocused() &&
-      this.setState({ appointments })
-    ).catch(console.warn);
-  }
+  // _getAppointmentList = () => {
+  //   this.props.screenProps.withConnHandler(fetchAppointmentList ,{hasLoadingModal:false})
+  //   .then(({ appointments }) =>
+  //     // this.props.navigation.isFocused() &&
+  //     this.setState({ appointments })
+  //   ).catch(console.warn);
+  // }
 
   _getActivityList = () => {
-    this.props.screenProps.withConnHandler(fetchActivityList ,{hasLoadingModal:false})
-    .then(({ activityList }) =>
+    fetchActivityList().then(({ activityList }) =>
       // this.props.navigation.isFocused() &&
       this.setState({ activities: activityList })
-    ).catch(e => console.warn(e));;
+    ).catch(console.warn);
   }
 
   _goToAppointmentRequest = () => {

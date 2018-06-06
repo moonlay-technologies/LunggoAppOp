@@ -67,8 +67,9 @@ export default class OtpVerificationScreen extends React.Component {
   }
 
   _sendOtp = () => {
-    let { countryCallCd, phone } = this.props.navigation.state.params;
-    sendOtp(countryCallCd, phone).then(response => {
+    const { countryCallCd, phone } = this.props.navigation.state.params;
+    this.props.screenProps.withConnHandler( () => sendOtp(countryCallCd, phone))
+    .then(response => {
       if (response.error = 'ERR_TOO_MANY_SEND_SMS_IN_A_TIME')
         this._startCooldown(response.resendCooldown);
       else
@@ -78,11 +79,12 @@ export default class OtpVerificationScreen extends React.Component {
 
   _verifyOtp = () => {
     Keyboard.dismiss();
-    let { navigation } = this.props;
+    const { navigation, screenProps } = this.props;
     let { countryCallCd, phone, email, onVerified } = navigation.state.params;
     let otp = this.state.inputs.join('');
     this.setState({ isLoading: true });
-    verifyOtp(countryCallCd, phone, otp).then(response => {
+    screenProps.withConnHandler( () => verifyOtp(countryCallCd, phone, otp))
+    .then(response => {
       if (response.status === 200) {
         clearInterval(this._itv);
         onVerified({ countryCallCd, phone, email, otp, navigation });
