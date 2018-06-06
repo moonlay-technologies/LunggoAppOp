@@ -23,7 +23,7 @@ export default function withConnectivityHandler(WrappedComponent) {
 
     defaultAlertOptions = {
       hasOfflineNotificationBar: true,
-      hasLoadingModal: true,
+      // withModal: true,
       shouldThrowOnConnectionError: false,
     };
     alertOptions = {
@@ -34,25 +34,26 @@ export default function withConnectivityHandler(WrappedComponent) {
     withConnHandler = async (fn, options={}) => {
       const {
         shouldThrowOnConnectionError = false,
-        hasLoadingModal = true,
+        withModal = true,
       } = options;
       if (!await NetInfo.isConnected.fetch()) {
-        if (shouldThrowOnConnectionError) throw 'CONNECTION_OFFLINE';
-        this.showOfflineModal();
+        if (shouldThrowOnConnectionError)
+          throw 'CONNECTION_OFFLINE';
+        withModal && this.showOfflineModal();
         throw hasBeenHandledMessage;
       }
-      hasLoadingModal && this.showLoadingModal();
+      withModal && this.showLoadingModal();
       const timeout = new Promise((resolve, reject) => {
         setTimeout(reject, 10000, 'REQUEST_TIMED_OUT');
       });
       return Promise
         .race([ timeout, fn() ])
-        .then( res => { this.hideModal(); return res} )
+        .then( res => { withModal && this.hideModal(); return res} )
         .catch(err => {
-          this.hideModal();
+          withModal && this.hideModal();
           if (err === 'REQUEST_TIMED_OUT') {
             if (shouldThrowOnConnectionError) throw err;
-            this.showTimeoutModal();
+            withModal && this.showTimeoutModal();
             throw hasBeenHandledMessage;
           } else if ( err == 'ERRGEN99' ) {
             //
@@ -87,10 +88,15 @@ export default function withConnectivityHandler(WrappedComponent) {
       );
     }
   }
-  withConnectivityHandler.displayName = `withConnectivityHandler(${getDisplayName(WrappedComponent)})`;
+
+  withConnectivityHandler.displayName = 
+    `withConnectivityHandler(${getDisplayName(WrappedComponent)})`;
+
   return withConnectivityHandler;
 }
 
 function getDisplayName(WrappedComponent) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  return WrappedComponent.displayName ||
+        WrappedComponent.name ||
+        'Component';
 }

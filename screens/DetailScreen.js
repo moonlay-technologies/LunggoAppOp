@@ -21,10 +21,10 @@ export default class DetailScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    let { details, id } = this.props.navigation.state.params;
+    let { details, id } = props.navigation.state.params;
 
     let item = { ...details }
-    if (!Array.isArray(item.mediaSrc))
+    if (Array.isArray(item.mediaSrc) == false)
       item.mediaSrc = [details.mediaSrc];
 
     this.state = {
@@ -38,6 +38,7 @@ export default class DetailScreen extends React.Component {
       scrollY: new Animated.Value(0),
       isLoading: true,
       isDateLoading: true,
+      error: null,
     };
   }
 
@@ -50,9 +51,13 @@ export default class DetailScreen extends React.Component {
       path: `/${version}/activities/${id}`,
       requiredAuthLevel: AUTH_LEVEL.Guest,
     };
-    const { withConnHandler } = this.props.screenProps;
-    withConnHandler( () => fetchTravoramaApi(request) ,{ hasLoadingModal: false })
-    .then(response => {
+    this.props.screenProps.withConnHandler(
+      () => fetchTravoramaApi(request),
+      {
+        withModal: false,
+        shouldThrowOnConnectionError: true,
+      }
+    ).then(response => {
       this.setState(response.activityDetail);
       this.setState({ isLoading: false });
       if (!response.activityDetail.package) {
@@ -60,11 +65,20 @@ export default class DetailScreen extends React.Component {
         console.log(response.activityDetail.package);
         console.error(response.activityDetail.package);
       }
-    }).catch(error => console.log(error));
+    }).catch(error => {
+      if (error==='CONNECTION_OFFLINE' || error==='REQUEST_TIMED_OUT')
+        this.setState({error});
+      else console.error(errror);
+    });
 
     request.path = `/${version}/activities/${id}/availabledates`;
-    withConnHandler( () => fetchTravoramaApi(request) ,{ hasLoadingModal: false })
-    .then(response => {
+    this.props.screenProps.withConnHandler(
+      () => fetchTravoramaApi(request),
+      {
+        withModal: false,
+        shouldThrowOnConnectionError: true,
+      }
+    ).then(response => {
       this.setState(response);
       this.setState({ isDateLoading: false });
       // this.forceUpdate( () => {/*this.marker.showCallout()*/} );
@@ -77,7 +91,7 @@ export default class DetailScreen extends React.Component {
     const { requiredPaxData, isLoading, name, city, duration, price,
       id, mediaSrc, address, lat, long, shortDesc, contents, review,
       reviewCount, rating, ratingCount, additionalContents,
-      isDateLoading, availableDateTimes, scrollY } = this.state;
+      isDateLoading, availableDateTimes, scrollY, error } = this.state;
     return (
       <View>
         <ScrollView
@@ -97,8 +111,15 @@ export default class DetailScreen extends React.Component {
               <LoadingAnimation />
             )}
 
+            { error=='CONNECTION_OFFLINE' &&
+              <Text>CONNECTION_OFFLINE</Text>
+            }
+            
+            { error=='REQUEST_TIMED_OUT' &&
+              <Text>REQUEST_TIMED_OUT</Text>
+            }
 
-            {(!isLoading && !isDateLoading) && (
+            {(!isLoading && !isDateLoading && !error) && (
               <View>
                 <MainInfo name={name} shortDesc={shortDesc} city={city} duration={duration} />
                 <Contents contents={contents} />
@@ -143,7 +164,7 @@ export default class DetailScreen extends React.Component {
         
         <Header id={id} scrollY={this.state.scrollY} title={name} {...this.props} />
         {
-          (!isLoading && !isDateLoading) &&  (
+          (!isLoading && !isDateLoading && !error) &&  (
             <Footer price={this.state.price} details={this.state} {...this.props} _isDateAvailable = {this._isDateAvailable(availableDateTimes)} />
           )
         }

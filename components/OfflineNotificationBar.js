@@ -6,25 +6,23 @@ import { Icon } from 'react-native-elements';
 
 export default class OfflineNotificationBar extends React.Component {
   
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       showNotification: false,
     };
-    NetInfo.isConnected.addEventListener(
-      'connectionChange',
-      this._handleConnectivityChange
-    );
   }
 
   componentDidMount() {
     NetInfo.isConnected.fetch().then(this._handleConnectivityChange);
+    NetInfo.isConnected.addEventListener(
+      'connectionChange', this._handleConnectivityChange
+    );
   }
 
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
-        'connectionChange',
-        this._handleConnectivityChange
+        'connectionChange', this._handleConnectivityChange
     );
   }
   

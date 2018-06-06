@@ -21,7 +21,7 @@ import { //getActivityList,
   fetchActivityList } from './ActivityController';
 import Avatar from './../components/Avatar';
 import MenuButton from './../components/MenuButton';
-import intervalController from './IntervalController';
+import { register } from './IntervalController';
 import { observable, observer } from 'mobx-react';
 
 const { getItemAsync } = Expo.SecureStore;
@@ -90,7 +90,8 @@ export default class Dashboard extends React.Component {
 
   componentDidMount() {
     const { isLoggedIn, withConnHandler } = this.props.screenProps;
-    withConnHandler(getProfile ,{hasLoadingModal:false})
+    const { addListener, dispatch } this.props.navigation;
+    withConnHandler(getProfile ,{withModal:false})
       .then(profile => this.setState(profile))
       .catch(console.warn);
     if (!isLoggedIn) {
@@ -99,11 +100,11 @@ export default class Dashboard extends React.Component {
         index: 0,
         actions: [navigate({ routeName: 'LoginScreen' })],
       });
-      this.props.navigation.dispatch(action);
+      dispatch(action);
     }
-    this.props.navigation.addListener('didFocus', this._refreshData);
-    this.props.navigation.addListener('didFocus', () => intervalController.register(fetchAppointmentRequests));
-    this.props.navigation.addListener('didFocus', () => intervalController.register(fetchAppointmentListActive));
+    addListener('didFocus', this._refreshData);
+    addListener('didFocus', () => register(fetchAppointmentRequests));
+    addListener('didFocus', () => register(fetchAppointmentListActive));
   }
 
   _refreshData = () => {
@@ -113,7 +114,7 @@ export default class Dashboard extends React.Component {
       _refreshAppointmentRequest(),
       this._getActivityList(),
       // this._getReservationList()
-    ]), {hasLoadingModal:false} ).finally(() => {
+    ]), {withModal:false} ).finally(() => {
       this.setState({ refreshing: false });
     });
   }
@@ -121,7 +122,7 @@ export default class Dashboard extends React.Component {
   // _getAppointmentRequests = async () => {
   //   var appointmentRequestsJson = await getItemAsync("appointmentRequests");
   //   if (!appointmentRequests) {
-  //     var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests ,{hasLoadingModal:false});
+  //     var response = this.props.screenProps.withConnHandler(fetchAppointmentRequests ,{withModal:false});
   //   }
   //   else{
   //     var appointmentRequests = JSON.parse(appointmentRequestsJson);
@@ -130,7 +131,7 @@ export default class Dashboard extends React.Component {
   // }
 
   // _getAppointmentList = () => {
-  //   this.props.screenProps.withConnHandler(fetchAppointmentList ,{hasLoadingModal:false})
+  //   this.props.screenProps.withConnHandler(fetchAppointmentList ,{withModal:false})
   //   .then(({ appointments }) =>
   //     // this.props.navigation.isFocused() &&
   //     this.setState({ appointments })
@@ -203,9 +204,10 @@ export default class Dashboard extends React.Component {
               <View style={{ marginTop: 20 }}>
                 <Text style={styles.namaProfile}>{this.state.name}</Text>
               </View>
-              {/* <View style={{}}>
-                <Text style={styles.saldo}>{Formatter.price(this.state.balance)}</Text>
-              </View> */}
+              {/* <Text style={styles.saldo}>
+                  {Formatter.price(this.state.balance)}
+                </Text>
+              */}
               <View style={{ flexDirection: 'row', marginTop: 25 }}>
                 <TouchableOpacity onPress={this._goToActivityList} style={{ flex: 1, alignItems: 'center' }}>
                   <Text style={styles.teks1}>Aktivitasku</Text>
