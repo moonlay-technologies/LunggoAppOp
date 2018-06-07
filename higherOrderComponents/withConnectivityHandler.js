@@ -36,6 +36,9 @@ export default function withConnectivityHandler(WrappedComponent) {
         shouldThrowOnConnectionError = false,
         withModal = true,
       } = options;
+      //// await 0 sec to make sure NetInfo.isConnected.fetch() works
+      //// bug from isConnected.fetch(), dunno why
+      await new Promise( resolve => setImmediate(resolve) );
       if (!await NetInfo.isConnected.fetch()) {
         if (shouldThrowOnConnectionError)
           throw 'CONNECTION_OFFLINE';

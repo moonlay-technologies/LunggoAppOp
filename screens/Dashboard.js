@@ -21,7 +21,7 @@ import { //getActivityList,
   fetchActivityList } from './ActivityController';
 import Avatar from './../components/Avatar';
 import MenuButton from './../components/MenuButton';
-import { register } from './IntervalController';
+import IntervalController from './IntervalController';
 import { observable, observer } from 'mobx-react';
 
 const { getItemAsync } = Expo.SecureStore;
@@ -90,7 +90,7 @@ export default class Dashboard extends React.Component {
 
   componentDidMount() {
     const { isLoggedIn, withConnHandler } = this.props.screenProps;
-    const { addListener, dispatch } this.props.navigation;
+    const { addListener, dispatch } = this.props.navigation;
     withConnHandler(getProfile ,{withModal:false})
       .then(profile => this.setState(profile))
       .catch(console.warn);
@@ -103,21 +103,23 @@ export default class Dashboard extends React.Component {
       dispatch(action);
     }
     addListener('didFocus', this._refreshData);
-    addListener('didFocus', () => register(fetchAppointmentRequests));
-    addListener('didFocus', () => register(fetchAppointmentListActive));
+    addListener('didFocus', () => IntervalController.register(fetchAppointmentRequests));
+    addListener('didFocus', () => IntervalController.register(fetchAppointmentListActive));
   }
 
-  _refreshData = () => {
+  _pullToRefresh = () => {
     this.setState({ refreshing: true });
+    this._refreshData().finally( () =>
+      this.setState({ refreshing: false })
+    );
+  }
+  _refreshData = () =>
     this.props.screenProps.withConnHandler( () => Promise.all([
       _refreshAppointmentListActive(),
       _refreshAppointmentRequest(),
       this._getActivityList(),
       // this._getReservationList()
-    ]), {withModal:false} ).finally(() => {
-      this.setState({ refreshing: false });
-    });
-  }
+    ]), {withModal:false} );
 
   // _getAppointmentRequests = async () => {
   //   var appointmentRequestsJson = await getItemAsync("appointmentRequests");
@@ -180,7 +182,7 @@ export default class Dashboard extends React.Component {
     return (
       <ScrollView
         style={{ backgroundColor: '#f7f8fb' }}
-        refreshControl={<RefreshControl onRefresh={this._refreshData} refreshing={this.state.refreshing} />}
+        refreshControl={<RefreshControl onRefresh={this._pullToRefresh} refreshing={this.state.refreshing} />}
       >
         <View style={{ height: 310 }}>
           <Image style={{ height: 250, resizeMode: 'cover' }} source={require('../assets/images/bg1.jpg')} />
