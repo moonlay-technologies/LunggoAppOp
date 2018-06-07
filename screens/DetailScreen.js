@@ -47,42 +47,42 @@ export default class DetailScreen extends React.Component {
   componentDidMount() {
     const version = 'v1';
     const { id } = this.state;
-    let request = {
+    const request = {
       path: `/${version}/activities/${id}`,
       requiredAuthLevel: AUTH_LEVEL.Guest,
     };
     this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request),
-      {
-        withModal: false,
-        shouldThrowOnConnectionError: true,
+      () => fetchTravoramaApi(request), 'screen'
+    ).then( ({activityDetail}) => {
+      if (!activityDetail || !activityDetail.package) {
+        // console.log('PACKAGES:');
+        // console.log(activityDetail.package);
+        // console.error(activityDetail.package);
+        console.error('no activity package',activityDetail);
       }
-    ).then(response => {
-      this.setState(response.activityDetail);
+      this.setState(activityDetail);
       this.setState({ isLoading: false });
-      if (!response.activityDetail.package) {
-        console.log('PACKAGES:');
-        console.log(response.activityDetail.package);
-        console.error(response.activityDetail.package);
-      }
     }).catch(error => {
       if (error==='CONNECTION_OFFLINE' || error==='REQUEST_TIMED_OUT')
         this.setState({error});
-      else console.error(errror);
+      else console.error(error);
     });
 
-    request.path = `/${version}/activities/${id}/availabledates`;
+    const request2 = {
+      ...request,
+      path: `/${version}/activities/${id}/availabledates`,
+    };
     this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request),
-      {
-        withModal: false,
-        shouldThrowOnConnectionError: true,
-      }
+      () => fetchTravoramaApi(request2), 'screen'
     ).then(response => {
       this.setState(response);
       this.setState({ isDateLoading: false });
       // this.forceUpdate( () => {/*this.marker.showCallout()*/} );
-    }).catch(error => console.log(error));
+    }).catch(error => {
+      if (error==='CONNECTION_OFFLINE' || error==='REQUEST_TIMED_OUT')
+        this.setState({error});
+      else console.log(error);
+    });
   }
 
   _isDateAvailable = availableDates => (availableDates.length > 0)

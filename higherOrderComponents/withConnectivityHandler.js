@@ -24,23 +24,25 @@ export default function withConnectivityHandler(WrappedComponent) {
     defaultAlertOptions = {
       hasOfflineNotificationBar: true,
       // withModal: true,
-      shouldThrowOnConnectionError: false,
+      // shouldThrowOnConnectionError: false,
     };
     alertOptions = {
       ...this.defaultAlertOptions,
       ...WrappedComponent.alertOptions,
     };
 
-    withConnHandler = async (fn, options={}) => {
-      const {
-        shouldThrowOnConnectionError = false,
-        withModal = true,
-      } = options;
+    /* handlingType:
+        modal: show modal on loading, no connection, or timeout
+        screen: any loading and connection error state shown in caller's screen
+        background: ignore any fetch loading and connection error
+    */
+    withConnHandler = async (fn, handlingType = 'modal') => {
+      const withModal = handlingType == 'modal';
       //// await 0 sec to make sure NetInfo.isConnected.fetch() works
       //// bug from isConnected.fetch(), dunno why
       await new Promise( resolve => setImmediate(resolve) );
       if (!await NetInfo.isConnected.fetch()) {
-        if (shouldThrowOnConnectionError)
+        if (handlingType = 'screen')
           throw 'CONNECTION_OFFLINE';
         withModal && this.showOfflineModal();
         throw hasBeenHandledMessage;
@@ -55,7 +57,7 @@ export default function withConnectivityHandler(WrappedComponent) {
         .catch(err => {
           withModal && this.hideModal();
           if (err === 'REQUEST_TIMED_OUT') {
-            if (shouldThrowOnConnectionError) throw err;
+            if (handlingType = 'screen') throw err;
             withModal && this.showTimeoutModal();
             throw hasBeenHandledMessage;
           } else if ( err == 'ERRGEN99' ) {

@@ -91,7 +91,7 @@ export default class Dashboard extends React.Component {
   componentDidMount() {
     const { isLoggedIn, withConnHandler } = this.props.screenProps;
     const { addListener, dispatch } = this.props.navigation;
-    withConnHandler(getProfile ,{withModal:false})
+    withConnHandler(getProfile, 'background')
       .then(profile => this.setState(profile))
       .catch(console.warn);
     if (!isLoggedIn) {
@@ -119,7 +119,7 @@ export default class Dashboard extends React.Component {
       _refreshAppointmentRequest(),
       this._getActivityList(),
       // this._getReservationList()
-    ]), {withModal:false} );
+    ]), 'background');
 
   // _getAppointmentRequests = async () => {
   //   var appointmentRequestsJson = await getItemAsync("appointmentRequests");
