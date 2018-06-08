@@ -5,7 +5,7 @@ import { Dashboard } from '../screens/Screens';
 // Example server, implemented in Rails: https://git.io/vKHKv
 // const PUSH_ENDPOINT = 'https://expo-push-server.herokuapp.com/tokens';
 // const PUSH_ENDPOINT = 'http://5acf2105.ngrok.io';
-const PUSH_ENDPOINT = '/v1/notification/registration';
+const PUSH_ENDPOINT = '/v1/operator/notification/registration';
 
 export default (async function registerForPushNotificationsAsync() {
   // Android remote notification permissions are granted during the app
