@@ -52,7 +52,7 @@ export default class DetailScreen extends React.Component {
       requiredAuthLevel: AUTH_LEVEL.Guest,
     };
     this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request), 'screen'
+      () => fetchTravoramaApi(request), 'content'
     ).then( ({activityDetail}) => {
       if (!activityDetail || !activityDetail.package) {
         // console.log('PACKAGES:');
@@ -73,7 +73,7 @@ export default class DetailScreen extends React.Component {
       path: `/${version}/activities/${id}/availabledates`,
     };
     this.props.screenProps.withConnHandler(
-      () => fetchTravoramaApi(request2), 'screen'
+      () => fetchTravoramaApi(request2), 'content'
     ).then(response => {
       this.setState(response);
       this.setState({ isDateLoading: false });

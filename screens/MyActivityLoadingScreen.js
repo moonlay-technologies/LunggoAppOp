@@ -26,7 +26,7 @@ export default class MyActivityLoadingScreen extends React.Component {
 
   _refreshList = () => {
     this.setState({isLoading: true});
-    this.props.screenProps.withConnHandler(getActivityList, 'screen')
+    this.props.screenProps.withConnHandler(getActivityList, 'content')
     .then(res => this.setState({ list: res.activityList }) )
     .catch(console.warn)
     .finally(() => this.setState({ isLoading: false }));

@@ -4,12 +4,16 @@ import React from 'react';
 import { StyleSheet, View, Text, NetInfo, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 
+const MessageTexts = {
+  CONNECTION_OFFLINE: 'Terputus dari jaringan',
+  REQUEST_TIMED_OUT: 'Jaringan buruk',
+}
 export default class OfflineNotificationBar extends React.Component {
   
   constructor() {
     super();
     this.state = {
-      showNotification: false,
+      errorMessage: '',
     };
   }
 
@@ -26,19 +30,22 @@ export default class OfflineNotificationBar extends React.Component {
     );
   }
   
-  _handleConnectivityChange = isConnected =>
-    setTimeout(
-      () => this.setState({showNotification: !isConnected})
-    , 300)
+  forceShowNotification = errCode =>
+    this.setState({ errorMessage: MessageTexts[errCode] })
 
-  _onClose = () => this.setState({showNotification: false})
+  _handleConnectivityChange = isOnline =>
+    setTimeout( () => this.setState({
+      errorMessage: isOnline ? '' : MessageTexts.CONNECTION_OFFLINE,
+    }), 300)
+
+  _onClose = () => this.setState({errorMessage: ''})
 
   render() {
-    return ( this.state.showNotification &&
+    return ( !!this.state.errorMessage &&
       <View style={styles.offlineState}>
         <Text style={{color:'#fff'}}>
           <Text style={{color:'#fff', fontWeight:'bold'}}>Error! </Text>
-          Terputus dari jaringan
+          {this.state.errorMessage}
         </Text>
         <TouchableOpacity onPress={this._onClose}>
           <Icon

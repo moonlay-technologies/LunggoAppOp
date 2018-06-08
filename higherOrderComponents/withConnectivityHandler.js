@@ -31,47 +31,52 @@ export default function withConnectivityHandler(WrappedComponent) {
       ...WrappedComponent.alertOptions,
     };
 
-    /* handlingType:
-        modal: show modal on loading, no connection, or timeout
-        screen: any loading and connection error state shown in caller's screen
-        background: ignore any fetch loading and connection error
-    */
+
+    /***===== withConnHandler =====***
+      handlingType:
+        modal   : show modal on loading, no connection, or timeout
+        bar     : only show connection error, in notification bar
+        content : any loading and connection error state shown in
+                  caller's screen
+    ***/
     withConnHandler = async (fn, handlingType = 'modal') => {
       const withModal = handlingType == 'modal';
       //// await 0 sec to make sure NetInfo.isConnected.fetch() works
       //// bug from isConnected.fetch(), dunno why
       await new Promise( resolve => setImmediate(resolve) );
       if (!await NetInfo.isConnected.fetch()) {
-        if (handlingType == 'screen')
-          throw 'CONNECTION_OFFLINE';
-        withModal && this.showOfflineModal();
-        throw hasBeenHandledMessage;
+        this._handleConnectionError('CONNECTION_OFFLINE', handlingType);
       }
-      withModal && this.showLoadingModal();
+      withModal && this.setModal('loading');
       const timeout = new Promise((resolve, reject) => {
         setTimeout(reject, 10000, 'REQUEST_TIMED_OUT');
       });
       return Promise
         .race([ timeout, fn() ])
-        .then( res => { withModal && this.hideModal(); return res} )
+        .then( res => { withModal && this.setModal(''); return res} )
         .catch(err => {
-          withModal && this.hideModal();
+          withModal && this.setModal('');
           if (err === 'REQUEST_TIMED_OUT') {
-            if (handlingType == 'screen') throw err;
-            withModal && this.showTimeoutModal();
-            throw hasBeenHandledMessage;
-          } else if ( err == 'ERRGEN99' ) {
-            //
+            this._handleConnectionError(err, handlingType);
+          } else if ( err === 'ERRGEN99' ) {
+            console.warn(err);
             throw err;
           }
           else throw err;
         });
     }
 
-    showLoadingModal = () => this.setState({connectionStatus: 'loading'})
-    showOfflineModal = () => this.setState({connectionStatus: 'offline'})
-    showTimeoutModal = () => this.setState({connectionStatus: 'timeout'})
-    hideModal = () => this.setState({connectionStatus: ''})
+    _handleConnectionError = (err, handlingType) => {
+      if (handlingType == 'content') throw err;
+      else if (handlingType == 'bar')
+        this.bar.forceShowNotification(err);
+      else {
+        withModal && this.setModal(err);
+        throw hasBeenHandledMessage;
+      }
+    }
+
+    setModal = code => this.setState({connectionStatus: code})
 
     render() {
       return (
@@ -83,7 +88,7 @@ export default function withConnectivityHandler(WrappedComponent) {
           />
           {
             this.alertOptions.hasOfflineNotificationBar &&
-            <OfflineNotificationBar />
+            <OfflineNotificationBar ref={ e => this.bar = e } />
           }
           <WrappedComponent
             withConnHandler={this.withConnHandler}

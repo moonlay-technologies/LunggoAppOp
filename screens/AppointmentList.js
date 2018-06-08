@@ -106,7 +106,7 @@ export default class AppointmentList extends React.Component {
 
   _refreshList = () => {
     this.setState({ isLoading: true });
-    this.props.screenProps.withConnHandler(_refreshAppointmentListActive, 'screen')
+    this.props.screenProps.withConnHandler(_refreshAppointmentListActive, 'content')
     .then(response => this.setState({ isLoading: false }) );
   }
 
