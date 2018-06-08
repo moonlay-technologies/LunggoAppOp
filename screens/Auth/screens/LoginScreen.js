@@ -68,6 +68,7 @@ export default class LoginScreen extends React.Component {
           registerForPushNotificationsAsync();
           backToMain(navigation);
         } else {
+          this.setState({ isLoading: false })
           let errorMessage;
           switch (response.error) {
             case 'ERR_NOT_REGISTERED':
@@ -86,9 +87,10 @@ export default class LoginScreen extends React.Component {
           this.setState({ error: errorMessage });
         }
       }).catch(error => {
-        console.log("Login error!!");
+        this.setState({ isLoading: false })
+        console.warn("Login error!!");
         console.log(error);
-      }).finally( () => this.setState({ isLoading: false }) );
+      });
   }
 
   _toggleShowPassword = () => {

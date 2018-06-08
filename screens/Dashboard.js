@@ -9,7 +9,7 @@ import { Icon } from 'react-native-elements';
 import { getProfile } from '../logic/ProfileController';
 // import * as Formatter from '../components/Formatter';
 import LoadingAnimation from '../components/LoadingAnimation';
-import { checkUserLoggedIn } from '../api/Common';
+import { checkUserLoggedIn } from './Auth/AuthController';
 import { NavigationActions } from 'react-navigation';
 import {
   fetchAppointmentRequests, fetchAppointmentList,
@@ -88,12 +88,10 @@ export default class Dashboard extends React.Component {
     header: null,
   }
 
-  componentDidMount() {
-    const { isLoggedIn, withConnHandler } = this.props.screenProps;
+  async componentDidMount() {
+    const { withConnHandler } = this.props.screenProps;
     const { addListener, dispatch } = this.props.navigation;
-    withConnHandler(getProfile, 'bar')
-      .then(profile => this.setState(profile))
-      .catch(console.warn);
+    const isLoggedIn = await checkUserLoggedIn();
     if (!isLoggedIn) {
       let { reset, navigate } = NavigationActions;
       const action = reset({
@@ -102,6 +100,9 @@ export default class Dashboard extends React.Component {
       });
       dispatch(action);
     }
+    withConnHandler(getProfile, 'bar')
+      .then(profile => this.setState(profile))
+      .catch(console.warn);
     addListener('didFocus', this._refreshData);
     addListener('didFocus', () => IntervalController.register(fetchAppointmentRequests));
     addListener('didFocus', () => IntervalController.register(fetchAppointmentListActive));
