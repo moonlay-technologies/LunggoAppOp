@@ -42,7 +42,7 @@ export default function withConnectivityHandler(WrappedComponent) {
       //// bug from isConnected.fetch(), dunno why
       await new Promise( resolve => setImmediate(resolve) );
       if (!await NetInfo.isConnected.fetch()) {
-        if (handlingType = 'screen')
+        if (handlingType == 'screen')
           throw 'CONNECTION_OFFLINE';
         withModal && this.showOfflineModal();
         throw hasBeenHandledMessage;
@@ -57,7 +57,7 @@ export default function withConnectivityHandler(WrappedComponent) {
         .catch(err => {
           withModal && this.hideModal();
           if (err === 'REQUEST_TIMED_OUT') {
-            if (handlingType = 'screen') throw err;
+            if (handlingType == 'screen') throw err;
             withModal && this.showTimeoutModal();
             throw hasBeenHandledMessage;
           } else if ( err == 'ERRGEN99' ) {
