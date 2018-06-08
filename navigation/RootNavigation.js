@@ -35,6 +35,7 @@ import NotFound from '../screens/NotFoundScreen';
 import DetailScreen from './../screens/DetailScreen';
 import MapScreen from './../screens/MapScreen';
 import ChangeProfile from './../screens/ChangeProfile';
+import CancellationReason from './../screens/CancellationReason';
 
 export default class RootNavigator extends React.Component {
 
@@ -75,6 +76,7 @@ export default class RootNavigator extends React.Component {
       DetailScreen: { screen: DetailScreen },
       MapScreen: { screen: MapScreen },
       ChangeProfile: { screen: ChangeProfile },
+      CancellationReason: { screen: CancellationReason },
       ReservationDetail: { screen: ReservationDetail },
     },
     {
