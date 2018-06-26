@@ -19,8 +19,8 @@ export default class ReservationDetail extends React.Component {
     title: 'Detail Peserta',
   }
 
-  _callOperator = (contact) => Linking.openURL('tel:' + contact.countryCallCd + contact.phone);
-  _smsOperator = (contact) => Linking.openURL('sms:' + contact.countryCallCd + contact.phone);
+  _callOperator = (contact) => Linking.openURL('tel:+' + contact.countryCallCd + contact.phone);
+  _smsOperator = (contact) => Linking.openURL('sms:+' + contact.countryCallCd + contact.phone);
 
   render() {
     let { rsv, activityDetail: { name, date, session } } =

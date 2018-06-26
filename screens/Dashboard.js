@@ -276,7 +276,7 @@ export default class Dashboard extends React.Component {
         <View style={styles.boxDetail}>
 
           <MenuButton
-            label='Pencairan Dana'
+            label='Dana Masuk Rekening'
             icon={
               <Icon
                 name='md-trending-up'
@@ -300,7 +300,7 @@ export default class Dashboard extends React.Component {
             onPress={this._goToRefund}
           />
           <MenuButton
-            label='Penghasilan'
+            label='Riwayat Pesanan'
             icon={
               <Icon
                 name='ios-cash'
